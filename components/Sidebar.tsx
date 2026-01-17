@@ -47,7 +47,7 @@ export const MainSidebar: React.FC<MainSidebarProps> = ({ activeItem, onSelectIt
       {/* Semi-circular Toggle Button */}
       <button 
         onClick={() => setIsExpanded(!isExpanded)}
-        className="absolute -right-[17px] top-12 w-4 h-12 bg-white border border-l-0 border-slate-200 rounded-r-full flex items-center justify-center text-slate-500 hover:text-blue-600 shadow-sm z-50 cursor-pointer hover:shadow-md transition-all group"
+        className="absolute -right-[17px] top-12 w-4 h-12 bg-white border border-l-0 border-slate-200 rounded-r-full flex items-center justify-center text-slate-500 hover:text-blue-500 shadow-sm z-50 cursor-pointer hover:shadow-md transition-all group"
         title={isExpanded ? "收起菜单" : "展开菜单"}
       >
         <div className="transform transition-transform duration-300 group-hover:scale-110">
@@ -68,7 +68,7 @@ export const MainSidebar: React.FC<MainSidebarProps> = ({ activeItem, onSelectIt
       {/* Search (Expanded Only) */}
       {isExpanded && (
           <div className="px-3 mb-4 w-full animate-in fade-in slide-in-from-left-2 duration-200">
-              <div className="bg-slate-800/50 border border-slate-700 rounded-md flex items-center px-2 py-1.5 text-slate-400 focus-within:border-blue-500 focus-within:bg-slate-800 transition-colors">
+              <div className="bg-slate-800/50 border border-slate-700 rounded-md flex items-center px-2 py-1.5 text-slate-400 focus-within:border-blue-400 focus-within:bg-slate-800 transition-colors">
                   <Search size={14} />
                   <input 
                       type="text" 
@@ -90,7 +90,7 @@ export const MainSidebar: React.FC<MainSidebarProps> = ({ activeItem, onSelectIt
               className={`
                  flex items-center cursor-pointer group rounded-lg transition-all duration-200
                  ${isExpanded ? 'px-3 py-2.5 gap-3 w-full' : 'flex-col justify-center py-2.5 px-0 w-full'}
-                 ${isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}
+                 ${isActive ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}
               `}
               title={!isExpanded ? item.label : ''}
             >
@@ -205,7 +205,7 @@ export const SecondarySidebar: React.FC<SecondarySidebarProps> = ({
                       onClick={() => onViewSelect(view)}
                       className={`px-6 py-2 text-sm cursor-pointer transition-all border-l-[3px] ${
                         activeView === view 
-                          ? 'text-blue-700 bg-blue-50/80 font-medium border-blue-600' 
+                          ? 'text-blue-600 bg-blue-50/80 font-medium border-blue-500' 
                           : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-transparent'
                       }`}
                     >
@@ -231,7 +231,7 @@ export const SecondarySidebar: React.FC<SecondarySidebarProps> = ({
                             e.stopPropagation();
                             onAddView();
                           }}
-                          className="hover:text-blue-600 hover:bg-blue-100 rounded"
+                          className="hover:text-blue-500 hover:bg-blue-50 rounded"
                           title="新增视图"
                         >
                           <Plus size={14} />
@@ -248,7 +248,7 @@ export const SecondarySidebar: React.FC<SecondarySidebarProps> = ({
                       onClick={() => onViewSelect(view.name)}
                       className={`px-6 py-2 text-sm cursor-pointer transition-all border-l-[3px] ${
                         activeView === view.name
-                          ? 'text-blue-700 bg-blue-50/80 font-medium border-blue-600'
+                          ? 'text-blue-600 bg-blue-50/80 font-medium border-blue-500'
                           : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-transparent'
                       }`}
                     >
@@ -282,7 +282,7 @@ export const SecondarySidebar: React.FC<SecondarySidebarProps> = ({
                     onClick={() => onViewSelect('区域内暂无视图')}
                     className={`px-6 py-2 text-sm cursor-pointer transition-all border-l-[3px] ${
                       activeView === '区域内暂无视图'
-                        ? 'text-blue-700 bg-blue-50/80 font-medium border-blue-600'
+                        ? 'text-blue-600 bg-blue-50/80 font-medium border-blue-500'
                         : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-transparent'
                     }`}
                   >

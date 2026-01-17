@@ -67,7 +67,10 @@ import {
   ListChecks,
   Mail,
   UserCheck,
-  CreditCard
+  CreditCard,
+  // Added Monitor and Smartphone for NotificationSettings component
+  Monitor,
+  Smartphone
 } from 'lucide-react';
 
 export {
@@ -138,11 +141,14 @@ export {
   ListChecks,
   Mail,
   UserCheck,
-  CreditCard
+  CreditCard,
+  // Added Monitor and Smartphone for NotificationSettings component
+  Monitor,
+  Smartphone
 };
 
 export const GLogo = () => (
-  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md shadow-blue-900/20">
+  <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md shadow-blue-900/20">
     G
   </div>
 );

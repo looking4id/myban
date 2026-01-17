@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Search, ChevronDown, ListFilter, ArrowUpDown, Maximize2, MoreHorizontal, Plus, Calendar, XCircle, CheckCircle2, LayoutGrid, LayoutList, FolderTree } from './Icons';
 import { MOCK_USERS, MOCK_PROJECTS, MOCK_COLUMNS } from '../constants';
@@ -169,7 +170,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                 <button 
                     onClick={() => { closeAllDropdowns(); setIsProjectOpen(!isProjectOpen); }}
                     className={`flex items-center gap-1 px-3 py-1.5 border border-dashed rounded text-sm transition-colors ${
-                        filters.projectId ? 'bg-blue-50 text-blue-600 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
+                        filters.projectId ? 'bg-blue-50 text-blue-500 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
                     }`}
                 >
                     <span>{selectedProject ? selectedProject.name : '项目'}</span>
@@ -184,7 +185,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                                 className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center justify-between"
                             >
                                 <span className="truncate">{project.name}</span>
-                                {filters.projectId === project.id && <CheckCircle2 size={14} className="text-blue-600 flex-shrink-0" />}
+                                {filters.projectId === project.id && <CheckCircle2 size={14} className="text-blue-500 flex-shrink-0" />}
                             </button>
                         ))}
                     </div>
@@ -196,7 +197,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                 <button 
                     onClick={() => { closeAllDropdowns(); setIsAssigneeOpen(!isAssigneeOpen); }}
                     className={`flex items-center gap-1 px-3 py-1.5 border border-dashed rounded text-sm transition-colors ${
-                        filters.assigneeId ? 'bg-blue-50 text-blue-600 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
+                        filters.assigneeId ? 'bg-blue-50 text-blue-500 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
                     }`}
                 >
                     <span>{selectedAssignee ? selectedAssignee.name : '负责人'}</span>
@@ -214,7 +215,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                                     {user.name.slice(0, 1)}
                                 </div>
                                 <span className="flex-1">{user.name}</span>
-                                {filters.assigneeId === user.id && <CheckCircle2 size={14} className="text-blue-600" />}
+                                {filters.assigneeId === user.id && <CheckCircle2 size={14} className="text-blue-500" />}
                             </button>
                         ))}
                     </div>
@@ -226,7 +227,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                 <button 
                     onClick={() => { closeAllDropdowns(); setIsTypeOpen(!isTypeOpen); }}
                     className={`flex items-center gap-1 px-3 py-1.5 border border-dashed rounded text-sm transition-colors ${
-                        filters.type ? 'bg-blue-50 text-blue-600 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
+                        filters.type ? 'bg-blue-50 text-blue-500 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
                     }`}
                 >
                     <span>{filters.type || '类型'}</span>
@@ -241,7 +242,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                                 className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center justify-between"
                             >
                                 <span>{type}</span>
-                                {filters.type === type && <CheckCircle2 size={14} className="text-blue-600" />}
+                                {filters.type === type && <CheckCircle2 size={14} className="text-blue-500" />}
                             </button>
                         ))}
                     </div>
@@ -253,7 +254,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                 <button 
                     onClick={() => { closeAllDropdowns(); setIsPriorityOpen(!isPriorityOpen); }}
                     className={`flex items-center gap-1 px-3 py-1.5 border border-dashed rounded text-sm transition-colors ${
-                        filters.priority ? 'bg-blue-50 text-blue-600 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
+                        filters.priority ? 'bg-blue-50 text-blue-500 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
                     }`}
                 >
                     <span>{filters.priority || '优先级'}</span>
@@ -268,7 +269,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                                 className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center justify-between"
                             >
                                 <span>{p}</span>
-                                {filters.priority === p && <CheckCircle2 size={14} className="text-blue-600" />}
+                                {filters.priority === p && <CheckCircle2 size={14} className="text-blue-500" />}
                             </button>
                         ))}
                     </div>
@@ -280,7 +281,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                  <button 
                     onClick={() => { closeAllDropdowns(); setIsDateOpen(!isDateOpen); }}
                     className={`flex items-center gap-1 px-3 py-1.5 border border-dashed rounded text-sm transition-colors ${
-                        filters.dateRange ? 'bg-blue-50 text-blue-600 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
+                        filters.dateRange ? 'bg-blue-50 text-blue-500 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
                     }`}
                 >
                     <Calendar size={14} />
@@ -290,10 +291,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                 {isDateOpen && (
                      <div className="absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-slate-100 p-4 z-50 animate-in fade-in zoom-in-95 duration-100">
                         <div className="grid grid-cols-2 gap-2 mb-4">
-                            <button onClick={() => handleDatePreset('today')} className="px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 rounded border border-slate-200 transition-colors">今天截止</button>
-                            <button onClick={() => handleDatePreset('tomorrow')} className="px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 rounded border border-slate-200 transition-colors">明天截止</button>
-                            <button onClick={() => handleDatePreset('thisWeek')} className="px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 rounded border border-slate-200 transition-colors">本周</button>
-                            <button onClick={() => handleDatePreset('nextWeek')} className="px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 rounded border border-slate-200 transition-colors">下周</button>
+                            <button onClick={() => handleDatePreset('today')} className="px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 hover:text-blue-500 hover:border-blue-200 rounded border border-slate-200 transition-colors">今天截止</button>
+                            <button onClick={() => handleDatePreset('tomorrow')} className="px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 hover:text-blue-500 hover:border-blue-200 rounded border border-slate-200 transition-colors">明天截止</button>
+                            <button onClick={() => handleDatePreset('thisWeek')} className="px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 hover:text-blue-500 hover:border-blue-200 rounded border border-slate-200 transition-colors">本周</button>
+                            <button onClick={() => handleDatePreset('nextWeek')} className="px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 hover:text-blue-500 hover:border-blue-200 rounded border border-slate-200 transition-colors">下周</button>
                         </div>
                         <div className="space-y-3 pt-3 border-t border-slate-100">
                              <div className="grid grid-cols-2 gap-2">
@@ -301,7 +302,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                                      <label className="text-xs text-slate-400 mb-1 block">开始日期</label>
                                      <input 
                                         type="date" 
-                                        className="w-full text-xs border border-slate-200 rounded px-2 py-1 focus:border-blue-500 outline-none"
+                                        className="w-full text-xs border border-slate-200 rounded px-2 py-1 focus:border-blue-400 outline-none"
                                         onChange={(e) => setTempDateRange(prev => ({ start: e.target.value, end: prev?.end || e.target.value }))}
                                      />
                                  </div>
@@ -309,7 +310,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                                      <label className="text-xs text-slate-400 mb-1 block">结束日期</label>
                                      <input 
                                         type="date" 
-                                        className="w-full text-xs border border-slate-200 rounded px-2 py-1 focus:border-blue-500 outline-none"
+                                        className="w-full text-xs border border-slate-200 rounded px-2 py-1 focus:border-blue-400 outline-none"
                                         onChange={(e) => setTempDateRange(prev => ({ start: prev?.start || e.target.value, end: e.target.value }))}
                                      />
                                  </div>
@@ -318,7 +319,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                                  <button 
                                     onClick={handleDateConfirm}
                                     disabled={!tempDateRange}
-                                    className="px-3 py-1.5 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
                                  >
                                      应用筛选
                                  </button>
@@ -333,7 +334,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                 <button 
                     onClick={() => { closeAllDropdowns(); setIsStatusOpen(!isStatusOpen); }}
                     className={`flex items-center gap-1 px-3 py-1.5 border border-dashed rounded text-sm transition-colors ${
-                        filters.status ? 'bg-blue-50 text-blue-600 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
+                        filters.status ? 'bg-blue-50 text-blue-500 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
                     }`}
                 >
                     <span>{filters.status || '状态'}</span>
@@ -348,7 +349,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                                 className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center justify-between"
                             >
                                 <span>{col.title}</span>
-                                {filters.status === col.title && <CheckCircle2 size={14} className="text-blue-600" />}
+                                {filters.status === col.title && <CheckCircle2 size={14} className="text-blue-500" />}
                             </button>
                         ))}
                     </div>
@@ -359,7 +360,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
              {hasActiveFilters && (
                 <>
                     <div className="w-px h-6 bg-slate-200 mx-1"></div>
-                    <button onClick={handleClearFilters} className="flex items-center gap-1 text-slate-500 hover:text-red-600 text-sm transition-colors">
+                    <button onClick={handleClearFilters} className="flex items-center gap-1 text-slate-500 hover:text-red-500 text-sm transition-colors">
                         <XCircle size={14} />
                         <span>清除筛选</span>
                     </button>
@@ -372,21 +373,21 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
          <div className="flex items-center bg-slate-100 rounded p-0.5">
              <button 
                 onClick={() => setViewType('kanban')}
-                className={`p-1 rounded transition-colors ${viewType === 'kanban' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                className={`p-1 rounded transition-colors ${viewType === 'kanban' ? 'bg-white text-blue-500 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                 title="看板视图"
              >
                  <LayoutGrid size={16} />
              </button>
              <button 
                 onClick={() => setViewType('list')}
-                className={`p-1 rounded transition-colors ${viewType === 'list' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                className={`p-1 rounded transition-colors ${viewType === 'list' ? 'bg-white text-blue-500 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                 title="平铺列表"
              >
                  <LayoutList size={16} />
              </button>
              <button 
                 onClick={() => setViewType('tree')}
-                className={`p-1 rounded transition-colors ${viewType === 'tree' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                className={`p-1 rounded transition-colors ${viewType === 'tree' ? 'bg-white text-blue-500 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                 title="树状列表"
              >
                  <FolderTree size={16} />
@@ -418,23 +419,23 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                  <div className="absolute top-full right-0 mt-2 w-40 bg-white rounded-lg shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
                      <button
                         onClick={() => { onTriggerCreate(TaskType.Requirement); setIsNewDropdownOpen(false); }}
-                        className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                        className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
                      >
-                        <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
                         新建需求
                      </button>
                      <button
                         onClick={() => { onTriggerCreate(TaskType.Task); setIsNewDropdownOpen(false); }}
-                        className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                        className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
                      >
-                        <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-green-500"></span>
                         新建任务
                      </button>
                      <button
                         onClick={() => { onTriggerCreate(TaskType.Defect); setIsNewDropdownOpen(false); }}
-                        className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                        className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
                      >
-                        <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
                         新建缺陷
                      </button>
                  </div>

@@ -21,7 +21,7 @@ const WorkbenchHeader = ({ user, onAddClick }: { user: string; onAddClick: () =>
       </div>
       <button 
         onClick={onAddClick}
-        className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white border border-blue-600 rounded text-sm hover:bg-blue-700 shadow-sm transition-colors"
+        className="flex items-center gap-1 px-3 py-1.5 bg-blue-500 text-white border border-blue-500 rounded text-sm hover:bg-blue-600 shadow-sm transition-colors"
       >
         <Plus size={16} />
         <span>添加组件</span>
@@ -100,19 +100,19 @@ const AddWidgetModal = ({
                         className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg cursor-pointer group transition-colors m-1"
                     >
                         <div className="flex items-center gap-3">
-                            <div className="p-2 bg-slate-100 text-slate-500 rounded group-hover:bg-white group-hover:text-blue-600 group-hover:shadow-sm transition-all">
+                            <div className="p-2 bg-slate-100 text-slate-500 rounded group-hover:bg-white group-hover:text-blue-500 group-hover:shadow-sm transition-all">
                                 <w.icon size={18} />
                             </div>
                             <span className="text-sm font-medium text-slate-700">{w.title}</span>
                         </div>
-                        <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${visibleWidgets[w.id] ? 'bg-blue-600 border-blue-600' : 'border-slate-300'}`}>
+                        <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${visibleWidgets[w.id] ? 'bg-blue-500 border-blue-500' : 'border-slate-300'}`}>
                             {visibleWidgets[w.id] && <CheckCircle2 size={14} className="text-white" />}
                         </div>
                     </div>
                 ))}
             </div>
              <div className="p-4 bg-slate-50 border-t border-slate-100 text-center">
-                <button onClick={onClose} className="px-8 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors shadow-sm">
+                <button onClick={onClose} className="px-8 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm font-medium transition-colors shadow-sm">
                     完成
                 </button>
             </div>
@@ -240,7 +240,7 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect }) => {
                         <div 
                             key={p.id} 
                             onClick={() => onProjectSelect && onProjectSelect(p)}
-                            className="p-3 bg-slate-50 rounded border border-slate-100 hover:border-blue-200 hover:shadow-sm transition-all cursor-pointer group relative"
+                            className="p-3 bg-slate-50 rounded border border-slate-100 hover:border-blue-300 hover:shadow-sm transition-all cursor-pointer group relative"
                         >
                             <div className="flex justify-between items-start mb-2">
                                 <div className="flex items-center gap-2">
@@ -260,7 +260,7 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect }) => {
                             </div>
                         </div>
                         ))}
-                        <div className="border border-dashed border-slate-300 rounded flex items-center justify-center p-3 text-slate-400 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-colors gap-1 min-h-[90px]">
+                        <div className="border border-dashed border-slate-300 rounded flex items-center justify-center p-3 text-slate-400 hover:text-blue-500 hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-colors gap-1 min-h-[90px]">
                         <Plus size={16} />
                         <span className="text-sm font-medium">创建新项目</span>
                         </div>
@@ -286,7 +286,7 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect }) => {
                             <div className="flex items-center gap-2">
                                 <div className={`w-1 h-8 rounded-full ${task.statusColor}`}></div>
                                 <div>
-                                    <div className="text-sm text-slate-700 font-medium group-hover:text-blue-600 line-clamp-1">{task.title}</div>
+                                    <div className="text-sm text-slate-700 font-medium group-hover:text-blue-500 line-clamp-1">{task.title}</div>
                                     <div className="text-[10px] text-slate-400 font-mono">{task.displayId}</div>
                                 </div>
                             </div>
@@ -337,7 +337,7 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect }) => {
                             <div className="text-sm text-slate-700">
                                 <span className="font-semibold">{act.user.name}</span>
                                 <span className="mx-1 text-slate-500">{act.action}</span>
-                                <span className="text-blue-600 hover:underline cursor-pointer">{act.target}</span>
+                                <span className="text-blue-500 hover:underline cursor-pointer">{act.target}</span>
                             </div>
                             <div className="text-xs text-slate-400 mt-1">{act.time}</div>
                         </div>
@@ -364,13 +364,13 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect }) => {
                         <div className="text-slate-300">28</div><div className="text-slate-300">29</div><div className="text-slate-300">30</div>
                         <div>1</div><div>2</div><div>3</div><div>4</div>
                         <div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div>
-                        <div>12</div><div>13</div><div>14</div><div className="bg-blue-600 text-white rounded-full w-6 h-6 mx-auto flex items-center justify-center">15</div><div>16</div><div>17</div><div>18</div>
+                        <div>12</div><div>13</div><div>14</div><div className="bg-blue-500 text-white rounded-full w-6 h-6 mx-auto flex items-center justify-center">15</div><div>16</div><div>17</div><div>18</div>
                         <div>19</div><div>20</div><div>21</div><div>22</div><div>23</div><div>24</div><div>25</div>
                         </div>
                         
                         <div className="mt-6 border-t border-slate-100 pt-4">
                             <div className="text-xs font-semibold text-slate-500 mb-2">今日日程</div>
-                            <div className="bg-blue-50 border-l-2 border-blue-500 p-2 text-xs text-blue-700 mb-2 rounded-r">
+                            <div className="bg-blue-50 border-l-2 border-blue-500 p-2 text-xs text-blue-600 mb-2 rounded-r">
                             09:00 晨会
                             </div>
                             <div className="bg-orange-50 border-l-2 border-orange-500 p-2 text-xs text-orange-700 rounded-r">
