@@ -1,6 +1,9 @@
 
-import { MOCK_PROJECTS, MOCK_USERS, MOCK_COLUMNS } from '../constants';
+import { MOCK_PROJECTS as INITIAL_PROJECTS, MOCK_USERS, MOCK_COLUMNS } from '../constants';
 import { Project, Task, WorkbenchData, ApiResponse, TaskType, Priority } from '../types';
+
+// Session-based project storage
+let sessionProjects = [...INITIAL_PROJECTS];
 
 // Simulate network delay
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -35,13 +38,32 @@ export const AuthService = {
 export const ProjectService = {
   list: async (): Promise<ApiResponse<Project[]>> => {
     await delay(300);
-    return success([...MOCK_PROJECTS]);
+    return success([...sessionProjects]);
   },
 
   getById: async (id: string): Promise<ApiResponse<Project | undefined>> => {
     await delay(200);
-    const project = MOCK_PROJECTS.find(p => p.id === id);
+    const project = sessionProjects.find(p => p.id === id);
     return success(project);
+  },
+
+  create: async (projectData: Partial<Project>): Promise<ApiResponse<Project>> => {
+    await delay(500);
+    const newProject: Project = {
+      id: `p${sessionProjects.length + 1}`,
+      code: projectData.code || `P${1000 + sessionProjects.length}`,
+      name: projectData.name || '新项目',
+      type: projectData.type || '敏捷项目',
+      manager: projectData.manager || MOCK_USERS[0],
+      statusLabel: '开始',
+      memberCount: 1,
+      repoCount: 0,
+      activityTrend: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      isStar: false,
+      iconColor: projectData.iconColor || 'text-blue-500',
+    };
+    sessionProjects = [newProject, ...sessionProjects];
+    return success(newProject);
   }
 };
 
@@ -82,7 +104,7 @@ export const WorkbenchService = {
     ];
 
     return success({
-      projects: MOCK_PROJECTS,
+      projects: sessionProjects,
       myTasks: myTasks.slice(0, 5),
       stats: {
         todo: myTasks.length,

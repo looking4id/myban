@@ -5,12 +5,13 @@ import {
   MoreHorizontal, Maximize2, ChevronRight, AlertTriangle,
   FolderTree, LayoutGrid
 } from '../Icons';
+import { Task, TaskType, Priority } from '../../types';
 
 interface Requirement {
   id: string;
   title: string;
   type: 'EPIC' | 'STORY';
-  priority: 'High' | 'Middle';
+  priority: Priority;
   iteration: string;
   status: string;
   hasWarning?: boolean;
@@ -19,58 +20,62 @@ interface Requirement {
   isExpanded?: boolean;
 }
 
+interface RequirementListProps {
+  onRequirementClick?: (task: Partial<Task>) => void;
+}
+
 const MOCK_REQUIREMENTS: Requirement[] = [
-  { id: '1000039', title: '测试需求', type: 'STORY', priority: 'Middle', iteration: '-', status: '规划中', level: 0 },
-  { id: '1000002', title: '数据中心', type: 'EPIC', priority: 'High', iteration: '【存款产品】...', status: '规划中', level: 0 },
-  { id: '1000001', title: '用户平台开发', type: 'EPIC', priority: 'High', iteration: '-', status: '规划中', hasWarning: true, level: 0 },
+  { id: '1000039', title: '测试需求', type: 'STORY', priority: Priority.Normal, iteration: '-', status: '规划中', level: 0 },
+  { id: '1000002', title: '数据中心', type: 'EPIC', priority: Priority.High, iteration: '【存款产品】...', status: '规划中', level: 0 },
+  { id: '1000001', title: '用户平台开发', type: 'EPIC', priority: Priority.High, iteration: '-', status: '规划中', hasWarning: true, level: 0 },
   { 
     id: '1000004', 
     title: '金融应用（社交、保险、分期）', 
     type: 'EPIC', 
-    priority: 'High', 
+    priority: Priority.High, 
     iteration: '-', 
     status: '规划中', 
     hasWarning: true, 
     level: 0,
     isExpanded: true,
     children: [
-      { id: '1000010', title: '金融应用-保险', type: 'STORY', priority: 'High', iteration: '【金融与应用...', status: '规划中', hasWarning: true, level: 1 },
+      { id: '1000010', title: '金融应用-保险', type: 'STORY', priority: Priority.High, iteration: '【金融与应用...', status: '规划中', hasWarning: true, level: 1 },
     ]
   },
   { 
     id: '1000003', 
     title: '支付安全', 
     type: 'EPIC', 
-    priority: 'High', 
+    priority: Priority.High, 
     iteration: '-', 
     status: '规划中', 
     hasWarning: true, 
     level: 0,
     isExpanded: true,
     children: [
-      { id: '1000009', title: '支付安全-系统安全加固', type: 'STORY', priority: 'Middle', iteration: '【支付安全】...', status: '规划中', hasWarning: true, level: 1 },
-      { id: '1000008', title: '支付安全-反欺诈风控', type: 'STORY', priority: 'High', iteration: '【支付安全】...', status: '规划中', level: 1 },
-      { id: '1000018', title: '支付安全-安全技术合规', type: 'STORY', priority: 'Middle', iteration: '【支付安全】...', status: '规划中', level: 1 },
+      { id: '1000009', title: '支付安全-系统安全加固', type: 'STORY', priority: Priority.Normal, iteration: '【支付安全】...', status: '规划中', hasWarning: true, level: 1 },
+      { id: '1000008', title: '支付安全-反欺诈风控', type: 'STORY', priority: Priority.High, iteration: '【支付安全】...', status: '规划中', level: 1 },
+      { id: '1000018', title: '支付安全-安全技术合规', type: 'STORY', priority: Priority.Normal, iteration: '【支付安全】...', status: '规划中', level: 1 },
     ]
   },
   { 
     id: '1000006', 
     title: '清算平台', 
     type: 'EPIC', 
-    priority: 'High', 
+    priority: Priority.High, 
     iteration: '-', 
     status: '规划中', 
     level: 0,
     isExpanded: true,
     children: [
-      { id: '1000014', title: '清算平台-合规处理', type: 'STORY', priority: 'High', iteration: '【存款产品】...', status: '规划中', level: 1 },
-      { id: '1000017', title: '清算平台-结算收入', type: 'STORY', priority: 'High', iteration: '【存款产品】...', status: '规划中', level: 1 },
+      { id: '1000014', title: '清算平台-合规处理', type: 'STORY', priority: Priority.High, iteration: '【存款产品】...', status: '规划中', level: 1 },
+      { id: '1000017', title: '清算平台-结算收入', type: 'STORY', priority: Priority.High, iteration: '【存款产品】...', status: '规划中', level: 1 },
     ]
   },
-  { id: '1000005', title: '交易平台', type: 'EPIC', priority: 'High', iteration: '-', status: '规划中', level: 0 },
+  { id: '1000005', title: '交易平台', type: 'EPIC', priority: Priority.High, iteration: '-', status: '规划中', level: 0 },
 ];
 
-export const RequirementList: React.FC = () => {
+export const RequirementList: React.FC<RequirementListProps> = ({ onRequirementClick }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeCategory, setActiveCategory] = useState('所有的');
 
@@ -87,9 +92,22 @@ export const RequirementList: React.FC = () => {
     { name: '商业运营（审...', count: 0 },
   ];
 
+  const handleRowClick = (req: Requirement) => {
+    if (onRequirementClick) {
+      onRequirementClick({
+        id: req.id,
+        displayId: `#REQ-${req.id}`,
+        title: req.title,
+        type: TaskType.Requirement,
+        priority: req.priority,
+        statusColor: 'bg-blue-500',
+        dueDate: '2026-01-15'
+      });
+    }
+  };
+
   return (
     <div className="flex h-full bg-white -m-6 overflow-hidden">
-      {/* 左侧分类侧边栏 */}
       <div className={`transition-all duration-300 border-r border-slate-200 bg-white flex flex-col flex-shrink-0 ${isSidebarOpen ? 'w-64' : 'w-0'}`}>
         <div className="p-4 flex items-center justify-between border-b border-slate-100 flex-shrink-0 h-12">
           <div className="flex items-center gap-2 text-slate-800 font-bold text-sm">
@@ -118,7 +136,6 @@ export const RequirementList: React.FC = () => {
         </div>
       </div>
 
-      {/* 收缩按钮占位 */}
       <div className="relative w-0 z-20">
          <button 
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -128,9 +145,7 @@ export const RequirementList: React.FC = () => {
          </button>
       </div>
 
-      {/* 主体内容区 */}
       <div className="flex-1 flex flex-col min-w-0 bg-slate-50/30">
-        {/* 工具栏 */}
         <div className="px-4 py-3 bg-white flex items-center justify-between border-b border-slate-100 flex-shrink-0">
           <div className="flex items-center gap-2">
             <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm font-medium flex items-center gap-1.5 transition-colors shadow-sm">
@@ -165,7 +180,6 @@ export const RequirementList: React.FC = () => {
           </div>
         </div>
 
-        {/* 树状表格 */}
         <div className="flex-1 overflow-auto bg-white">
           <table className="w-full text-left border-collapse">
             <thead className="bg-white border-b border-slate-100 sticky top-0 z-10 text-slate-400 text-sm font-bold">
@@ -179,7 +193,6 @@ export const RequirementList: React.FC = () => {
               </tr>
             </thead>
             <tbody className="text-sm">
-              {/* 快速创建行 */}
               <tr className="border-b border-slate-50">
                  <td></td>
                  <td></td>
@@ -192,7 +205,10 @@ export const RequirementList: React.FC = () => {
               
               {MOCK_REQUIREMENTS.map((req) => (
                 <React.Fragment key={req.id}>
-                  <tr className="hover:bg-slate-50/80 transition-colors group cursor-pointer border-b border-slate-50">
+                  <tr 
+                    className="hover:bg-slate-50/80 transition-colors group cursor-pointer border-b border-slate-50"
+                    onClick={() => handleRowClick(req)}
+                  >
                     <td className="py-3 px-4 text-center">
                       <input type="checkbox" className="rounded border-slate-300" onClick={(e) => e.stopPropagation()} />
                     </td>
@@ -215,7 +231,7 @@ export const RequirementList: React.FC = () => {
                     </td>
                     <td className="py-3 px-4">
                       <span className={`px-3 py-1 rounded text-xs font-bold text-white min-w-[60px] inline-block text-center ${
-                        req.priority === 'High' ? 'bg-red-400' : 'bg-emerald-500'
+                        req.priority === Priority.High ? 'bg-red-400' : req.priority === Priority.Normal ? 'bg-emerald-500' : 'bg-slate-400'
                       }`}>
                         {req.priority}
                       </span>
@@ -231,7 +247,11 @@ export const RequirementList: React.FC = () => {
                   </tr>
 
                   {req.isExpanded && req.children?.map(child => (
-                    <tr key={child.id} className="hover:bg-slate-50/80 transition-colors group cursor-pointer border-b border-slate-50">
+                    <tr 
+                      key={child.id} 
+                      className="hover:bg-slate-50/80 transition-colors group cursor-pointer border-b border-slate-50"
+                      onClick={() => handleRowClick(child)}
+                    >
                       <td className="py-3 px-4 text-center">
                         <input type="checkbox" className="rounded border-slate-300" onClick={(e) => e.stopPropagation()} />
                       </td>
@@ -249,7 +269,7 @@ export const RequirementList: React.FC = () => {
                       </td>
                       <td className="py-3 px-4">
                         <span className={`px-3 py-1 rounded text-xs font-bold text-white min-w-[60px] inline-block text-center ${
-                          child.priority === 'High' ? 'bg-red-400' : 'bg-emerald-500'
+                          child.priority === Priority.High ? 'bg-red-400' : child.priority === Priority.Normal ? 'bg-emerald-500' : 'bg-slate-400'
                         }`}>
                           {child.priority}
                         </span>

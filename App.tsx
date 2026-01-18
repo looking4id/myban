@@ -13,7 +13,7 @@ import { KnowledgeBase } from './components/KnowledgeBase';
 import { MemberManagement } from './components/MemberManagement';
 import { PerformanceMetrics } from './components/PerformanceMetrics';
 import { SystemSettings } from './components/SystemSettings';
-import { FilterState, ViewType, SavedView, TaskType, User, Project } from './types';
+import { FilterState, ViewType, SavedView, TaskType, User, Project, Task } from './types';
 
 const App = () => {
   const initialFilters: FilterState = {
@@ -93,6 +93,16 @@ const App = () => {
       }
   };
 
+  const handleTaskJump = (task: Task) => {
+      setActiveMainItem('工作项');
+      // 设置搜索过滤器以找到该具体事项
+      setFilters(prev => ({
+          ...initialFilters,
+          search: task.displayId
+      }));
+      setActiveView('全部工作项');
+  };
+
   if (!isAuthenticated) {
     return <Login onLoginSuccess={handleLoginSuccess} />;
   }
@@ -100,10 +110,13 @@ const App = () => {
   const renderContent = () => {
     switch (activeMainItem) {
       case '工作台':
-        return <Workbench onProjectSelect={(p) => {
+        return <Workbench 
+          onProjectSelect={(p) => {
             setActiveProject(p);
             setActiveMainItem('项目');
-        }} />;
+          }} 
+          onTaskSelect={handleTaskJump}
+        />;
       case '项目':
         if (activeProject) {
             return <ProjectDetail project={activeProject} onBack={() => setActiveProject(null)} />;

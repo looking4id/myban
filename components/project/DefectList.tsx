@@ -5,6 +5,7 @@ import {
   MoreHorizontal, Users, BarChart2, HelpCircle, Bug, 
   Download, UploadCloud, Printer, Settings, Maximize2
 } from '../Icons';
+import { Task, TaskType, Priority } from '../../types';
 
 interface Defect {
   id: string;
@@ -16,6 +17,10 @@ interface Defect {
   handler: string;
   creator: string;
   createTime: string;
+}
+
+interface DefectListProps {
+  onDefectClick?: (task: Partial<Task>) => void;
 }
 
 const MOCK_DEFECTS: Defect[] = [
@@ -43,7 +48,7 @@ const MOCK_DEFECTS: Defect[] = [
   },
 ];
 
-export const DefectList: React.FC = () => {
+export const DefectList: React.FC<DefectListProps> = ({ onDefectClick }) => {
   const [isMoreActionsOpen, setIsMoreActionsOpen] = useState(false);
 
   const getSeverityColor = (sev: string) => {
@@ -64,9 +69,23 @@ export const DefectList: React.FC = () => {
     return 'border-slate-300 text-slate-500';
   };
 
+  const handleRowClick = (defect: Defect) => {
+    if (onDefectClick) {
+      onDefectClick({
+        id: defect.id,
+        displayId: `#BUG-${defect.id}`,
+        title: defect.title,
+        type: TaskType.Defect,
+        priority: defect.priority === '高' ? Priority.High : Priority.Normal,
+        statusColor: 'bg-red-500',
+        dueDate: '2026-01-10'
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col h-full bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden font-sans">
-      {/* 顶部工具栏 - 高度还原原型图 */}
+      {/* 顶部工具栏 */}
       <div className="px-4 py-3 flex items-center justify-between border-b border-slate-100 flex-shrink-0">
         <div className="flex items-center gap-2">
           <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm font-medium flex items-center gap-1.5 transition-colors shadow-sm">
@@ -149,8 +168,12 @@ export const DefectList: React.FC = () => {
           </thead>
           <tbody className="text-sm divide-y divide-slate-50">
             {MOCK_DEFECTS.map((defect) => (
-              <tr key={defect.id} className="hover:bg-slate-50/80 transition-colors group cursor-pointer">
-                <td className="py-3 px-4"><input type="checkbox" className="rounded border-slate-300" /></td>
+              <tr 
+                key={defect.id} 
+                className="hover:bg-slate-50/80 transition-colors group cursor-pointer"
+                onClick={() => handleRowClick(defect)}
+              >
+                <td className="py-3 px-4"><input type="checkbox" className="rounded border-slate-300" onClick={(e) => e.stopPropagation()} /></td>
                 <td className="py-3 px-4">
                   <div className="flex items-center gap-2">
                     <span className="bg-red-500 text-white text-[10px] px-1 rounded leading-none py-0.5 font-bold flex-shrink-0">BUG</span>
@@ -183,9 +206,6 @@ export const DefectList: React.FC = () => {
             ))}
           </tbody>
         </table>
-        
-        {/* 空行填充（可选，为了还原原型图的视觉深度） */}
-        <div className="h-full bg-white"></div>
       </div>
     </div>
   );

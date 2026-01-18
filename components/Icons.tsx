@@ -4,14 +4,14 @@ import * as LucideIcons from 'lucide-react';
 
 /**
  * 图标工厂函数：统一全站图标风格
- * 风格定义：1.8px 细线条 + 5% 填充，营造精致的专业感
+ * 风格定义：1.5px 极细线条 + 5% 填充 + 悬停缩放，营造极致的精致感
  */
 const createIcon = (IconComponent: any) => {
-  return ({ size = 20, className = '', strokeWidth = 1.8, ...props }: any) => (
+  return ({ size = 20, className = '', strokeWidth = 1.5, ...props }: any) => (
     <IconComponent 
       size={size} 
       strokeWidth={strokeWidth}
-      className={`${className} transition-all duration-300`}
+      className={`group ${className} transition-all duration-300 hover:scale-110`}
       style={{ 
         // 增加极淡的填充，使细线条图标更有质感
         fill: 'currentColor', 
@@ -112,7 +112,7 @@ export const GLogo = () => (
 export const AiIcon = () => (
   <div className="relative group cursor-pointer">
     <div className="absolute inset-0 bg-indigo-500 blur-md opacity-20 group-hover:opacity-40 transition-opacity"></div>
-    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-[10px] text-white font-black border border-white/30 shadow-sm relative z-10">
+    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-[10px] text-white font-black border border-white/30 shadow-sm relative z-10 hover:scale-110 transition-transform">
       AI
     </div>
   </div>

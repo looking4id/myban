@@ -60,6 +60,25 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
       setIsCreateModalOpen(true);
   };
 
+  const handleWorkItemClick = (item: Partial<Task>) => {
+    // 补全缺失属性以适配详情组件
+    const fullTask: Task = {
+      id: item.id || '',
+      displayId: item.displayId || '',
+      title: item.title || '',
+      type: item.type || TaskType.Task,
+      priority: item.priority,
+      dueDate: item.dueDate || '2026-01-01',
+      assignee: item.assignee || { id: 'u1', name: 'lo', avatarColor: 'bg-yellow-500' },
+      statusColor: item.statusColor || 'bg-blue-500',
+      creatorId: 'u1',
+      description: item.description || `这是 ${item.displayId} 的详细描述内容...`,
+      projectId: project.id,
+      ...item
+    };
+    setEditingTask(fullTask);
+  };
+
   // Consolidated Menu Logic
   const menuItems = [
     { icon: LayoutDashboard, label: '项目概览' },
@@ -87,19 +106,19 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
 
   const renderContent = () => {
     switch (activeTab) {
-        case '项目概览': return <ProjectOverview project={project} />;
-        case '需求': return <RequirementList />;
+        case '项目概览': return <ProjectOverview project={project} onIterationClick={() => setActiveTab('迭代')} />;
+        case '需求': return <RequirementList onRequirementClick={handleWorkItemClick} />;
         case '任务': return (
             <WorkItemList 
                 project={project} 
                 type={TaskType.Task} 
                 tasks={tasks}
                 onCreate={() => openCreateModal(TaskType.Task)}
-                onTaskClick={setEditingTask}
+                onTaskClick={handleWorkItemClick}
                 onDelete={handleDeleteTask}
             />
         );
-        case '缺陷': return <DefectList />;
+        case '缺陷': return <DefectList onDefectClick={handleWorkItemClick} />;
         case '甘特图': return <ProjectGantt />;
         case '迭代': return <ProjectIterations />;
         case '测试': return <ProjectTesting />;

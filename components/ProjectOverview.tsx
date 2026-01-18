@@ -4,7 +4,12 @@ import { MoreHorizontal, Zap, Maximize2 } from './Icons';
 import { Project } from '../types';
 import { DonutChart } from './ProjectShared';
 
-export const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => (
+interface ProjectOverviewProps {
+  project: Project;
+  onIterationClick?: () => void;
+}
+
+export const ProjectOverview: React.FC<ProjectOverviewProps> = ({ project, onIterationClick }) => (
     <div className="grid grid-cols-12 gap-6">
         {/* Row 1: Project Info & Charts */}
         <div className="col-span-12 md:col-span-4 bg-white rounded-lg border border-slate-200 shadow-sm p-6">
@@ -107,7 +112,10 @@ export const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => 
                 </div>
                 </div>
                 
-                <div className="bg-slate-50 rounded-lg p-5 flex items-center justify-between border border-slate-100 hover:border-blue-200 transition-colors cursor-pointer">
+                <div 
+                    onClick={() => onIterationClick && onIterationClick()}
+                    className="bg-slate-50 rounded-lg p-5 flex items-center justify-between border border-slate-100 hover:border-blue-200 transition-colors cursor-pointer"
+                >
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-orange-500 rounded flex items-center justify-center text-white font-bold text-xl">Sp</div>
                         <div>

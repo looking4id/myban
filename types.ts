@@ -1,8 +1,8 @@
 
 export enum Priority {
-  High = 'High',
-  Urgent = 'Urgent',
-  Normal = 'Normal'
+  High = '高',
+  Normal = '中',
+  Low = '低'
 }
 
 export enum TaskType {

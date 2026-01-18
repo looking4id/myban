@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Priority } from '../types';
+import { Circle, PlayCircle, CheckCircle2, XCircle, Clock, AlertTriangle } from './Icons';
 
 export const DonutChart = ({ percentage, color, label }: { percentage: number; color: string; label: string }) => {
   const radius = 30;
@@ -24,7 +25,7 @@ export const DonutChart = ({ percentage, color, label }: { percentage: number; c
             strokeLinecap="round"
           />
         </svg>
-        <span className="absolute text-base font-bold text-slate-700">{percentage}%</span>
+        <span className="absolute text-sm font-bold text-slate-700">{percentage}%</span>
       </div>
       <span className="text-xs font-medium text-slate-500 mt-2">{label}</span>
     </div>
@@ -43,32 +44,57 @@ export const StatRing = ({ total, label, colorClass, subLabel }: { total: number
             </div>
             <div>
                  <div className="font-bold text-sm text-slate-800">{label}</div>
-                 <div className="text-[11px] text-slate-400 mt-0.5">{subLabel}</div>
+                 <div className="text-xs text-slate-400 mt-0.5">{subLabel}</div>
             </div>
         </div>
     );
 };
 
-export const StatusBadge = ({ status }: { status: string }) => {
+export const StatusBadge = ({ status, className = "" }: { status: string, className?: string }) => {
     let colorClass = 'bg-slate-100 text-slate-600 border-slate-200';
-    if (['进行中', '处理中', '开启', 'Open'].includes(status)) colorClass = 'bg-blue-50 text-blue-600 border-blue-100';
-    if (['已完成', '已关闭', '通过', 'Merged'].includes(status)) colorClass = 'bg-emerald-50 text-emerald-600 border-emerald-100';
-    if (['已逾期', '失败', 'Warning', 'Failed'].includes(status)) colorClass = 'bg-rose-50 text-rose-600 border-rose-100';
-    if (['未开始', '已识别'].includes(status)) colorClass = 'bg-slate-50 text-slate-500 border-slate-200';
+    let Icon = Circle;
+
+    if (['进行中', '处理中', '开启', 'Open', '开发中', '测试中'].includes(status)) {
+        colorClass = 'bg-blue-50 text-blue-600 border-blue-100';
+        Icon = PlayCircle;
+    } else if (['已完成', '已关闭', '通过', 'Merged', '已实现'].includes(status)) {
+        colorClass = 'bg-emerald-50 text-emerald-600 border-emerald-100';
+        Icon = CheckCircle2;
+    } else if (['已逾期', '失败', 'Warning', 'Failed', '紧急'].includes(status)) {
+        colorClass = 'bg-rose-50 text-rose-600 border-rose-100';
+        Icon = AlertTriangle;
+    } else if (['未开始', '已识别', '规划中'].includes(status)) {
+        colorClass = 'bg-slate-50 text-slate-500 border-slate-200';
+        Icon = Clock;
+    } else if (['已拒绝', '已取消'].includes(status)) {
+        colorClass = 'bg-slate-100 text-slate-400 border-slate-200 opacity-70';
+        Icon = XCircle;
+    }
     
     return (
-        <span className={`text-[11px] px-2 py-0.5 rounded-md border font-bold ${colorClass}`}>
-            {status}
+        <span className={`inline-flex items-center gap-2 text-xs px-2 py-1 rounded-lg border font-bold transition-all ${colorClass} ${className}`}>
+            <Icon size={12} strokeWidth={2} />
+            <span className="tracking-tight">{status}</span>
         </span>
     );
 };
 
 export const PriorityBadge = ({ priority }: { priority?: Priority }) => {
-    if (priority === Priority.Urgent) {
-      return <span className="text-[11px] px-2 py-0.5 rounded-md border border-rose-100 text-rose-600 bg-rose-50 font-bold">紧急</span>;
-    }
+    const baseClass = "inline-flex items-center gap-1.5 text-xs px-2 py-0.5 rounded-md border font-bold";
     if (priority === Priority.High) {
-      return <span className="text-[11px] px-2 py-0.5 rounded-md border border-orange-100 text-orange-600 bg-orange-50 font-bold">高</span>;
+      return <span className={`${baseClass} border-rose-100 text-rose-600 bg-rose-50`}>
+        <div className="w-1.5 h-1.5 rounded-full bg-rose-600"></div>
+        高
+      </span>;
     }
-    return <span className="text-[11px] px-2 py-0.5 rounded-md border border-slate-200 text-slate-500 bg-slate-50 font-bold">普通</span>;
+    if (priority === Priority.Normal) {
+      return <span className={`${baseClass} border-orange-100 text-orange-600 bg-orange-50`}>
+        <div className="w-1.5 h-1.5 rounded-full bg-orange-600"></div>
+        中
+      </span>;
+    }
+    return <span className={`${baseClass} border-slate-200 text-slate-500 bg-slate-50`}>
+      <div className="w-1.5 h-1.5 rounded-full bg-slate-400"></div>
+      低
+    </span>;
 };

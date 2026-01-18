@@ -6,11 +6,13 @@ import {
   Briefcase, Calendar, ChevronRight, BarChart2, XCircle
 } from './Icons';
 import { WorkbenchService } from '../services/api';
-import { WorkbenchData, Project } from '../types';
+import { WorkbenchData, Project, Task } from '../types';
 import { StatusBadge } from './ProjectShared';
+import { CreateProjectModal } from './CreateProjectModal';
 
 interface WorkbenchProps {
   onProjectSelect?: (project: Project) => void;
+  onTaskSelect?: (task: Task) => void;
 }
 
 const WorkbenchHeader = ({ user, onAddClick }: { user: string; onAddClick: () => void }) => {
@@ -25,7 +27,7 @@ const WorkbenchHeader = ({ user, onAddClick }: { user: string; onAddClick: () =>
         className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 shadow-md shadow-blue-200 transition-all active:scale-95"
       >
         <Plus size={16} />
-        <span>添加组件</span>
+        <span>新建项目</span>
       </button>
     </div>
   );
@@ -72,23 +74,24 @@ const StatCard = ({ label, value, color, icon: Icon }: any) => (
   </div>
 );
 
-export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect }) => {
+export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSelect }) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<WorkbenchData | null>(null);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isCreateProjectModalOpen, setIsCreateProjectModalOpen] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await WorkbenchService.getData('u1');
+      if (response.code === 0) setData(response.data);
+    } catch (error) {
+      console.error("Failed to fetch workbench data", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await WorkbenchService.getData('u1');
-        if (response.code === 0) setData(response.data);
-      } catch (error) {
-        console.error("Failed to fetch workbench data", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
 
@@ -102,7 +105,7 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect }) => {
 
   return (
     <div className="flex-1 overflow-y-auto bg-slate-50/50 p-8 custom-scrollbar">
-      <WorkbenchHeader user="lo" onAddClick={() => setIsAddModalOpen(true)} />
+      <WorkbenchHeader user="lo" onAddClick={() => setIsCreateProjectModalOpen(true)} />
       
       {/* Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -141,7 +144,10 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect }) => {
                             </div>
                         </div>
                     ))}
-                    <div className="border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center p-4 text-slate-400 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-all gap-2 min-h-[100px]">
+                    <div 
+                      onClick={() => setIsCreateProjectModalOpen(true)}
+                      className="border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center p-4 text-slate-400 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-all gap-2 min-h-[100px]"
+                    >
                         <Plus size={18} />
                         <span className="text-sm font-bold">创建新项目</span>
                     </div>
@@ -159,7 +165,11 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect }) => {
                     </thead>
                     <tbody className="divide-y divide-slate-50">
                         {data.myTasks.map(task => (
-                        <tr key={task.id} className="hover:bg-slate-50/50 group cursor-pointer transition-colors">
+                        <tr 
+                          key={task.id} 
+                          onClick={() => onTaskSelect && onTaskSelect(task)}
+                          className="hover:bg-slate-50/50 group cursor-pointer transition-colors"
+                        >
                             <td className="py-4 px-2">
                                 <div className="flex flex-col gap-0.5">
                                     <div className="text-sm text-slate-700 font-bold group-hover:text-blue-600 transition-colors line-clamp-1">{task.title}</div>
@@ -223,6 +233,13 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect }) => {
             </WidgetWrapper>
         </div>
       </div>
+
+      {isCreateProjectModalOpen && (
+        <CreateProjectModal 
+          onClose={() => setIsCreateProjectModalOpen(false)} 
+          onSuccess={fetchData}
+        />
+      )}
     </div>
   );
 };

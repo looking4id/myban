@@ -7,18 +7,24 @@
     <title>G-Project 管理系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      /* 全局字体平滑处理 */
+      /* 全局字体标准化：优先 San Francisco */
+      :root {
+        --font-sf: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      }
+
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-family: var(--font-sf);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         background-color: #f8fafc;
+        font-size: 14px; /* 默认正文大小 */
+        line-height: 1.5;
       }
 
       /* 统一自定义滚动条 */
       ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 6px;
+        height: 6px;
       }
       ::-webkit-scrollbar-track {
         background: transparent;
@@ -33,17 +39,14 @@
         background: #94a3b8;
       }
 
-      /* 看板横向滚动条优化 */
       .kanban-scroll::-webkit-scrollbar {
-        height: 10px;
+        height: 8px;
       }
 
-      /* 消除按钮点击时的轮廓 */
       button:focus {
         outline: none;
       }
 
-      /* 隐藏滚动条工具类 */
       .no-scrollbar::-webkit-scrollbar {
         display: none;
       }
@@ -51,6 +54,11 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
+
+      /* 强制标准化字体大小映射 */
+      .text-body { font-size: 14px; }
+      .text-title { font-size: 20px; }
+      .text-small { font-size: 12px; }
     </style>
     <script type="importmap">
 {
