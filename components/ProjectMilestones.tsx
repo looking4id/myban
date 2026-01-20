@@ -52,10 +52,10 @@ const MilestoneModal = ({
 
     return (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[200] flex items-center justify-center p-4 font-sans text-slate-700">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg animate-in zoom-in-95 duration-200 overflow-hidden border border-white/20">
+            <div className="bg-white rounded-none shadow-2xl w-full max-w-lg animate-in zoom-in-95 duration-200 overflow-hidden border border-white/20">
                 <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-blue-100 text-blue-600 rounded-xl shadow-inner"><Flag size={20} /></div>
+                        <div className="p-2 bg-blue-100 text-blue-600 rounded-none shadow-inner"><Flag size={20} /></div>
                         <div>
                             <h3 className="text-lg font-black text-slate-800">{initialData ? '编辑里程碑' : '新建里程碑'}</h3>
                             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Project Milestone Entry</p>
@@ -76,7 +76,7 @@ const MilestoneModal = ({
                         <input 
                             required 
                             autoFocus
-                            className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-50 outline-none transition-all bg-slate-50 focus:bg-white font-bold"
+                            className="w-full border border-slate-200 rounded-none px-4 py-3 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-50 outline-none transition-all bg-slate-50 focus:bg-white font-bold"
                             value={formData.title}
                             onChange={e => setFormData({...formData, title: e.target.value})}
                             placeholder="例如：核心版本发布"
@@ -86,7 +86,7 @@ const MilestoneModal = ({
                     <div className="space-y-1.5">
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">目标描述</label>
                         <textarea 
-                            className="w-full h-20 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all bg-slate-50 focus:bg-white resize-none"
+                            className="w-full h-20 border border-slate-200 rounded-none px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all bg-slate-50 focus:bg-white resize-none"
                             value={formData.subtitle}
                             onChange={e => setFormData({...formData, subtitle: e.target.value})}
                             placeholder="简述该阶段的具体交付内容..."
@@ -99,7 +99,7 @@ const MilestoneModal = ({
                             <input 
                                 type="date"
                                 required
-                                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold"
+                                className="w-full border border-slate-200 rounded-none px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold"
                                 value={formData.date}
                                 onChange={e => setFormData({...formData, date: e.target.value})}
                             />
@@ -107,7 +107,7 @@ const MilestoneModal = ({
                         <div className="space-y-1.5">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">状态</label>
                             <select 
-                                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold cursor-pointer"
+                                className="w-full border border-slate-200 rounded-none px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold cursor-pointer"
                                 value={formData.status}
                                 onChange={e => setFormData({...formData, status: e.target.value})}
                             >
@@ -121,7 +121,7 @@ const MilestoneModal = ({
                     <div className="space-y-1.5">
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">负责人</label>
                         <select 
-                            className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold cursor-pointer"
+                            className="w-full border border-slate-200 rounded-none px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold cursor-pointer"
                             value={formData.owner}
                             onChange={e => {
                                 const user = MOCK_USERS.find(u => u.name === e.target.value);
@@ -133,8 +133,8 @@ const MilestoneModal = ({
                     </div>
 
                     <div className="pt-4 flex gap-3">
-                        <button type="button" onClick={onClose} className="flex-1 py-3 border border-slate-200 rounded-2xl text-slate-500 font-bold text-sm hover:bg-slate-50 transition-colors">取消</button>
-                        <button type="submit" className="flex-1 py-3 bg-blue-600 text-white rounded-2xl font-black text-sm hover:bg-blue-700 shadow-xl shadow-blue-200 transition-all active:scale-95">提交保存</button>
+                        <button type="button" onClick={onClose} className="flex-1 py-3 border border-slate-200 rounded-none text-slate-500 font-bold text-sm hover:bg-slate-50 transition-colors">取消</button>
+                        <button type="submit" className="flex-1 py-3 bg-blue-600 text-white rounded-none font-black text-sm hover:bg-blue-700 shadow-xl shadow-blue-200 transition-all active:scale-95">提交保存</button>
                     </div>
                 </form>
             </div>
@@ -145,11 +145,11 @@ const MilestoneModal = ({
 export const ProjectMilestones = () => {
   // 核心数据状态
   const [milestones, setMilestones] = useState<Milestone[]>([
-    { id: 1, title: '创建新项目', subtitle: '完成项目立项与团队组建', date: '2025-12-11', status: '已完成', owner: 'looking4id', ownerColor: 'bg-purple-500' },
-    { id: 2, title: '邀请同事加入项目', subtitle: '完成核心开发人员入驻', date: '2025-12-18', status: '已完成', owner: 'looking4id', ownerColor: 'bg-purple-500' },
-    { id: 3, title: '在项目中管理需求池', subtitle: '完成首批需求梳理与评审', date: '2025-12-25', status: '进行中', owner: 'pm01', ownerColor: 'bg-indigo-500' },
-    { id: 4, title: '通过数据报表进行项目复盘', subtitle: 'Sprint 1 结束后的数据分析', date: '2026-01-01', status: '未开始', owner: 'looking4id', ownerColor: 'bg-purple-500' },
-    { id: 5, title: '完成一次迭代交付', subtitle: 'V1.0 版本正式上线', date: '2026-01-10', status: '未开始', owner: 'dev01', ownerColor: 'bg-blue-500' },
+    { id: 1, title: '创建新项目', subtitle: '完成项目立项与团队组建', date: '2025-12-11', status: '已完成', owner: 'lo', ownerColor: 'bg-purple-500' },
+    { id: 2, title: '邀请同事加入项目', subtitle: '完成核心开发人员入驻', date: '2025-12-18', status: '已完成', owner: 'lo', ownerColor: 'bg-purple-500' },
+    { id: 3, title: '在项目中管理需求池', subtitle: '完成首批需求梳理与评审', date: '2025-12-25', status: '进行中', owner: '产品经理', ownerColor: 'bg-indigo-500' },
+    { id: 4, title: '通过数据报表进行项目复盘', subtitle: 'Sprint 1 结束后的数据分析', date: '2026-01-01', status: '未开始', owner: 'lo', ownerColor: 'bg-purple-500' },
+    { id: 5, title: '完成一次迭代交付', subtitle: 'V1.0 版本正式上线', date: '2026-01-10', status: '未开始', owner: 'Dev 1', ownerColor: 'bg-blue-500' },
   ]);
 
   // UI 交互状态
@@ -190,7 +190,7 @@ export const ProjectMilestones = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden font-sans text-slate-700">
+    <div className="flex flex-col h-full bg-white rounded-none border border-slate-200 shadow-sm overflow-hidden font-sans text-slate-700">
       {/* Header */}
       <div className="p-6 border-b border-slate-100 flex justify-between items-start bg-slate-50/20">
         <div>
@@ -199,7 +199,7 @@ export const ProjectMilestones = () => {
         </div>
         <button 
             onClick={() => { setEditingMilestone(null); setIsModalOpen(true); }}
-            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-sm font-bold shadow-lg shadow-blue-100 transition-all active:scale-95"
+            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-none hover:bg-blue-700 text-sm font-bold shadow-lg shadow-blue-100 transition-all active:scale-95"
         >
           <Plus size={18} strokeWidth={3} />
           <span>新建里程碑</span>
@@ -253,17 +253,17 @@ export const ProjectMilestones = () => {
                     placeholder="输入关键词搜索..." 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 bg-slate-50 transition-all focus:bg-white shadow-sm"
+                    className="w-full pl-10 pr-4 py-2 text-sm border border-slate-200 rounded-none focus:outline-none focus:border-blue-500 bg-slate-50 transition-all focus:bg-white shadow-sm"
                 />
                 <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
             </div>
             
-            <div className="flex bg-slate-100 p-1 rounded-xl gap-1">
+            <div className="flex bg-slate-100 p-1 rounded-none gap-1">
                 {['全部', '未开始', '进行中', '已完成'].map(st => (
                     <button 
                         key={st}
                         onClick={() => setStatusFilter(st)}
-                        className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${statusFilter === st ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                        className={`px-3 py-1 text-xs font-bold rounded-none transition-all ${statusFilter === st ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                     >
                         {st}
                     </button>
@@ -271,16 +271,16 @@ export const ProjectMilestones = () => {
             </div>
           </div>
           <div className="flex items-center gap-3">
-             <div className="text-[10px] font-black text-slate-300 uppercase tracking-widest border border-slate-100 px-2 py-1 rounded-lg">
+             <div className="text-[10px] font-black text-slate-300 uppercase tracking-widest border border-slate-100 px-2 py-1 rounded-none">
                 Showing: {filteredMilestones.length}
              </div>
-             <button className="p-2 hover:bg-slate-50 rounded-xl text-slate-400 transition-all"><MoreHorizontal size={18}/></button>
+             <button className="p-2 hover:bg-slate-50 rounded-none text-slate-400 transition-all"><MoreHorizontal size={18}/></button>
           </div>
         </div>
 
         {/* 里程碑明细列表 */}
         <div className="px-6 py-6">
-          <div className="border border-slate-100 rounded-3xl overflow-hidden shadow-sm bg-white">
+          <div className="border border-slate-100 rounded-none overflow-hidden shadow-sm bg-white">
             <table className="w-full text-left">
               <thead className="bg-slate-50/80 border-b border-slate-100">
                 <tr className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
@@ -321,13 +321,13 @@ export const ProjectMilestones = () => {
                       <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-all">
                         <button 
                             onClick={() => handleEdit(m)}
-                            className="p-2 text-slate-400 hover:text-blue-600 hover:bg-white rounded-xl border border-transparent hover:border-slate-100 shadow-sm"
+                            className="p-2 text-slate-400 hover:text-blue-600 hover:bg-white rounded-none border border-transparent hover:border-slate-100 shadow-sm"
                         >
                             <Edit3 size={16} />
                         </button>
                         <button 
                             onClick={() => handleDelete(m.id)}
-                            className="p-2 text-slate-400 hover:text-red-600 hover:bg-white rounded-xl border border-transparent hover:border-slate-100 shadow-sm"
+                            className="p-2 text-slate-400 hover:text-red-600 hover:bg-white rounded-none border border-transparent hover:border-slate-100 shadow-sm"
                         >
                             <Trash2 size={16} />
                         </button>

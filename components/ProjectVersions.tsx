@@ -57,12 +57,12 @@ export const ProjectVersions = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-50/30 rounded-xl border border-slate-200 shadow-sm overflow-hidden font-sans">
+    <div className="flex flex-col h-full bg-slate-50/30 rounded-none border border-slate-200 shadow-sm overflow-hidden font-sans">
       {/* Header */}
       <div className="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between flex-shrink-0 z-20 shadow-sm">
         <div className="flex items-center gap-8 h-full">
           <div className="flex items-center gap-3">
-             <div className="p-2 bg-blue-50 text-blue-600 rounded-lg"><Box size={20} /></div>
+             <div className="p-2 bg-blue-50 text-blue-600 rounded-none"><Box size={20} /></div>
              <h2 className="text-lg font-black text-slate-800 tracking-tight">项目版本</h2>
           </div>
           <div className="flex items-center gap-6 h-full pt-1">
@@ -88,7 +88,7 @@ export const ProjectVersions = () => {
               <input 
                 type="text" 
                 placeholder="搜索版本/名称..." 
-                className="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:border-blue-500 outline-none w-64 bg-slate-50/50 transition-all focus:bg-white"
+                className="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-none focus:border-blue-500 outline-none w-64 bg-slate-50/50 transition-all focus:bg-white"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -97,7 +97,7 @@ export const ProjectVersions = () => {
           )}
           <button 
             onClick={() => { setEditingVersion(null); setSelectedCalendarDate(undefined); setIsModalOpen(true); }}
-            className="bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-black px-6 py-2.5 rounded-xl flex items-center gap-2 shadow-lg shadow-blue-100 transition-all uppercase tracking-widest active:scale-95"
+            className="bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-black px-6 py-2.5 rounded-none flex items-center gap-2 shadow-lg shadow-blue-100 transition-all uppercase tracking-widest active:scale-95"
           >
             <Plus size={16} strokeWidth={3} /> 新建版本
           </button>

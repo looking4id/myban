@@ -6,19 +6,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>G-Project 管理系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              slate: {
+                850: '#1e293b',
+                900: '#0f172a',
+                950: '#020617',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-      /* 全局字体标准化：优先 San Francisco */
+      /* 全局字体标准化：优先 Inter, 其次 San Francisco */
       :root {
-        --font-sf: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+        --font-sans: "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       }
 
       body {
-        font-family: var(--font-sf);
+        font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         background-color: #f8fafc;
         font-size: 14px; /* 默认正文大小 */
         line-height: 1.5;
+        color: #334155;
+      }
+      
+      /* Dark mode overrides for body */
+      .dark body {
+        background-color: #0f172a; /* slate-900 */
+        color: #cbd5e1; /* slate-300 */
       }
 
       /* 统一自定义滚动条 */
@@ -30,13 +56,18 @@
         background: transparent;
       }
       ::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
+        background: #e2e8f0;
         border-radius: 20px;
-        border: 2px solid transparent;
-        background-clip: content-box;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
+        background: #cbd5e1;
+      }
+      
+      .dark ::-webkit-scrollbar-thumb {
+        background: #334155;
+      }
+      .dark ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
       }
 
       .kanban-scroll::-webkit-scrollbar {
@@ -54,11 +85,6 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
-
-      /* 强制标准化字体大小映射 */
-      .text-body { font-size: 14px; }
-      .text-title { font-size: 20px; }
-      .text-small { font-size: 12px; }
     </style>
     <script type="importmap">
 {
@@ -73,7 +99,7 @@
 }
 </script>
   </head>
-  <body class="text-slate-700 overflow-hidden">
+  <body class="text-slate-700 overflow-hidden transition-colors duration-300">
     <div id="root"></div>
   </body>
 </html>

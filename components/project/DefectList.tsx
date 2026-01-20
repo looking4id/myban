@@ -57,13 +57,13 @@ export const DefectList: React.FC<DefectListProps> = ({ tasks, onCreate, onDefec
   const columns = ['选中', 'ID', '缺陷标题', '当前状态', '优先级', '严重程度', '发现环境', '处理人', '操作'];
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden font-sans -m-6">
+    <div className="flex flex-col h-full bg-white rounded shadow-sm border border-slate-200 overflow-hidden font-sans -m-6">
       {/* 增强型工具栏 */}
       <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100 flex-shrink-0 bg-slate-50/30">
         <div className="flex items-center gap-4">
           <button 
             onClick={onCreate}
-            className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-xl text-sm font-black flex items-center gap-2 shadow-lg shadow-red-100 transition-all active:scale-95"
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-black flex items-center gap-2 shadow-lg shadow-red-100 transition-all active:scale-95"
           >
             <Plus size={16} strokeWidth={3} /> 创建缺陷
           </button>
@@ -73,7 +73,7 @@ export const DefectList: React.FC<DefectListProps> = ({ tasks, onCreate, onDefec
               placeholder="搜索缺陷 ID 或标题关键词..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:border-red-400 outline-none w-72 bg-white transition-all shadow-sm"
+              className="pl-10 pr-4 py-2 text-sm border border-slate-200 rounded focus:border-red-400 outline-none w-72 bg-white transition-all shadow-sm"
             />
             <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           </div>
@@ -82,7 +82,7 @@ export const DefectList: React.FC<DefectListProps> = ({ tasks, onCreate, onDefec
           <div className="flex items-center gap-1.5 cursor-pointer hover:text-slate-800 transition-colors">
             <Filter size={16} /> <span>过滤</span>
           </div>
-          <div className="text-[11px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">TOTAL: {defects.length}</div>
+          <div className="text-[11px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded">TOTAL: {defects.length}</div>
           <button className="p-1 hover:bg-slate-100 rounded transition-colors text-slate-400">
             <MoreHorizontal size={20} />
           </button>
@@ -138,13 +138,13 @@ export const DefectList: React.FC<DefectListProps> = ({ tasks, onCreate, onDefec
                   <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
                     <button 
                       onClick={(e) => { e.stopPropagation(); onDefectClick(defect); }}
-                      className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-white rounded-lg shadow-sm border border-transparent hover:border-slate-100"
+                      className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-white rounded shadow-sm border border-transparent hover:border-slate-100"
                     >
                       <Edit3 size={16} />
                     </button>
                     <button 
                       onClick={(e) => { e.stopPropagation(); onDelete(defect.id); }}
-                      className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-white rounded-lg shadow-sm border border-transparent hover:border-slate-100"
+                      className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-white rounded shadow-sm border border-transparent hover:border-slate-100"
                     >
                       <Trash2 size={16} />
                     </button>

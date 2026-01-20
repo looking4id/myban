@@ -23,11 +23,11 @@ export const TestCaseList = ({
         <div className="flex items-center gap-3">
           <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">共有 {testCases.length} 项</span>
           <div className="relative">
-            <input type="text" placeholder="搜索用例标题/ID..." value={searchQuery} onChange={e => onSearchChange(e.target.value)} className="pl-8 pr-4 py-1.5 text-sm border border-slate-200 rounded-lg bg-white w-64 focus:outline-none focus:border-pink-500 transition-all" />
+            <input type="text" placeholder="搜索用例标题/ID..." value={searchQuery} onChange={e => onSearchChange(e.target.value)} className="pl-8 pr-4 py-1.5 text-sm border border-slate-200 rounded-none bg-white w-64 focus:outline-none focus:border-pink-500 transition-all" />
             <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
           </div>
         </div>
-        <button className="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-900 border border-transparent hover:border-slate-200 px-2 py-1 rounded transition-all">
+        <button className="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-900 border border-transparent hover:border-slate-200 px-2 py-1 rounded-none transition-all">
           <Filter size={14} /> 筛选
         </button>
       </div>
@@ -46,8 +46,8 @@ export const TestCaseList = ({
                 <td className="py-5 px-4"><div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full bg-indigo-500 text-white flex items-center justify-center text-[10px] font-black">{tc.maintainer.charAt(0)}</div><span className="text-slate-600 font-bold">{tc.maintainer}</span></div></td>
                 <td className="py-5 px-12 text-right">
                   <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="p-1.5 text-slate-400 hover:text-blue-600 bg-white rounded-lg shadow-sm"><Edit3 size={14} /></button>
-                    <button onClick={(e) => { e.stopPropagation(); onDelete(tc.id); }} className="p-1.5 text-slate-400 hover:text-red-600 bg-white rounded-lg shadow-sm"><Trash2 size={14} /></button>
+                    <button className="p-1.5 text-slate-400 hover:text-blue-600 bg-white rounded-none shadow-sm"><Edit3 size={14} /></button>
+                    <button onClick={(e) => { e.stopPropagation(); onDelete(tc.id); }} className="p-1.5 text-slate-400 hover:text-red-600 bg-white rounded-none shadow-sm"><Trash2 size={14} /></button>
                   </div>
                 </td>
               </tr>

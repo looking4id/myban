@@ -1,30 +1,24 @@
 
 import React, { useState } from 'react';
-import { MainSidebar, SecondarySidebar } from './components/Sidebar';
-import { TopHeader } from './components/TopHeader';
-import { FilterBar } from './components/FilterBar';
-import { KanbanBoard } from './components/KanbanBoard';
-import { ProjectList } from './components/ProjectList';
-import { ProjectDetail } from './components/ProjectDetail';
-import { Workbench } from './components/Workbench';
-import { Login } from './components/Login';
+import { MainSidebar, SecondarySidebar } from './components/layout/Sidebar';
+import { TopHeader } from './components/layout/TopHeader';
+import { FilterBar } from './features/project/kanban/FilterBar';
+import { KanbanBoard } from './features/project/kanban/KanbanBoard';
+import { ProjectList } from './features/project/list/ProjectList';
+import { ProjectDetail } from './features/project/views/ProjectDetail';
+import { Workbench } from './features/workbench/Workbench';
+import { Login } from './features/auth/Login';
 import { CodeManagement } from './components/CodeManagement';
 import { KnowledgeBase } from './components/KnowledgeBase';
 import { MemberManagement } from './components/MemberManagement';
 import { PerformanceMetrics } from './components/PerformanceMetrics';
 import { SystemSettings } from './components/SystemSettings';
 import { FilterState, ViewType, SavedView, TaskType, User, Project, Task } from './types';
+import { AppProvider } from './utils/AppContext';
 
-const App = () => {
+const AppContent = () => {
   const initialFilters: FilterState = {
-    search: '',
-    assigneeId: null,
-    type: null,
-    priority: null,
-    dateRange: null,
-    projectId: null,
-    status: null,
-    creatorId: null
+    search: '', assigneeId: null, type: null, priority: null, dateRange: null, projectId: null, status: null, creatorId: null
   };
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -46,10 +40,22 @@ const App = () => {
     setIsAuthenticated(true);
   };
 
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+    setActiveMainItem('工作台');
+    setActiveProject(null);
+    setFilters(initialFilters);
+  };
+
+  const handleGoHome = () => {
+    setActiveMainItem('工作台');
+    setActiveProject(null);
+  };
+
   const handleViewSelect = (viewName: string) => {
     setActiveView(viewName);
     let newFilters = { ...initialFilters };
-
     if (viewName === '全部工作项') {
     } else if (viewName === '我负责的') {
        newFilters.assigneeId = currentUser?.id || 'u1';
@@ -61,9 +67,7 @@ const App = () => {
        newFilters.type = TaskType.Requirement;
     } else {
        const customView = customViews.find(v => v.name === viewName);
-       if (customView) {
-           newFilters = { ...newFilters, ...customView.filters };
-       }
+       if (customView) newFilters = { ...newFilters, ...customView.filters };
     }
     setFilters(newFilters);
   };
@@ -71,12 +75,7 @@ const App = () => {
   const handleAddCustomView = () => {
       const name = window.prompt("请输入新视图名称", `视图 ${customViews.length + 1}`);
       if (name && !customViews.some(v => v.name === name)) {
-          const newView: SavedView = {
-              name,
-              type: 'personal',
-              filters: { ...filters }
-          };
-          setCustomViews([...customViews, newView]);
+          setCustomViews([...customViews, { name, type: 'personal', filters: { ...filters } }]);
           setActiveView(name);
       }
   };
@@ -88,82 +87,50 @@ const App = () => {
 
   const handleMainItemSelect = (item: string) => {
       setActiveMainItem(item);
-      if (item !== '项目') {
-          setActiveProject(null);
-      }
+      if (item !== '项目') setActiveProject(null);
   };
 
   const handleTaskJump = (task: Task) => {
       setActiveMainItem('工作项');
-      // 设置搜索过滤器以找到该具体事项
-      setFilters(prev => ({
-          ...initialFilters,
-          search: task.displayId
-      }));
+      setFilters(prev => ({ ...initialFilters, search: task.displayId }));
       setActiveView('全部工作项');
   };
 
-  if (!isAuthenticated) {
-    return <Login onLoginSuccess={handleLoginSuccess} />;
-  }
+  if (!isAuthenticated) return <Login onLoginSuccess={handleLoginSuccess} />;
 
   const renderContent = () => {
     switch (activeMainItem) {
       case '工作台':
         return <Workbench 
-          onProjectSelect={(p) => {
-            setActiveProject(p);
-            setActiveMainItem('项目');
-          }} 
+          onProjectSelect={(p) => { setActiveProject(p); setActiveMainItem('项目'); }} 
           onTaskSelect={handleTaskJump}
+          user={currentUser}
+          onLogout={handleLogout}
+          onGoHome={handleGoHome}
         />;
       case '项目':
-        if (activeProject) {
-            return <ProjectDetail project={activeProject} onBack={() => setActiveProject(null)} />;
-        }
-        return <ProjectList onProjectClick={setActiveProject} />;
-      case '代码':
-        return <CodeManagement />;
-      case '知识库':
-        return <KnowledgeBase />;
-      case '成员':
-        return <MemberManagement />;
-      case '效能度量':
-        return <PerformanceMetrics />;
-      case '设置':
-        return <SystemSettings />;
+        if (activeProject) return <ProjectDetail project={activeProject} onBack={() => setActiveProject(null)} onLogout={handleLogout} onGoHome={handleGoHome} user={currentUser} />;
+        return <ProjectList onProjectClick={setActiveProject} onLogout={handleLogout} onGoHome={handleGoHome} user={currentUser} />;
+      case '代码': return <CodeManagement />;
+      case '知识库': return <KnowledgeBase />;
+      case '成员': return <MemberManagement />;
+      case '效能度量': return <PerformanceMetrics />;
+      case '设置': return <SystemSettings />;
       case '工作项':
       default:
         return (
           <div className="flex flex-1 overflow-hidden">
-            <SecondarySidebar 
-                activeView={activeView} 
-                onViewSelect={handleViewSelect}
-                customViews={customViews}
-                onAddView={handleAddCustomView}
-            />
+            <SecondarySidebar activeView={activeView} onViewSelect={handleViewSelect} customViews={customViews} onAddView={handleAddCustomView} />
             <div className="flex-1 flex flex-col overflow-hidden relative">
               <TopHeader 
-                selectedType={filters.type}
-                onTypeChange={(type) => {
-                    setFilters(prev => ({ ...prev, type }));
-                }}
+                selectedType={filters.type} 
+                onTypeChange={(type) => setFilters(prev => ({ ...prev, type }))} 
+                user={currentUser}
+                onLogout={handleLogout}
+                onGoHome={handleGoHome}
               />
-              <FilterBar 
-                filters={filters} 
-                setFilters={setFilters} 
-                viewType={viewType}
-                setViewType={setViewType}
-                onTriggerCreate={handleTriggerCreate}
-              />
-              <KanbanBoard 
-                filters={filters} 
-                viewType={viewType}
-                isCreateModalOpen={isCreateModalOpen}
-                setIsCreateModalOpen={setIsCreateModalOpen}
-                createModalType={createModalType}
-                setCreateModalType={setCreateModalType}
-              />
+              <FilterBar filters={filters} setFilters={setFilters} viewType={viewType} setViewType={setViewType} onTriggerCreate={handleTriggerCreate} />
+              <KanbanBoard filters={filters} viewType={viewType} isCreateModalOpen={isCreateModalOpen} setIsCreateModalOpen={setIsCreateModalOpen} createModalType={createModalType} setCreateModalType={setCreateModalType} />
             </div>
           </div>
         );
@@ -172,12 +139,17 @@ const App = () => {
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-white">
-      <MainSidebar 
-        activeItem={activeMainItem}
-        onSelectItem={handleMainItemSelect}
-      />
+      <MainSidebar activeItem={activeMainItem} onSelectItem={handleMainItemSelect} />
       {renderContent()}
     </div>
+  );
+};
+
+const App = () => {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
   );
 };
 

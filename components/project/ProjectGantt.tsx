@@ -67,11 +67,11 @@ const GanttTaskModal = ({
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[200] flex items-center justify-center p-4 font-sans text-slate-700">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-xl animate-in zoom-in-95 duration-200 overflow-hidden border border-white/20">
+        <div className="fixed inset-0 bg-slate-900/10 backdrop-blur-[2px] z-[200] flex items-center justify-center p-4 font-sans text-slate-700">
+            <div className="bg-white rounded-lg shadow-2xl w-full max-w-xl animate-in zoom-in-95 duration-300 overflow-hidden border border-white/20">
                 <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-blue-100 text-blue-600 rounded-xl shadow-inner"><LayoutGrid size={20} /></div>
+                        <div className="p-2 bg-blue-100 text-blue-600 rounded-lg shadow-inner"><LayoutGrid size={20} /></div>
                         <div>
                             <h3 className="text-lg font-black text-slate-800">{initialData ? '编辑甘特图任务' : '新建甘特图任务'}</h3>
                             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">{initialData ? 'Update Schedule Entry' : 'Define Timeline Task'}</p>
@@ -93,7 +93,7 @@ const GanttTaskModal = ({
                         <input 
                             required 
                             autoFocus
-                            className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-50 outline-none transition-all bg-slate-50 focus:bg-white font-bold"
+                            className="w-full border border-slate-200 rounded px-4 py-3 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-50 outline-none transition-all bg-slate-50 focus:bg-white font-bold"
                             value={formData.title}
                             onChange={e => setFormData({...formData, title: e.target.value})}
                             placeholder="输入任务或需求标题..."
@@ -104,7 +104,7 @@ const GanttTaskModal = ({
                         <div className="space-y-1.5">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">业务类别</label>
                             <select 
-                                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold cursor-pointer"
+                                className="w-full border border-slate-200 rounded px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold cursor-pointer"
                                 value={formData.type}
                                 onChange={e => setFormData({...formData, type: e.target.value as any})}
                             >
@@ -117,7 +117,7 @@ const GanttTaskModal = ({
                         <div className="space-y-1.5">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">优先级</label>
                             <select 
-                                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold cursor-pointer"
+                                className="w-full border border-slate-200 rounded px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold cursor-pointer"
                                 value={formData.priority || Priority.Normal}
                                 onChange={e => setFormData({...formData, priority: e.target.value as any})}
                             >
@@ -134,7 +134,7 @@ const GanttTaskModal = ({
                             <input 
                                 type="date"
                                 required
-                                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold"
+                                className="w-full border border-slate-200 rounded px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold"
                                 value={formData.start}
                                 onChange={e => setFormData({...formData, start: e.target.value})}
                             />
@@ -144,7 +144,7 @@ const GanttTaskModal = ({
                             <input 
                                 type="date"
                                 required
-                                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold"
+                                className="w-full border border-slate-200 rounded px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold"
                                 value={formData.end}
                                 min={formData.start}
                                 onChange={e => setFormData({...formData, end: e.target.value})}
@@ -156,7 +156,7 @@ const GanttTaskModal = ({
                         <div className="space-y-1.5">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">负责人</label>
                             <select 
-                                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold cursor-pointer"
+                                className="w-full border border-slate-200 rounded px-4 py-3 text-sm outline-none focus:border-blue-500 bg-slate-50 font-bold cursor-pointer"
                                 value={formData.handler}
                                 onChange={e => setFormData({...formData, handler: e.target.value})}
                             >
@@ -183,8 +183,8 @@ const GanttTaskModal = ({
                     </div>
 
                     <div className="pt-4 flex gap-3">
-                        <button type="button" onClick={onClose} className="flex-1 py-3 border border-slate-200 rounded-2xl text-slate-500 font-bold text-sm hover:bg-slate-50 transition-colors">取消</button>
-                        <button type="submit" className="flex-1 py-3 bg-blue-600 text-white rounded-2xl font-black text-sm hover:bg-blue-700 shadow-xl shadow-blue-200 transition-all active:scale-95">
+                        <button type="button" onClick={onClose} className="flex-1 px-4 py-2 border border-slate-200 rounded text-slate-500 font-bold text-sm hover:bg-slate-50 transition-colors flex items-center justify-center gap-2">取消</button>
+                        <button type="submit" className="flex-1 px-4 py-2 bg-blue-600 text-white rounded font-black text-sm hover:bg-blue-700 shadow-xl shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2">
                             {initialData ? '保存修改' : '加入排期'}
                         </button>
                     </div>
@@ -342,16 +342,16 @@ export const ProjectGantt: React.FC = () => {
       <div className="h-14 border-b border-slate-200 flex items-center justify-between px-6 bg-white flex-shrink-0 z-30 shadow-sm">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-blue-50 text-blue-600 rounded-lg"><LayoutGrid size={18} /></div>
+            <div className="p-2 bg-blue-50 text-blue-600 rounded"><LayoutGrid size={18} /></div>
             <h2 className="text-base font-black text-slate-800 tracking-tight">项目甘特图</h2>
           </div>
           
           {/* 月度切换器 */}
-          <div className="flex items-center bg-slate-100 p-1 rounded-xl gap-2">
+          <div className="flex items-center bg-slate-100 p-1 rounded gap-2">
             <div className="flex items-center gap-1">
               <button 
                 onClick={handlePrevMonth}
-                className="p-1 text-slate-400 hover:text-blue-600 hover:bg-white rounded-lg transition-all"
+                className="p-1 text-slate-400 hover:text-blue-600 hover:bg-white rounded transition-all"
               >
                 <ChevronLeft size={16} />
               </button>
@@ -360,7 +360,7 @@ export const ProjectGantt: React.FC = () => {
               </div>
               <button 
                 onClick={handleNextMonth}
-                className="p-1 text-slate-400 hover:text-blue-600 hover:bg-white rounded-lg transition-all"
+                className="p-1 text-slate-400 hover:text-blue-600 hover:bg-white rounded transition-all"
               >
                 <ChevronRight size={16} />
               </button>
@@ -368,18 +368,18 @@ export const ProjectGantt: React.FC = () => {
             <div className="w-px h-4 bg-slate-200 mx-1"></div>
             <button 
               onClick={handleGoToday}
-              className="px-3 py-1 text-[11px] font-black uppercase text-slate-500 hover:text-blue-600 transition-colors"
+              className="px-4 py-2 text-[11px] font-black uppercase text-slate-500 hover:text-blue-600 transition-colors rounded flex items-center gap-2"
             >
               今天
             </button>
           </div>
 
-          <div className="flex bg-slate-100 p-1 rounded-xl gap-1">
+          <div className="flex bg-slate-100 p-1 rounded gap-1">
             {(['day', 'week', 'month'] as const).map(s => (
               <button 
                 key={s} 
                 onClick={() => setViewScale(s)}
-                className={`px-4 py-1 text-[11px] font-black uppercase tracking-widest rounded-lg transition-all ${viewScale === s ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`px-4 py-2 text-[11px] font-black uppercase tracking-widest rounded transition-all flex items-center gap-2 ${viewScale === s ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
               >
                 {s === 'day' ? '天' : s === 'week' ? '周' : '月'}
               </button>
@@ -392,7 +392,7 @@ export const ProjectGantt: React.FC = () => {
               placeholder="搜索任务关键词..." 
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="pl-9 pr-4 py-1.5 text-xs border border-slate-200 rounded-xl focus:border-blue-400 outline-none w-56 bg-slate-50/50 focus:bg-white transition-all"
+              className="pl-9 pr-4 py-1.5 text-xs border border-slate-200 rounded focus:border-blue-400 outline-none w-56 bg-slate-50/50 focus:bg-white transition-all"
             />
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           </div>
@@ -409,7 +409,7 @@ export const ProjectGantt: React.FC = () => {
            <div className="w-px h-6 bg-slate-100"></div>
            <button 
              onClick={openCreateModal}
-             className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 text-white rounded-xl text-xs font-black shadow-lg shadow-blue-100 hover:bg-blue-700 active:scale-95 transition-all"
+             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded text-xs font-black shadow-lg shadow-blue-100 hover:bg-blue-700 active:scale-95 transition-all"
            >
              <Plus size={14} strokeWidth={3} /> 新建任务
            </button>
@@ -481,7 +481,7 @@ export const ProjectGantt: React.FC = () => {
                   className={`border-r border-slate-100 flex flex-col items-center justify-center flex-shrink-0 transition-colors ${date.isWeekend ? 'bg-slate-50/50' : ''}`}
                  >
                     <span className="text-[10px] text-slate-300 font-black uppercase tracking-tighter mb-1">{date.week}</span>
-                    <span className={`text-sm font-black ${date.dateStr === new Date().toISOString().split('T')[0] ? 'w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md' : 'text-slate-500'}`}>{date.day}</span>
+                    <span className={`text-sm font-black ${date.dateStr === new Date().toISOString().split('T')[0] ? 'w-7 h-7 rounded bg-blue-600 text-white flex items-center justify-center shadow-md' : 'text-slate-500'}`}>{date.day}</span>
                  </div>
                ))}
              </div>
@@ -524,7 +524,7 @@ export const ProjectGantt: React.FC = () => {
                         </div>
                       ) : barStyle && (
                         <div 
-                          className={`absolute h-6 rounded-full shadow-sm flex items-center px-1 overflow-hidden group/bar transition-all hover:h-8 hover:z-20 ${getPriorityColor(task.priority)} ${editingTask?.id === task.id ? 'ring-2 ring-blue-400 ring-offset-1' : ''}`}
+                          className={`absolute h-6 rounded shadow-sm flex items-center px-1 overflow-hidden group/bar transition-all hover:h-8 hover:z-20 ${getPriorityColor(task.priority)} ${editingTask?.id === task.id ? 'ring-2 ring-blue-400 ring-offset-1' : ''}`}
                           style={barStyle}
                         >
                           {/* 进度条底层 */}
@@ -539,7 +539,7 @@ export const ProjectGantt: React.FC = () => {
                           {/* 任务标题/百分比悬浮显示 */}
                           <div className="relative z-10 px-2 flex items-center justify-between w-full">
                              <span className="text-[9px] font-black text-white truncate drop-shadow-sm">{task.progress}%</span>
-                             {task.progress === 100 && <div className="w-3 h-3 rounded-full bg-white flex items-center justify-center"><Plus size={8} className="text-emerald-600 rotate-45" /></div>}
+                             {task.progress === 100 && <div className="w-3 h-3 rounded bg-white flex items-center justify-center"><Plus size={8} className="text-emerald-600 rotate-45" /></div>}
                           </div>
                         </div>
                       )}
@@ -556,7 +556,7 @@ export const ProjectGantt: React.FC = () => {
                className="absolute top-0 bottom-0 w-0.5 bg-blue-500 z-30 pointer-events-none shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                style={{ left: ((new Date().getTime() - baseDate.getTime()) / (1000 * 60 * 60 * 24)) * dayWidth + (dayWidth / 2) }}
              >
-               <div className="absolute top-0 -left-1.5 w-3.5 h-3.5 bg-blue-500 rounded-full border-2 border-white"></div>
+               <div className="absolute top-0 -left-1.5 w-3.5 h-3.5 bg-blue-500 rounded border-2 border-white"></div>
              </div>
            </div>
         </div>

@@ -81,7 +81,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#f9fafb] text-slate-800 font-sans">
       
       {/* Main Card */}
-      <div className="bg-white rounded-[4px] shadow-2xl shadow-slate-200/50 w-[960px] h-[580px] flex overflow-hidden">
+      <div className="bg-white rounded shadow-2xl shadow-slate-200/50 w-[960px] h-[580px] flex overflow-hidden">
         
         {/* Left Side: Illustration */}
         <div className="w-[45%] relative bg-gradient-to-br from-blue-50 to-white p-10 flex flex-col overflow-hidden border-r border-slate-100">
@@ -168,7 +168,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
                                     type="button"
                                     onClick={handleSendCode}
                                     disabled={countdown > 0}
-                                    className="px-3 h-8 mr-1 rounded bg-slate-50 text-slate-500 text-xs hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    className="px-4 py-2 mr-1 rounded bg-slate-50 text-slate-500 text-xs hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
                                 >
                                     {countdown > 0 ? `${countdown}s 后重试` : '获取短信验证码'}
                                 </button>

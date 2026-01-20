@@ -169,7 +169,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
             <div className="relative">
                 <button 
                     onClick={() => { closeAllDropdowns(); setIsProjectOpen(!isProjectOpen); }}
-                    className={`flex items-center gap-1 px-3 py-1.5 border border-dashed rounded text-sm transition-colors ${
+                    className={`flex items-center gap-1 px-4 py-2 border border-dashed rounded text-sm transition-colors ${
                         filters.projectId ? 'bg-blue-50 text-blue-500 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
                     }`}
                 >
@@ -177,7 +177,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                     <ChevronDown size={14} />
                 </button>
                  {isProjectOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
+                    <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
                         {MOCK_PROJECTS.map(project => (
                              <button
                                 key={project.id}
@@ -196,7 +196,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
             <div className="relative">
                 <button 
                     onClick={() => { closeAllDropdowns(); setIsAssigneeOpen(!isAssigneeOpen); }}
-                    className={`flex items-center gap-1 px-3 py-1.5 border border-dashed rounded text-sm transition-colors ${
+                    className={`flex items-center gap-1 px-4 py-2 border border-dashed rounded text-sm transition-colors ${
                         filters.assigneeId ? 'bg-blue-50 text-blue-500 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
                     }`}
                 >
@@ -204,7 +204,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                     <ChevronDown size={14} />
                 </button>
                 {isAssigneeOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
+                    <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
                         {MOCK_USERS.map(user => (
                             <button
                                 key={user.id}
@@ -226,7 +226,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
             <div className="relative">
                 <button 
                     onClick={() => { closeAllDropdowns(); setIsTypeOpen(!isTypeOpen); }}
-                    className={`flex items-center gap-1 px-3 py-1.5 border border-dashed rounded text-sm transition-colors ${
+                    className={`flex items-center gap-1 px-4 py-2 border border-dashed rounded text-sm transition-colors ${
                         filters.type ? 'bg-blue-50 text-blue-500 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
                     }`}
                 >
@@ -234,7 +234,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                     <ChevronDown size={14} />
                 </button>
                 {isTypeOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-40 bg-white rounded-lg shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
+                    <div className="absolute top-full left-0 mt-2 w-40 bg-white rounded shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
                         {Object.values(TaskType).map(type => (
                              <button
                                 key={type}
@@ -253,7 +253,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
             <div className="relative">
                 <button 
                     onClick={() => { closeAllDropdowns(); setIsPriorityOpen(!isPriorityOpen); }}
-                    className={`flex items-center gap-1 px-3 py-1.5 border border-dashed rounded text-sm transition-colors ${
+                    className={`flex items-center gap-1 px-4 py-2 border border-dashed rounded text-sm transition-colors ${
                         filters.priority ? 'bg-blue-50 text-blue-500 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
                     }`}
                 >
@@ -261,7 +261,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                     <ChevronDown size={14} />
                 </button>
                 {isPriorityOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-40 bg-white rounded-lg shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
+                    <div className="absolute top-full left-0 mt-2 w-40 bg-white rounded shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
                         {Object.values(Priority).map(p => (
                              <button
                                 key={p}
@@ -280,7 +280,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
             <div className="relative">
                  <button 
                     onClick={() => { closeAllDropdowns(); setIsDateOpen(!isDateOpen); }}
-                    className={`flex items-center gap-1 px-3 py-1.5 border border-dashed rounded text-sm transition-colors ${
+                    className={`flex items-center gap-1 px-4 py-2 border border-dashed rounded text-sm transition-colors ${
                         filters.dateRange ? 'bg-blue-50 text-blue-500 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
                     }`}
                 >
@@ -289,7 +289,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                     <ChevronDown size={14} />
                 </button>
                 {isDateOpen && (
-                     <div className="absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-slate-100 p-4 z-50 animate-in fade-in zoom-in-95 duration-100">
+                     <div className="absolute top-full left-0 mt-2 w-72 bg-white rounded shadow-xl border border-slate-100 p-4 z-50 animate-in fade-in zoom-in-95 duration-100">
                         <div className="grid grid-cols-2 gap-2 mb-4">
                             <button onClick={() => handleDatePreset('today')} className="px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 hover:text-blue-500 hover:border-blue-200 rounded border border-slate-200 transition-colors">今天截止</button>
                             <button onClick={() => handleDatePreset('tomorrow')} className="px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 hover:text-blue-500 hover:border-blue-200 rounded border border-slate-200 transition-colors">明天截止</button>
@@ -319,7 +319,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                                  <button 
                                     onClick={handleDateConfirm}
                                     disabled={!tempDateRange}
-                                    className="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="px-4 py-2 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
                                  >
                                      应用筛选
                                  </button>
@@ -333,7 +333,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
             <div className="relative">
                 <button 
                     onClick={() => { closeAllDropdowns(); setIsStatusOpen(!isStatusOpen); }}
-                    className={`flex items-center gap-1 px-3 py-1.5 border border-dashed rounded text-sm transition-colors ${
+                    className={`flex items-center gap-1 px-4 py-2 border border-dashed rounded text-sm transition-colors ${
                         filters.status ? 'bg-blue-50 text-blue-500 border-blue-200 font-medium' : 'bg-white border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400'
                     }`}
                 >
@@ -341,7 +341,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
                     <ChevronDown size={14} />
                 </button>
                 {isStatusOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-40 bg-white rounded-lg shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
+                    <div className="absolute top-full left-0 mt-2 w-40 bg-white rounded shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
                         {MOCK_COLUMNS.map(col => (
                              <button
                                 key={col.id}
@@ -360,7 +360,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
              {hasActiveFilters && (
                 <>
                     <div className="w-px h-6 bg-slate-200 mx-1"></div>
-                    <button onClick={handleClearFilters} className="flex items-center gap-1 text-slate-500 hover:text-red-500 text-sm transition-colors">
+                    <button onClick={handleClearFilters} className="flex items-center gap-1 text-slate-500 hover:text-red-500 text-sm transition-colors px-4 py-2 rounded">
                         <XCircle size={14} />
                         <span>清除筛选</span>
                     </button>
@@ -403,14 +403,14 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
          <div className="relative">
              <button 
                 onClick={() => { closeAllDropdowns(); setIsNewDropdownOpen(!isNewDropdownOpen); }}
-                className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1.5 rounded flex items-center gap-1 transition-colors shadow-sm"
+                className="bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-2 rounded flex items-center gap-1 transition-colors shadow-sm"
              >
                  <Plus size={16} />
                  <span>{getNewButtonLabel()}</span>
                  <ChevronDown size={14} className={`ml-1 transition-transform ${isNewDropdownOpen ? '-rotate-180' : ''}`} />
              </button>
              {isNewDropdownOpen && (
-                 <div className="absolute top-full right-0 mt-2 w-40 bg-white rounded-lg shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
+                 <div className="absolute top-full right-0 mt-2 w-40 bg-white rounded shadow-xl border border-slate-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
                      <button
                         onClick={() => { onTriggerCreate(TaskType.Requirement); setIsNewDropdownOpen(false); }}
                         className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
@@ -436,7 +436,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters, viewT
              )}
          </div>
 
-         <button className="bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 text-sm px-3 py-1.5 rounded transition-colors shadow-sm">
+         <button className="bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 text-sm px-4 py-2 rounded transition-colors shadow-sm flex items-center gap-2">
              里程碑
          </button>
       </div>

@@ -78,7 +78,7 @@ export const ProjectTesting = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm h-full flex overflow-hidden font-sans relative">
+    <div className="bg-white rounded-none border border-slate-200 shadow-sm h-full flex overflow-hidden font-sans relative">
       {/* 侧边导航 */}
       <div className="w-56 border-r border-slate-200 flex flex-col flex-shrink-0 bg-slate-50/50">
         <div className="h-14 flex items-center px-6 font-black text-slate-800 gap-3 border-b border-slate-100 bg-white">
@@ -95,7 +95,7 @@ export const ProjectTesting = () => {
             <div 
               key={item.id} 
               onClick={() => setActiveSubItem(item.id)} 
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl cursor-pointer text-sm transition-all group ${
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-none cursor-pointer text-sm transition-all group ${
                 activeSubItem === item.id 
                 ? 'bg-pink-100/50 text-pink-600 font-bold' 
                 : 'text-slate-500 hover:bg-white hover:text-slate-900'
@@ -123,7 +123,7 @@ export const ProjectTesting = () => {
           <div className="flex items-center gap-3">
             <button 
               onClick={() => { setQuickAddType(undefined); setIsCreateModalOpen(true); }} 
-              className="bg-pink-500 hover:bg-pink-600 text-white text-[11px] font-black px-5 py-2 rounded-xl flex items-center gap-2 shadow-md transition-all uppercase tracking-widest active:scale-95 shadow-pink-100"
+              className="bg-pink-500 hover:bg-pink-600 text-white text-[11px] font-black px-5 py-2 rounded-none flex items-center gap-2 shadow-md transition-all uppercase tracking-widest active:scale-95 shadow-pink-100"
             >
               <Plus size={16} strokeWidth={3} /> 新建
             </button>

@@ -22,6 +22,7 @@ interface Requirement {
 
 interface RequirementListProps {
   onRequirementClick?: (task: Partial<Task>) => void;
+  onCreate?: () => void;
 }
 
 const MOCK_REQUIREMENTS: Requirement[] = [
@@ -63,7 +64,7 @@ const MOCK_REQUIREMENTS: Requirement[] = [
   },
 ];
 
-export const RequirementList: React.FC<RequirementListProps> = ({ onRequirementClick }) => {
+export const RequirementList: React.FC<RequirementListProps> = ({ onRequirementClick, onCreate }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeCategory, setActiveCategory] = useState('所有的');
   
@@ -174,7 +175,6 @@ export const RequirementList: React.FC<RequirementListProps> = ({ onRequirementC
   };
 
   const renderRequirements = (reqs: Requirement[]) => {
-    // Fix: Changed JSX.Element[] to React.ReactNode[] to avoid namespace error
     let elements: React.ReactNode[] = [];
     reqs.forEach(req => {
       elements.push(renderRequirementRow(req));
@@ -228,11 +228,14 @@ export const RequirementList: React.FC<RequirementListProps> = ({ onRequirementC
       <div className="flex-1 flex flex-col min-w-0 bg-slate-50/10">
         <div className="px-4 py-3 bg-white flex items-center justify-between border-b border-slate-100 flex-shrink-0">
           <div className="flex items-center gap-2">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm font-bold flex items-center gap-1.5 transition-all shadow-md shadow-blue-100 active:scale-95">
+            <button 
+              onClick={onCreate}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm flex items-center gap-2 transition-all shadow-md shadow-blue-100 active:scale-95"
+            >
               <Plus size={16} strokeWidth={2.5} />
               创建需求
             </button>
-            <button className="px-3 py-1.5 border border-slate-200 rounded text-sm text-slate-600 hover:bg-slate-50 flex items-center gap-1 transition-colors">
+            <button className="px-4 py-2 border border-slate-200 rounded text-sm text-slate-600 hover:bg-slate-50 flex items-center gap-2 transition-colors">
               批量处理
               <ChevronDown size={14} className="text-slate-400" />
             </button>

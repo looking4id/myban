@@ -38,10 +38,10 @@ export const ReleaseCalendar: React.FC<ReleaseCalendarProps> = ({
       <div className="flex items-center justify-between px-8 py-6 border-b border-slate-100 bg-slate-50/20">
         <div className="flex items-center gap-4">
           <h3 className="text-xl font-black text-slate-800 tracking-tight">{calendarDate.getFullYear()}年 {calendarDate.getMonth() + 1}月</h3>
-          <div className="flex items-center bg-white border border-slate-200 rounded-xl shadow-sm p-1">
-            <button onClick={handlePrevMonth} className="p-1.5 hover:bg-slate-50 rounded-lg text-slate-400"><ChevronLeft size={18} /></button>
-            <button onClick={() => setCalendarDate(new Date())} className="px-3 py-1 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-lg">今天</button>
-            <button onClick={handleNextMonth} className="p-1.5 hover:bg-slate-50 rounded-lg text-slate-400"><ChevronRight size={18} /></button>
+          <div className="flex items-center bg-white border border-slate-200 rounded-none shadow-sm p-1">
+            <button onClick={handlePrevMonth} className="p-1.5 hover:bg-slate-50 rounded-none text-slate-400"><ChevronLeft size={18} /></button>
+            <button onClick={() => setCalendarDate(new Date())} className="px-3 py-1 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-none">今天</button>
+            <button onClick={handleNextMonth} className="p-1.5 hover:bg-slate-50 rounded-none text-slate-400"><ChevronRight size={18} /></button>
           </div>
         </div>
         <div className="flex gap-6">
@@ -65,11 +65,11 @@ export const ReleaseCalendar: React.FC<ReleaseCalendarProps> = ({
                 <>
                   <div className="flex justify-between items-start mb-2">
                     <span className={`text-xs font-bold ${date.toISOString().split('T')[0] === new Date().toISOString().split('T')[0] ? 'w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md' : 'text-slate-400'}`}>{date.getDate()}</span>
-                    <button className="p-1 text-blue-500 opacity-0 group-hover:opacity-100 bg-blue-50 rounded-lg"><Plus size={14} /></button>
+                    <button className="p-1 text-blue-500 opacity-0 group-hover:opacity-100 bg-blue-50 rounded-none"><Plus size={14} /></button>
                   </div>
                   <div className="space-y-1 overflow-y-auto max-h-[80px] custom-scrollbar">
                     {getVersionsForDate(date).map(v => (
-                      <div key={v.id} onClick={(e) => { e.stopPropagation(); onVersionEdit(v); }} className={`${v.color} text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm flex items-center justify-between cursor-pointer hover:brightness-110`}>
+                      <div key={v.id} onClick={(e) => { e.stopPropagation(); onVersionEdit(v); }} className={`${v.color} text-white text-[10px] font-bold px-2 py-1 rounded-none shadow-sm flex items-center justify-between cursor-pointer hover:brightness-110`}>
                         <span className="truncate pr-1">{v.version} {v.name}</span>
                         {v.progress === 100 && <CheckCircle2 size={10} />}
                       </div>

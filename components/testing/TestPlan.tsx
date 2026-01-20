@@ -23,7 +23,7 @@ export const TestPlan = ({
               <td className="py-5 px-4"><StatusBadge status={plan.status} /></td>
               <td className="py-5 px-32"><div className="flex flex-col gap-1"><div className="flex justify-between text-[10px] font-bold text-slate-400"><span>Cov: {plan.coverage}</span><span className="text-emerald-500">Pass: {plan.passRate}</span></div><div className="w-24 h-1 bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-blue-500" style={{ width: plan.coverage }}></div></div></div></td>
               <td className="py-5 px-32 text-slate-500 font-medium">{plan.sprint}</td>
-              <td className="py-5 px-12 text-right"><div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity"><button onClick={(e) => { e.stopPropagation(); onDelete(plan.id); }} className="p-1.5 text-slate-400 hover:text-red-500 bg-white rounded-lg shadow-sm"><Trash2 size={14} /></button><button className="p-1.5 text-slate-400 hover:text-slate-600"><MoreHorizontal size={16} /></button></div></td>
+              <td className="py-5 px-12 text-right"><div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity"><button onClick={(e) => { e.stopPropagation(); onDelete(plan.id); }} className="p-1.5 text-slate-400 hover:text-red-500 bg-white rounded-none shadow-sm"><Trash2 size={14} /></button><button className="p-1.5 text-slate-400 hover:text-slate-600"><MoreHorizontal size={16} /></button></div></td>
             </tr>
           ))}
         </tbody>

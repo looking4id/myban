@@ -27,32 +27,42 @@ export const MainSidebar: React.FC<MainSidebarProps> = ({ activeItem, onSelectIt
   ];
 
   return (
-    <div className={`${isExpanded ? 'w-56' : 'w-16'} bg-[#0f172a] border-r border-slate-800 flex flex-col py-6 z-20 flex-shrink-0 transition-all duration-300 relative shadow-2xl`}>
-      <button onClick={() => setIsExpanded(!isExpanded)} className="absolute -right-3 top-10 w-6 h-6 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-500 hover:text-blue-600 shadow-sm z-50 cursor-pointer transition-all">
-        {isExpanded ? <ChevronLeft size={12} /> : <ChevronRight size={12} />}
+    <div className={`${isExpanded ? 'w-60' : 'w-16'} bg-slate-900 border-r border-slate-800 flex flex-col py-6 z-20 flex-shrink-0 transition-all duration-300 relative`}>
+      <button onClick={() => setIsExpanded(!isExpanded)} className="absolute -right-3 top-8 w-6 h-6 bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-blue-600 shadow-sm z-50 cursor-pointer transition-all hover:scale-110 rounded-full">
+        {isExpanded ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
       </button>
 
-      <div className={`mb-8 px-4 ${isExpanded ? 'flex items-center gap-3' : 'flex justify-center'}`}>
-        <GLogo />
-        {isExpanded && <span className="text-white font-bold text-sm tracking-tight truncate">G-Project</span>}
+      <div className={`mb-10 px-6 ${isExpanded ? 'flex items-center gap-3' : 'flex justify-center'}`}>
+        <div className="text-blue-500">
+           <GLogo />
+        </div>
+        {isExpanded && <span className="text-white font-bold text-lg tracking-tight">LUK 协作</span>}
       </div>
 
-      <nav className="flex-1 px-2.5 space-y-1 overflow-y-auto no-scrollbar">
+      <nav className="flex-1 px-4 space-y-1 overflow-y-auto no-scrollbar">
         {menuItems.map((item, index) => {
           const isActive = activeItem === item.label;
           return (
             <div
               key={index}
               onClick={() => onSelectItem(item.label)}
-              className={`flex items-center cursor-pointer rounded-xl transition-all duration-300 ${isExpanded ? 'px-3 py-2.5 gap-3' : 'justify-center py-3.5'} ${isActive ? 'bg-blue-600 text-white shadow-xl shadow-blue-500/25 scale-105' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-100'}`}
+              className={`flex items-center cursor-pointer transition-all duration-200 rounded-lg ${isExpanded ? 'px-4 py-3 gap-3' : 'justify-center py-3'} ${
+                isActive 
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' 
+                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+              }`}
               title={!isExpanded ? item.label : ''}
             >
-              <item.icon size={isExpanded ? 18 : 20} strokeWidth={isActive ? 2 : 1.5} />
-              {isExpanded && <span className="text-sm font-bold tracking-wide">{item.label}</span>}
+              <item.icon size={20} strokeWidth={isActive ? 2 : 1.5} />
+              {isExpanded && <span className={`text-sm ${isActive ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>}
             </div>
           );
         })}
       </nav>
+      
+      <div className="px-6 mt-auto">
+         {isExpanded && <div className="text-xs text-slate-600 font-medium">v2.4.0 Enterprise</div>}
+      </div>
     </div>
   );
 };
@@ -72,19 +82,27 @@ export const SecondarySidebar: React.FC<SecondarySidebarProps> = ({
 
   return (
     <div className="w-56 bg-slate-50 border-r border-slate-200 flex flex-col flex-shrink-0 h-full">
-      <div className="h-14 flex items-center px-5 border-b border-slate-200 bg-white/80 backdrop-blur">
-        <span className="font-bold text-slate-800 text-sm">视图选择</span>
+      <div className="h-14 flex items-center px-5 border-b border-slate-200 bg-white">
+        <span className="font-semibold text-slate-700 text-sm">视图选择</span>
       </div>
       <div className="flex-1 overflow-y-auto py-4">
         <div className="mb-6">
-          <div className="px-5 py-2 flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-widest cursor-pointer hover:text-slate-600" onClick={() => setIsSystemOpen(!isSystemOpen)}>
+          <div className="px-5 py-2 flex items-center justify-between text-xs font-semibold text-slate-400 cursor-pointer hover:text-slate-600" onClick={() => setIsSystemOpen(!isSystemOpen)}>
             <span>系统视图</span>
-            <ChevronDown size={12} className={isSystemOpen ? 'opacity-40' : '-rotate-90 opacity-40'} />
+            <ChevronDown size={14} className={`transition-transform ${isSystemOpen ? '' : '-rotate-90'}`} />
           </div>
           {isSystemOpen && (
-            <div className="mt-1">
+            <div className="mt-1 space-y-0.5">
               {systemViews.map(view => (
-                <div key={view} onClick={() => onViewSelect(view)} className={`px-5 py-2.5 text-sm cursor-pointer border-r-4 transition-all ${activeView === view ? 'text-blue-600 bg-blue-50 border-blue-600 font-bold' : 'text-slate-600 hover:bg-slate-100 border-transparent'}`}>
+                <div 
+                    key={view} 
+                    onClick={() => onViewSelect(view)} 
+                    className={`px-5 py-2 text-sm cursor-pointer border-r-2 transition-all rounded ${
+                        activeView === view 
+                        ? 'text-blue-600 bg-white border-blue-600 font-medium' 
+                        : 'text-slate-600 hover:bg-slate-100 border-transparent font-normal'
+                    }`}
+                >
                   {view}
                 </div>
               ))}

@@ -54,11 +54,11 @@ const RiskModal = ({
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[200] flex items-center justify-center p-4 font-sans text-slate-700">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-xl animate-in zoom-in-95 duration-200 overflow-hidden border border-white/20">
+        <div className="fixed inset-0 bg-slate-900/10 backdrop-blur-[2px] z-[200] flex items-center justify-center p-4 font-sans text-slate-700">
+            <div className="bg-white rounded-lg shadow-2xl w-full max-w-xl animate-in zoom-in-95 duration-200 overflow-hidden border border-white/20">
                 <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-red-100 text-red-600 rounded-xl shadow-inner"><ShieldAlert size={20} /></div>
+                        <div className="p-2 bg-red-100 text-red-600 rounded-none shadow-inner"><ShieldAlert size={20} /></div>
                         <div>
                             <h3 className="text-lg font-black text-slate-800">{initialData ? '编辑风险信息' : '登记新风险'}</h3>
                             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Risk Maintenance Action</p>
@@ -80,7 +80,7 @@ const RiskModal = ({
                         <input 
                             required 
                             autoFocus
-                            className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-red-500 focus:ring-4 focus:ring-red-50 outline-none transition-all bg-slate-50 focus:bg-white font-bold"
+                            className="w-full border border-slate-200 rounded-none px-4 py-3 text-sm focus:border-red-500 focus:ring-4 focus:ring-red-50 outline-none transition-all bg-slate-50 focus:bg-white font-bold"
                             value={formData.title}
                             onChange={e => setFormData({...formData, title: e.target.value})}
                             placeholder="请简述识别到的风险点..."
@@ -91,7 +91,7 @@ const RiskModal = ({
                         <div className="space-y-1.5">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">发生可能性</label>
                             <select 
-                                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-red-500 bg-slate-50 font-bold cursor-pointer"
+                                className="w-full border border-slate-200 rounded-none px-4 py-3 text-sm outline-none focus:border-red-500 bg-slate-50 font-bold cursor-pointer"
                                 value={formData.probability}
                                 onChange={e => setFormData({...formData, probability: e.target.value as any})}
                             >
@@ -103,7 +103,7 @@ const RiskModal = ({
                         <div className="space-y-1.5">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">影响程度</label>
                             <select 
-                                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-red-500 bg-slate-50 font-bold cursor-pointer"
+                                className="w-full border border-slate-200 rounded-none px-4 py-3 text-sm outline-none focus:border-red-500 bg-slate-50 font-bold cursor-pointer"
                                 value={formData.impact}
                                 onChange={e => setFormData({...formData, impact: e.target.value as any})}
                             >
@@ -118,7 +118,7 @@ const RiskModal = ({
                         <div className="space-y-1.5">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">负责人</label>
                             <select 
-                                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-red-500 bg-slate-50 font-bold cursor-pointer"
+                                className="w-full border border-slate-200 rounded-none px-4 py-3 text-sm outline-none focus:border-red-500 bg-slate-50 font-bold cursor-pointer"
                                 value={formData.owner}
                                 onChange={e => setFormData({...formData, owner: e.target.value})}
                             >
@@ -128,7 +128,7 @@ const RiskModal = ({
                         <div className="space-y-1.5">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">应对策略</label>
                             <select 
-                                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-red-500 bg-slate-50 font-bold cursor-pointer"
+                                className="w-full border border-slate-200 rounded-none px-4 py-3 text-sm outline-none focus:border-red-500 bg-slate-50 font-bold cursor-pointer"
                                 value={formData.strategy}
                                 onChange={e => setFormData({...formData, strategy: e.target.value})}
                             >
@@ -143,7 +143,7 @@ const RiskModal = ({
                     <div className="space-y-1.5">
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">应对计划与备注</label>
                         <textarea 
-                            className="w-full h-28 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-red-500 outline-none transition-all bg-slate-50 focus:bg-white leading-relaxed resize-none"
+                            className="w-full h-28 border border-slate-200 rounded-none px-4 py-3 text-sm focus:border-red-500 outline-none transition-all bg-slate-50 focus:bg-white leading-relaxed resize-none"
                             value={formData.description}
                             onChange={e => setFormData({...formData, description: e.target.value})}
                             placeholder="请描述该风险的具体缓解措施..."
@@ -151,8 +151,8 @@ const RiskModal = ({
                     </div>
 
                     <div className="pt-4 flex gap-3">
-                        <button type="button" onClick={onClose} className="flex-1 py-3 border border-slate-200 rounded-2xl text-slate-500 font-bold text-sm hover:bg-slate-50 transition-colors">取消</button>
-                        <button type="submit" className="flex-1 py-3 bg-red-600 text-white rounded-2xl font-black text-sm hover:bg-red-700 shadow-xl shadow-red-200 transition-all active:scale-95">保存记录</button>
+                        <button type="button" onClick={onClose} className="flex-1 py-3 border border-slate-200 rounded-none text-slate-500 font-bold text-sm hover:bg-slate-50 transition-colors">取消</button>
+                        <button type="submit" className="flex-1 py-3 bg-red-600 text-white rounded-none font-black text-sm hover:bg-red-700 shadow-xl shadow-red-200 transition-all active:scale-95">保存记录</button>
                     </div>
                 </form>
             </div>
@@ -273,19 +273,19 @@ export const ProjectRisks = () => {
     const isFiltered = filterProb !== '全部' || filterStatus !== '全部' || searchQuery !== '';
 
     return (
-        <div className="flex flex-col h-full bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden font-sans text-slate-700">
+        <div className="flex flex-col h-full bg-white rounded-none shadow-sm border border-slate-200 overflow-hidden font-sans text-slate-700">
             {/* 工具栏区 */}
             <div className="px-6 py-4 flex flex-col gap-4 border-b border-slate-100 flex-shrink-0 bg-slate-50/20">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         {selectedIds.size > 0 ? (
                             <div className="flex items-center gap-3 animate-in fade-in slide-in-from-left-2 duration-300">
-                                <span className="text-sm font-black text-red-600 bg-white px-3 py-1.5 rounded-xl border border-red-100 shadow-sm">
+                                <span className="text-sm font-black text-red-600 bg-white px-3 py-1.5 rounded-none border border-red-100 shadow-sm">
                                     已选中 {selectedIds.size} 项
                                 </span>
                                 <button 
                                     onClick={handleBatchDelete}
-                                    className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl text-sm font-bold hover:bg-red-700 shadow-lg shadow-red-100 transition-all active:scale-95"
+                                    className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-none text-sm font-bold hover:bg-red-700 shadow-lg shadow-red-100 transition-all active:scale-95"
                                 >
                                     <Trash2 size={16} /> 一键删除
                                 </button>
@@ -295,7 +295,7 @@ export const ProjectRisks = () => {
                             <>
                                 <button 
                                     onClick={() => { setEditingRisk(null); setIsModalOpen(true); }}
-                                    className="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-xl text-sm font-black flex items-center gap-2 shadow-lg shadow-red-100 transition-all active:scale-95"
+                                    className="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-none text-sm font-black flex items-center gap-2 shadow-lg shadow-red-100 transition-all active:scale-95"
                                 >
                                     <Plus size={16} strokeWidth={3} /> 登记风险
                                 </button>
@@ -305,7 +305,7 @@ export const ProjectRisks = () => {
                                         placeholder="输入风险标题关键词搜索..." 
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="pl-10 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:border-red-400 focus:ring-4 focus:ring-red-50 outline-none w-72 bg-white transition-all shadow-sm"
+                                        className="pl-10 pr-4 py-2 text-sm border border-slate-200 rounded-none focus:border-red-400 focus:ring-4 focus:ring-red-50 outline-none w-72 bg-white transition-all shadow-sm"
                                     />
                                     <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                                 </div>
@@ -313,7 +313,7 @@ export const ProjectRisks = () => {
                         )}
                         <button 
                             onClick={() => setShowFilterPanel(!showFilterPanel)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all border ${showFilterPanel ? 'bg-red-50 border-red-200 text-red-600' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 shadow-sm'}`}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-none text-sm font-bold transition-all border ${showFilterPanel ? 'bg-red-50 border-red-200 text-red-600' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 shadow-sm'}`}
                         >
                             <Filter size={16} />
                             多维筛选
@@ -321,10 +321,10 @@ export const ProjectRisks = () => {
                         </button>
                     </div>
                     <div className="flex items-center gap-4">
-                        <div className="text-[10px] font-black text-slate-300 uppercase tracking-widest bg-white border border-slate-100 px-3 py-1 rounded-full shadow-sm">
+                        <div className="text-[10px] font-black text-slate-300 uppercase tracking-widest bg-white border border-slate-100 px-3 py-1 rounded-none shadow-sm">
                             LISTING: {filteredRisks.length} ITEMS
                         </div>
-                        <button className="p-2 hover:bg-white border border-transparent hover:border-slate-100 rounded-xl text-slate-400 transition-all">
+                        <button className="p-2 hover:bg-white border border-transparent hover:border-slate-100 rounded-none text-slate-400 transition-all">
                             <MoreHorizontal size={20} />
                         </button>
                     </div>
@@ -332,15 +332,15 @@ export const ProjectRisks = () => {
 
                 {/* 展开的筛选面板 */}
                 {showFilterPanel && (
-                    <div className="flex items-center gap-6 p-4 bg-white rounded-2xl border border-slate-100 shadow-sm animate-in slide-in-from-top-2 duration-300">
+                    <div className="flex items-center gap-6 p-4 bg-white rounded-none border border-slate-100 shadow-sm animate-in slide-in-from-top-2 duration-300">
                         <div className="flex flex-col gap-1.5">
                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter ml-1">可能性</span>
-                            <div className="flex bg-slate-50 p-1 rounded-lg border border-slate-100">
+                            <div className="flex bg-slate-50 p-1 rounded-none border border-slate-100">
                                 {['全部', '高', '中', '低'].map(opt => (
                                     <button 
                                         key={opt}
                                         onClick={() => setFilterProb(opt)}
-                                        className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${filterProb === opt ? 'bg-white text-red-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                                        className={`px-3 py-1 text-xs font-bold rounded-none transition-all ${filterProb === opt ? 'bg-white text-red-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
                                     >
                                         {opt}
                                     </button>
@@ -349,12 +349,12 @@ export const ProjectRisks = () => {
                         </div>
                         <div className="flex flex-col gap-1.5">
                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter ml-1">风险状态</span>
-                            <div className="flex bg-slate-50 p-1 rounded-lg border border-slate-100">
+                            <div className="flex bg-slate-50 p-1 rounded-none border border-slate-100">
                                 {['全部', '已识别', '处理中', '已关闭'].map(opt => (
                                     <button 
                                         key={opt}
                                         onClick={() => setFilterStatus(opt)}
-                                        className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${filterStatus === opt ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                                        className={`px-3 py-1 text-xs font-bold rounded-none transition-all ${filterStatus === opt ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
                                     >
                                         {opt}
                                     </button>
@@ -424,7 +424,7 @@ export const ProjectRisks = () => {
                                     <td className="py-5 px-4 truncate">
                                         <div className="flex flex-col gap-0.5">
                                             <div className="flex items-center gap-2">
-                                                <span className="text-[10px] font-mono font-black text-slate-300 bg-slate-100 px-1 rounded">{risk.id}</span>
+                                                <span className="text-[10px] font-mono font-black text-slate-300 bg-slate-100 px-1 rounded-none">{risk.id}</span>
                                                 <span className={`font-bold transition-colors truncate ${isSelected ? 'text-blue-600' : 'text-slate-800 group-hover:text-red-600'}`}>
                                                     {risk.title}
                                                 </span>
@@ -433,10 +433,10 @@ export const ProjectRisks = () => {
                                         </div>
                                     </td>
                                     <td className="py-5 px-4">
-                                        <span className={`text-[10px] font-black px-2 py-0.5 rounded border uppercase tracking-tighter ${getLevelStyle(risk.probability)}`}>{risk.probability}</span>
+                                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-none border uppercase tracking-tighter ${getLevelStyle(risk.probability)}`}>{risk.probability}</span>
                                     </td>
                                     <td className="py-5 px-4">
-                                        <span className={`text-[10px] font-black px-2 py-0.5 rounded border uppercase tracking-tighter ${getLevelStyle(risk.impact)}`}>{risk.impact}</span>
+                                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-none border uppercase tracking-tighter ${getLevelStyle(risk.impact)}`}>{risk.impact}</span>
                                     </td>
                                     <td className="py-5 px-4">
                                         <div className="flex items-center gap-2 text-slate-600 text-xs font-bold truncate">
@@ -457,14 +457,14 @@ export const ProjectRisks = () => {
                                         <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-all">
                                             <button 
                                                 onClick={() => handleEdit(risk)}
-                                                className="p-2 text-slate-400 hover:text-blue-600 hover:bg-white rounded-lg shadow-sm border border-transparent hover:border-slate-100"
+                                                className="p-2 text-slate-400 hover:text-blue-600 hover:bg-white rounded-none shadow-sm border border-transparent hover:border-slate-100"
                                                 title="查看/编辑详情"
                                             >
                                                 <Edit3 size={16} />
                                             </button>
                                             <button 
                                                 onClick={() => handleDelete(risk.id)}
-                                                className="p-2 text-slate-400 hover:text-red-600 hover:bg-white rounded-lg shadow-sm border border-transparent hover:border-slate-100"
+                                                className="p-2 text-slate-400 hover:text-red-600 hover:bg-white rounded-none shadow-sm border border-transparent hover:border-slate-100"
                                                 title="永久删除"
                                             >
                                                 <Trash2 size={16} />

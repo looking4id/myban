@@ -110,7 +110,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
   const renderContent = () => {
     switch (activeTab) {
         case '项目概览': return <ProjectOverview project={project} onIterationClick={() => setActiveTab('迭代')} />;
-        case '需求': return <RequirementList onRequirementClick={handleWorkItemClick} />;
+        case '需求': return <RequirementList onRequirementClick={handleWorkItemClick} onCreate={() => openCreateModal(TaskType.Requirement)} />;
         case '任务': return (
             <WorkItemList 
                 project={project} 
@@ -167,7 +167,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                      {isProjectPlusMenuOpen && (
                          <>
                              <div className="fixed inset-0 z-40" onClick={() => setIsProjectPlusMenuOpen(false)}></div>
-                             <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-slate-200 shadow-xl rounded-lg py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
+                             <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-slate-200 shadow-xl rounded py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
                                  <button onClick={() => { setActiveTab('需求'); setIsProjectPlusMenuOpen(false); }} className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2">
                                      <FileText size={16} className="text-blue-500" /><span>创建需求</span>
                                  </button>
@@ -185,13 +185,13 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                      <button
                         key={item.label}
                         onClick={() => setActiveTab(item.label)}
-                        className={`px-3 py-1.5 text-sm font-medium rounded-md whitespace-nowrap transition-colors flex items-center gap-2 ${
+                        className={`px-3 py-1.5 text-sm font-medium rounded whitespace-nowrap transition-colors flex items-center gap-2 ${
                             activeTab === item.label ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                         }`}
                      >
                          <span>{item.label}</span>
                          {item.count !== undefined && item.count > 0 && (
-                             <span className={`text-[10px] px-1.5 rounded-full ${activeTab === item.label ? 'bg-blue-200 text-blue-700' : 'bg-slate-100 text-slate-500'}`}>{item.count}</span>
+                             <span className={`text-[10px] px-1.5 rounded ${activeTab === item.label ? 'bg-blue-200 text-blue-700' : 'bg-slate-100 text-slate-500'}`}>{item.count}</span>
                          )}
                      </button>
                  ))}
@@ -203,13 +203,13 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack })
                          {isMoreOpen && (
                              <>
                                  <div className="fixed inset-0 z-40" onClick={() => setIsMoreOpen(false)}></div>
-                                 <div className="absolute top-full left-0 mt-1 w-52 bg-white border border-slate-200 shadow-xl rounded-lg py-2 z-50 animate-in fade-in zoom-in-95 duration-100">
+                                 <div className="absolute top-full left-0 mt-1 w-52 bg-white border border-slate-200 shadow-xl rounded py-2 z-50 animate-in fade-in zoom-in-95 duration-100">
                                      {hiddenItems.map(item => (
                                          <button key={item.label} onClick={() => { setActiveTab(item.label); setIsMoreOpen(false); }} className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between hover:bg-slate-50 transition-colors ${activeTab === item.label ? 'text-blue-600 bg-blue-50 font-semibold' : 'text-slate-700'}`}>
                                              <div className="flex items-center gap-3">
                                                  <item.icon size={16} className={activeTab === item.label ? 'text-blue-500' : 'text-slate-400'} /><span>{item.label}</span>
                                              </div>
-                                             {item.count !== undefined && <span className="text-[10px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-full">{item.count}</span>}
+                                             {item.count !== undefined && <span className="text-[10px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">{item.count}</span>}
                                          </button>
                                      ))}
                                  </div>

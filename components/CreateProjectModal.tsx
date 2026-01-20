@@ -41,7 +41,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose,
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-300">
+      <div className="bg-white rounded shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-300">
         <div className="p-8 border-b border-slate-100 flex items-center justify-between">
           <div>
             <h3 className="text-xl font-black text-slate-800">新建项目</h3>
@@ -64,7 +64,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose,
                 if (!code) setCode(e.target.value.toUpperCase().slice(0, 3) + Math.floor(Math.random() * 100));
               }}
               placeholder="例如：敏捷研发项目02"
-              className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 outline-none transition-all"
+              className="w-full bg-slate-50 border border-slate-200 rounded px-4 py-3 text-sm focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 outline-none transition-all"
             />
           </div>
 
@@ -77,7 +77,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose,
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 placeholder="PROJ-01"
-                className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm font-mono focus:bg-white focus:border-blue-500 outline-none transition-all uppercase"
+                className="w-full bg-slate-50 border border-slate-200 rounded px-4 py-3 text-sm font-mono focus:bg-white focus:border-blue-500 outline-none transition-all uppercase"
               />
             </div>
             <div className="space-y-2">
@@ -85,7 +85,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose,
               <select 
                 value={type}
                 onChange={(e) => setType(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:bg-white focus:border-blue-500 outline-none transition-all appearance-none"
+                className="w-full bg-slate-50 border border-slate-200 rounded px-4 py-3 text-sm focus:bg-white focus:border-blue-500 outline-none transition-all appearance-none"
               >
                 <option value="敏捷项目">敏捷项目</option>
                 <option value="标准项目">标准项目</option>
@@ -94,8 +94,8 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose,
             </div>
           </div>
 
-          <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100 flex gap-4">
-             <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-lg">
+          <div className="p-4 bg-blue-50 rounded border border-blue-100 flex gap-4">
+             <div className="w-10 h-10 rounded bg-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-lg">
                 <Code2 size={20} />
              </div>
              <p className="text-xs text-blue-800 leading-relaxed font-medium">
@@ -107,14 +107,14 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose,
              <button 
               type="button" 
               onClick={onClose}
-              className="flex-1 px-6 py-3 border border-slate-200 text-slate-600 rounded-2xl font-bold text-sm hover:bg-slate-50 transition-all"
+              className="flex-1 px-4 py-2 border border-slate-200 text-slate-600 rounded text-sm font-bold hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
              >
                取消
              </button>
              <button 
               type="submit" 
               disabled={loading}
-              className="flex-[2] px-6 py-3 bg-blue-600 text-white rounded-2xl font-black text-sm hover:bg-blue-700 shadow-xl shadow-blue-100 transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50"
+              className="flex-[2] px-4 py-2 bg-blue-600 text-white rounded text-sm font-black hover:bg-blue-700 shadow-xl shadow-blue-100 transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50"
              >
                {loading ? '正在创建...' : (
                  <>

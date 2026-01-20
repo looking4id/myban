@@ -35,7 +35,7 @@ export const VersionList: React.FC<VersionListProps> = ({ versions, onEdit, onDe
                 </div>
               </td>
               <td className="py-5 px-4 text-center">
-                 <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black text-white ${v.color} shadow-sm shadow-inner uppercase`}>
+                 <span className={`px-2.5 py-1 rounded-none text-[10px] font-black text-white ${v.color} shadow-sm shadow-inner uppercase`}>
                    {v.phase.slice(0, 2)}
                  </span>
               </td>
@@ -56,8 +56,8 @@ export const VersionList: React.FC<VersionListProps> = ({ versions, onEdit, onDe
               </td>
               <td className="py-5 px-12 text-right">
                 <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => onEdit(v)} className="p-2 text-slate-400 hover:text-blue-600 bg-white border border-slate-100 rounded-lg shadow-sm"><Edit3 size={14} /></button>
-                  <button onClick={() => onDelete(v.id)} className="p-2 text-slate-400 hover:text-red-500 bg-white border border-slate-100 rounded-lg shadow-sm"><Trash2 size={14} /></button>
+                  <button onClick={() => onEdit(v)} className="p-2 text-slate-400 hover:text-blue-600 bg-white border border-slate-100 rounded-none shadow-sm"><Edit3 size={14} /></button>
+                  <button onClick={() => onDelete(v.id)} className="p-2 text-slate-400 hover:text-red-500 bg-white border border-slate-100 rounded-none shadow-sm"><Trash2 size={14} /></button>
                 </div>
               </td>
             </tr>
