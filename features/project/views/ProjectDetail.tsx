@@ -4,7 +4,7 @@ import {
   LayoutDashboard, FileText, CheckSquare, Bug, Repeat, FlaskConical, GitBranch, Flag, ShieldAlert, GitPullRequest, PlayCircle, BarChart2, Users, Settings,
   Search, Bell, HelpCircle, Plus, ChevronDown, Box, LayoutList, Home, Edit3, Globe, Palette, User, LogOut, Send, ChevronRight, Check, ArrowLeft
 } from '../../../components/common/Icons';
-import { Project, TaskType, Task, User as UserType } from '../../../types';
+import { Project, TaskType, Task, User as UserType, Priority } from '../../../types';
 import { MOCK_COLUMNS } from '../../../utils/constants';
 import { CreateTaskModal, TaskDetailsModal } from '../kanban/KanbanBoard';
 import { useApp } from '../../../utils/AppContext';
@@ -50,7 +50,20 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, o
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   const handleCreateTask = (newTask: Task) => {
-    setTasks(prev => [newTask, ...prev]);
+    // 补全必要字段以在列表中正确显示
+    const taskToAdd: Task = {
+      ...newTask,
+      id: newTask.id || `t${Date.now()}`,
+      displayId: newTask.displayId || `#RQ-${Math.floor(Math.random() * 1000 + 1000)}`,
+      type: newTask.type || createTaskType,
+      priority: newTask.priority || Priority.Normal,
+      dueDate: newTask.dueDate || new Date().toISOString().split('T')[0],
+      assignee: newTask.assignee || (user ? { id: user.id, name: user.name, avatarColor: user.avatarColor } : { id: 'u1', name: 'lo', avatarColor: 'bg-yellow-500' }),
+      statusColor: newTask.statusColor || 'bg-blue-500',
+      creatorId: user?.id || 'u1',
+      projectId: project.id
+    };
+    setTasks(prev => [taskToAdd, ...prev]);
     setIsCreateModalOpen(false);
   };
 
@@ -92,7 +105,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, o
 
   const menuItems = [
     { icon: LayoutDashboard, label: '项目概览' },
-    { icon: FileText, label: '需求', count: 21 },
+    { icon: FileText, label: '需求', count: tasks.filter(t => t.type === TaskType.Requirement).length + 10 }, // 加上 Mock 数据的基础量
     { icon: CheckSquare, label: '任务', count: tasks.filter(t => t.type === TaskType.Task).length },
     { icon: Bug, label: '缺陷', count: tasks.filter(t => t.type === TaskType.Defect).length },
     { icon: LayoutList, label: '甘特图' },
@@ -115,7 +128,13 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, o
   const renderContent = () => {
     switch (activeTab) {
         case '项目概览': return <ProjectOverview project={project} onIterationClick={() => setActiveTab('迭代')} />;
-        case '需求': return <RequirementList onRequirementClick={handleWorkItemClick} onCreate={() => openCreateModal(TaskType.Requirement)} />;
+        case '需求': return (
+          <RequirementList 
+            requirements={tasks} 
+            onRequirementClick={handleWorkItemClick} 
+            onCreate={() => openCreateModal(TaskType.Requirement)} 
+          />
+        );
         case '任务': return (
             <WorkItemList 
                 project={project} 
@@ -166,7 +185,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, o
                  </button>
                  <span className="font-bold text-slate-800 dark:text-slate-200 text-sm truncate max-w-[120px]">{project.name}</span>
                  <div className="relative">
-                     <button onClick={() => setIsProjectPlusMenuOpen(!isProjectPlusMenuOpen)} className={`w-6 h-6 flex items-center justify-center rounded transition-colors ${isProjectPlusMenuOpen ? 'bg-blue-50 text-blue-500 dark:bg-slate-700' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>
+                     <button onClick={() => setIsProjectPlusMenuOpen(!isProjectPlusMenuOpen)} className={`w-6 h-6 flex items-center justify-center rounded transition-colors ${isProjectPlusMenuOpen ? 'bg-blue-50 text-blue-600 dark:bg-slate-700' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>
                          <Plus size={14} />
                      </button>
                      {isProjectPlusMenuOpen && (
@@ -237,7 +256,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, o
              </div>
          </div>
 
-         {/* Right Utilities using GlobalRightControls - Removed Settings Click prop */}
+         {/* Right Utilities using GlobalRightControls */}
          <GlobalRightControls 
             user={user} 
             onLogout={onLogout} 

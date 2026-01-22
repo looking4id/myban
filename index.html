@@ -11,6 +11,9 @@
         darkMode: 'class',
         theme: {
           extend: {
+            fontFamily: {
+              sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"SF Pro Display"', 'Inter', 'system-ui', 'sans-serif'],
+            },
             colors: {
               slate: {
                 850: '#1e293b',
@@ -26,9 +29,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-      /* 全局字体标准化：优先 Inter, 其次 San Francisco */
       :root {
-        --font-sans: "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
       }
 
       body {
@@ -36,18 +38,16 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         background-color: #f8fafc;
-        font-size: 14px; /* 默认正文大小 */
+        font-size: 14px; /* 标准正文字号 */
         line-height: 1.5;
         color: #334155;
       }
       
-      /* Dark mode overrides for body */
       .dark body {
-        background-color: #0f172a; /* slate-900 */
-        color: #cbd5e1; /* slate-300 */
+        background-color: #0f172a;
+        color: #cbd5e1;
       }
 
-      /* 统一自定义滚动条 */
       ::-webkit-scrollbar {
         width: 6px;
         height: 6px;
@@ -84,6 +84,11 @@
       .no-scrollbar {
         -ms-overflow-style: none;
         scrollbar-width: none;
+      }
+      
+      /* 强制应用 SF 字体到所有交互元素 */
+      input, button, select, textarea {
+        font-family: inherit;
       }
     </style>
     <script type="importmap">

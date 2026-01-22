@@ -2,8 +2,16 @@
 import React from 'react';
 import { BarChart2, Activity, Zap, Bug, TrendingUp, TrendingDown, Clock, Filter, Calendar } from './Icons';
 import { DonutChart } from './ProjectShared';
+import { GlobalRightControls } from './layout/GlobalRightControls';
+import { User as UserType } from '../types';
 
-export const PerformanceMetrics = () => {
+interface PerformanceMetricsProps {
+  user?: UserType | null;
+  onLogout?: () => void;
+  onGoHome?: () => void;
+}
+
+export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({ user, onLogout, onGoHome }) => {
   return (
     <div className="flex-1 flex flex-col bg-slate-50 overflow-hidden">
       <div className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0 z-10 shadow-sm">
@@ -11,16 +19,20 @@ export const PerformanceMetrics = () => {
           <BarChart2 size={24} className="text-blue-600" />
           <h2 className="text-xl font-bold text-slate-800">效能度量</h2>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center bg-slate-100 p-1 rounded-lg">
-            <button className="px-3 py-1.5 text-xs font-bold bg-white text-blue-600 rounded-md shadow-sm">研发交付</button>
-            <button className="px-3 py-1.5 text-xs font-bold text-slate-500 hover:text-slate-700">缺陷质量</button>
-            <button className="px-3 py-1.5 text-xs font-bold text-slate-500 hover:text-slate-700">代码效能</button>
+        <div className="flex items-center gap-5">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center bg-slate-100 p-1 rounded-lg">
+                <button className="px-3 py-1.5 text-xs font-bold bg-white text-blue-600 rounded-md shadow-sm">研发交付</button>
+                <button className="px-3 py-1.5 text-xs font-bold text-slate-500 hover:text-slate-700">缺陷质量</button>
+                <button className="px-3 py-1.5 text-xs font-bold text-slate-500 hover:text-slate-700">代码效能</button>
+            </div>
+            <button className="flex items-center gap-2 px-3 py-1.5 border border-slate-200 bg-white text-slate-600 rounded-lg hover:bg-slate-50 text-xs font-medium">
+                <Calendar size={14} /> 最近30天
+            </button>
+            <button className="p-1.5 border border-slate-200 rounded-lg bg-white"><Filter size={16} className="text-slate-400" /></button>
           </div>
-          <button className="flex items-center gap-2 px-3 py-1.5 border border-slate-200 bg-white text-slate-600 rounded-lg hover:bg-slate-50 text-xs font-medium">
-            <Calendar size={14} /> 最近30天
-          </button>
-          <button className="p-1.5 border border-slate-200 rounded-lg"><Filter size={16} className="text-slate-400" /></button>
+          <div className="w-px h-6 bg-slate-200 mx-1"></div>
+          <GlobalRightControls user={user} onLogout={onLogout} onGoHome={onGoHome} />
         </div>
       </div>
 

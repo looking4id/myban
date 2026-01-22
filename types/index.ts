@@ -57,12 +57,15 @@ export interface Task {
   environment?: string;
   reproductionRate?: string;
   tags?: string[];
-  dueDate: string;
+  startDate?: string; // 新增：计划开始日期
+  dueDate: string;     // 作为计划结束日期
   assignee: User;
   statusColor: string;
   description?: string;
   progress?: number;
   projectId?: string;
+  iteration?: string;  // 新增：迭代
+  version?: string;    // 新增：需求版本
   attachments?: Attachment[];
   creatorId: string;
 }

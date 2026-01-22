@@ -1,14 +1,22 @@
 
 import React, { useState } from 'react';
-import { Settings, ShieldAlert, Bell, Box, Lock, CreditCard, ChevronRight, User, Code2 } from './Icons';
+import { Settings, ShieldAlert, Bell, Box, Lock, CreditCard, ChevronRight, User } from './Icons';
 import { OrganizationInfo } from './settings/OrganizationInfo';
 import { UserManagement } from './settings/UserManagement';
 import { SecurityPermissions } from './settings/SecurityPermissions';
 import { NotificationSettings } from './settings/NotificationSettings';
 import { FinanceBilling } from './settings/FinanceBilling';
 import { AdvancedFeatures } from './settings/AdvancedFeatures';
+import { GlobalRightControls } from './layout/GlobalRightControls';
+import { User as UserType } from '../types';
 
-export const SystemSettings = () => {
+interface SystemSettingsProps {
+  user?: UserType | null;
+  onLogout?: () => void;
+  onGoHome?: () => void;
+}
+
+export const SystemSettings: React.FC<SystemSettingsProps> = ({ user, onLogout, onGoHome }) => {
   const [activeTab, setActiveTab] = useState('组织信息');
 
   const menuItems = [
@@ -39,6 +47,9 @@ export const SystemSettings = () => {
         <div className="flex items-center gap-3">
           <Settings size={24} className="text-slate-600" />
           <h2 className="text-xl font-bold text-slate-800">系统设置</h2>
+        </div>
+        <div className="flex items-center gap-5">
+           <GlobalRightControls user={user} onLogout={onLogout} onGoHome={onGoHome} />
         </div>
       </div>
 

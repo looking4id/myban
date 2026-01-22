@@ -1,9 +1,17 @@
 
 import React from 'react';
 import { Search, Plus, Users, MoreHorizontal, Filter, ShieldAlert, Mail, UserCheck } from './Icons';
+import { GlobalRightControls } from './layout/GlobalRightControls';
 import { MOCK_USERS } from '../constants';
+import { User as UserType } from '../types';
 
-export const MemberManagement = () => {
+interface MemberManagementProps {
+  user?: UserType | null;
+  onLogout?: () => void;
+  onGoHome?: () => void;
+}
+
+export const MemberManagement: React.FC<MemberManagementProps> = ({ user, onLogout, onGoHome }) => {
   return (
     <div className="flex-1 flex flex-col bg-slate-50 overflow-hidden">
       <div className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0 z-10 shadow-sm">
@@ -11,13 +19,17 @@ export const MemberManagement = () => {
           <Users size={24} className="text-blue-600" />
           <h2 className="text-xl font-bold text-slate-800">成员管理</h2>
         </div>
-        <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 bg-white text-slate-600 rounded-lg hover:bg-slate-50 text-sm font-medium transition-all">
-            <Mail size={16} /> 批量邀请
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-all shadow-sm">
-            <Plus size={16} /> 添加成员
-          </button>
+        <div className="flex items-center gap-5">
+          <div className="flex items-center gap-3">
+             <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 bg-white text-slate-600 rounded-lg hover:bg-slate-50 text-sm font-medium transition-all">
+                <Mail size={16} /> 批量邀请
+             </button>
+             <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-all shadow-sm">
+                <Plus size={16} /> 添加成员
+             </button>
+          </div>
+          <div className="w-px h-6 bg-slate-200 mx-1"></div>
+          <GlobalRightControls user={user} onLogout={onLogout} onGoHome={onGoHome} />
         </div>
       </div>
 

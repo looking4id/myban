@@ -26,7 +26,11 @@ export const VersionList: React.FC<VersionListProps> = ({ versions, onEdit, onDe
         </thead>
         <tbody className="text-sm">
           {versions.map(v => (
-            <tr key={v.id} className="border-b border-slate-50 hover:bg-slate-50 group transition-colors">
+            <tr 
+              key={v.id} 
+              onClick={() => onEdit(v)}
+              className="border-b border-slate-50 hover:bg-slate-50 group transition-colors cursor-pointer"
+            >
               <td className="py-5 px-8 font-black text-slate-800 text-base">{v.version}</td>
               <td className="py-5 px-4">
                 <div className="flex flex-col">
@@ -56,8 +60,18 @@ export const VersionList: React.FC<VersionListProps> = ({ versions, onEdit, onDe
               </td>
               <td className="py-5 px-12 text-right">
                 <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => onEdit(v)} className="p-2 text-slate-400 hover:text-blue-600 bg-white border border-slate-100 rounded-none shadow-sm"><Edit3 size={14} /></button>
-                  <button onClick={() => onDelete(v.id)} className="p-2 text-slate-400 hover:text-red-500 bg-white border border-slate-100 rounded-none shadow-sm"><Trash2 size={14} /></button>
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); onEdit(v); }} 
+                    className="p-2 text-slate-400 hover:text-blue-600 bg-white border border-slate-100 rounded-none shadow-sm"
+                  >
+                    <Edit3 size={14} />
+                  </button>
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); onDelete(v.id); }} 
+                    className="p-2 text-slate-400 hover:text-red-500 bg-white border border-slate-100 rounded-none shadow-sm"
+                  >
+                    <Trash2 size={14} />
+                  </button>
                 </div>
               </td>
             </tr>

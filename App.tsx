@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { MainSidebar, SecondarySidebar } from './components/layout/Sidebar';
 import { TopHeader } from './components/layout/TopHeader';
 import { FilterBar } from './features/project/kanban/FilterBar';
-import { KanbanBoard } from './features/project/kanban/KanbanBoard';
+import { WorkItemsView } from './features/project/work-items/WorkItemsView';
 import { ProjectList } from './features/project/list/ProjectList';
 import { ProjectDetail } from './features/project/views/ProjectDetail';
 import { Workbench } from './features/workbench/Workbench';
@@ -111,11 +111,16 @@ const AppContent = () => {
       case '项目':
         if (activeProject) return <ProjectDetail project={activeProject} onBack={() => setActiveProject(null)} onLogout={handleLogout} onGoHome={handleGoHome} user={currentUser} />;
         return <ProjectList onProjectClick={setActiveProject} onLogout={handleLogout} onGoHome={handleGoHome} user={currentUser} />;
-      case '代码': return <CodeManagement />;
-      case '知识库': return <KnowledgeBase />;
-      case '成员': return <MemberManagement />;
-      case '效能度量': return <PerformanceMetrics />;
-      case '设置': return <SystemSettings />;
+      case '代码': 
+        return <CodeManagement user={currentUser} onLogout={handleLogout} onGoHome={handleGoHome} />;
+      case '知识库': 
+        return <KnowledgeBase user={currentUser} onLogout={handleLogout} onGoHome={handleGoHome} />;
+      case '成员': 
+        return <MemberManagement user={currentUser} onLogout={handleLogout} onGoHome={handleGoHome} />;
+      case '效能度量': 
+        return <PerformanceMetrics user={currentUser} onLogout={handleLogout} onGoHome={handleGoHome} />;
+      case '设置': 
+        return <SystemSettings user={currentUser} onLogout={handleLogout} onGoHome={handleGoHome} />;
       case '工作项':
       default:
         return (
@@ -130,7 +135,14 @@ const AppContent = () => {
                 onGoHome={handleGoHome}
               />
               <FilterBar filters={filters} setFilters={setFilters} viewType={viewType} setViewType={setViewType} onTriggerCreate={handleTriggerCreate} />
-              <KanbanBoard filters={filters} viewType={viewType} isCreateModalOpen={isCreateModalOpen} setIsCreateModalOpen={setIsCreateModalOpen} createModalType={createModalType} setCreateModalType={setCreateModalType} />
+              <WorkItemsView 
+                filters={filters} 
+                viewType={viewType} 
+                isCreateModalOpen={isCreateModalOpen} 
+                setIsCreateModalOpen={setIsCreateModalOpen} 
+                createModalType={createModalType} 
+                setCreateModalType={setCreateModalType} 
+              />
             </div>
           </div>
         );

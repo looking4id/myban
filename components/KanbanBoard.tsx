@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { MOCK_COLUMNS, MOCK_USERS, MOCK_PROJECTS } from '../constants';
@@ -246,11 +247,11 @@ export const TaskDetailsModal: React.FC<{
   onDelete: (taskId: string) => void;
 }> = ({ task, onClose, onUpdate, onDelete }) => {
   return (
-    <div className="fixed inset-0 z-[120] flex items-center justify-end">
-      <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity" onClick={onClose}></div>
-      <div className="bg-white w-[800px] h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300 relative z-10">
+    <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 font-sans">
+      <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={onClose}></div>
+      <div className="bg-white w-[900px] max-h-[90vh] rounded-lg shadow-2xl flex flex-col animate-in zoom-in-95 duration-300 relative z-10 border border-white/20 overflow-hidden">
         {/* Header */}
-        <div className="h-16 border-b border-slate-100 flex items-center justify-between px-8 bg-white flex-shrink-0">
+        <div className="h-14 border-b border-slate-100 flex items-center justify-between px-8 bg-white flex-shrink-0">
            <div className="flex items-center gap-4">
               <span className="text-sm font-mono font-bold text-slate-400">{task.displayId}</span>
               <div className={`w-px h-4 bg-slate-200`}></div>

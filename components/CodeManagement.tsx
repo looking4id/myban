@@ -1,8 +1,16 @@
 
 import React from 'react';
-import { Search, Plus, GitBranch, Clock, Code2, Star, MoreHorizontal, RefreshCw, GitPullRequest } from './Icons';
+import { Search, Plus, GitBranch, Clock, Code2, Star, MoreHorizontal, RefreshCw } from './Icons';
+import { GlobalRightControls } from './layout/GlobalRightControls';
+import { User as UserType } from '../types';
 
-export const CodeManagement = () => {
+interface CodeManagementProps {
+  user?: UserType | null;
+  onLogout?: () => void;
+  onGoHome?: () => void;
+}
+
+export const CodeManagement: React.FC<CodeManagementProps> = ({ user, onLogout, onGoHome }) => {
   const repos = [
     { name: 'frontend-main-app', lang: 'TypeScript', branch: 'master', commits: 1240, updated: '2小时前', color: 'bg-blue-500' },
     { name: 'backend-api-service', lang: 'Go', branch: 'dev', commits: 856, updated: '5分钟前', color: 'bg-cyan-500' },
@@ -14,10 +22,12 @@ export const CodeManagement = () => {
     <div className="flex-1 flex flex-col bg-slate-50 overflow-hidden">
       <div className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm z-10">
         <h2 className="text-xl font-bold text-slate-800">代码管理</h2>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-5">
           <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-all shadow-sm">
             <Plus size={16} /> 创建仓库
           </button>
+          <div className="w-px h-6 bg-slate-200 mx-2"></div>
+          <GlobalRightControls user={user} onLogout={onLogout} onGoHome={onGoHome} />
         </div>
       </div>
 

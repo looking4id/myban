@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { 
-  Search, Plus, AiIcon, LayoutGrid, Filter, 
+  Search, Plus, LayoutGrid, Filter, 
   ArrowUpDown, MoreHorizontal, ChevronDown, Code2, Users, Star
 } from '../../../components/common/Icons';
 import { MOCK_PROJECTS } from '../../../utils/constants';
@@ -33,7 +33,6 @@ export const ProjectList: React.FC<ProjectListProps> = ({ onProjectClick, onLogo
            </div>
            
            <div className="flex items-center border-l border-slate-100 pl-4">
-               <div className="mr-4"><AiIcon /></div>
                <GlobalRightControls user={user} onLogout={onLogout} onGoHome={onGoHome} />
            </div>
         </div>
@@ -142,10 +141,10 @@ export const ProjectList: React.FC<ProjectListProps> = ({ onProjectClick, onLogo
                              </td>
                              <td className="py-5 px-4">
                                  <div className="flex items-center gap-2">
-                                     <div className={`w-6 h-6 rounded-lg ${project.manager.avatarColor} text-white flex items-center justify-center text-[10px] font-bold shadow-sm`}>
-                                         {project.manager.name.substring(0, 2)}
+                                     <div className={`w-6 h-6 rounded-lg ${project.manager?.avatarColor || 'bg-slate-400'} text-white flex items-center justify-center text-[10px] font-bold shadow-sm`}>
+                                         {project.manager?.name?.substring(0, 2) || '??'}
                                      </div>
-                                     <span className="font-medium text-slate-600">{project.manager.name}</span>
+                                     <span className="font-medium text-slate-600">{project.manager?.name || '未知'}</span>
                                  </div>
                              </td>
                              <td className="py-5 px-4 text-center">

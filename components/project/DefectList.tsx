@@ -21,7 +21,7 @@ export const DefectList: React.FC<DefectListProps> = ({ tasks, onCreate, onDefec
   const defects = useMemo(() => {
     return tasks.filter(t => 
       t.type === TaskType.Defect && 
-      (t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.displayId.toLowerCase().includes(searchQuery.toLowerCase()))
+      (t.title.toLowerCase().includes(searchQuery.toLowerCase()) || (t.displayId?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false))
     );
   }, [tasks, searchQuery]);
 
@@ -122,16 +122,16 @@ export const DefectList: React.FC<DefectListProps> = ({ tasks, onCreate, onDefec
                     <span className="text-slate-800 font-bold group-hover:text-red-600 transition-colors truncate">{defect.title}</span>
                   </div>
                 </td>
-                <td className="py-4 px-4"><StatusBadge status={defect.statusColor.includes('green') ? '已关闭' : '处理中'} /></td>
+                <td className="py-4 px-4"><StatusBadge status={defect.statusColor?.includes('green') ? '已关闭' : '处理中'} /></td>
                 <td className="py-4 px-4"><PriorityBadge priority={defect.priority} /></td>
                 <td className="py-4 px-4"><SeverityBadge severity={defect.severity} /></td>
                 <td className="py-4 px-4"><span className="text-xs font-bold text-slate-500">{defect.environment || '-'}</span></td>
                 <td className="py-4 px-4">
                   <div className="flex items-center gap-2 truncate">
-                    <div className={`w-6 h-6 rounded-full ${defect.assignee.avatarColor} text-white flex items-center justify-center text-[10px] font-black shadow-sm`}>
-                      {defect.assignee.name.charAt(0)}
+                    <div className={`w-6 h-6 rounded-full ${defect.assignee?.avatarColor || 'bg-slate-400'} text-white flex items-center justify-center text-[10px] font-black shadow-sm`}>
+                      {defect.assignee?.name?.charAt(0) || '?'}
                     </div>
-                    <span className="font-bold text-slate-600 truncate">{defect.assignee.name}</span>
+                    <span className="font-bold text-slate-600 truncate">{defect.assignee?.name || '未分配'}</span>
                   </div>
                 </td>
                 <td className="py-4 px-4 text-right">

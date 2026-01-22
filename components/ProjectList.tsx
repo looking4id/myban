@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { 
-  Search, Bell, HelpCircle, Plus, AiIcon, LayoutGrid, Filter, 
+  Search, Bell, HelpCircle, Plus, LayoutGrid, Filter, 
   ArrowUpDown, MoreHorizontal, ChevronDown, Code2, Users, Star
 } from './Icons';
 import { MOCK_PROJECTS } from '../constants';
@@ -29,7 +29,6 @@ export const ProjectList: React.FC<ProjectListProps> = ({ onProjectClick }) => {
            </div>
            
            <div className="flex items-center gap-4 border-l border-slate-100 pl-4">
-               <AiIcon />
                <Bell size={18} className="text-slate-400 cursor-pointer hover:text-slate-600 transition-colors" />
                <HelpCircle size={18} className="text-slate-400 cursor-pointer hover:text-slate-600 transition-colors" />
                <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold shadow-md shadow-blue-100 cursor-pointer">
@@ -142,10 +141,10 @@ export const ProjectList: React.FC<ProjectListProps> = ({ onProjectClick }) => {
                              </td>
                              <td className="py-5 px-4">
                                  <div className="flex items-center gap-2">
-                                     <div className={`w-6 h-6 rounded-lg ${project.manager.avatarColor} text-white flex items-center justify-center text-[10px] font-bold shadow-sm`}>
-                                         {project.manager.name.substring(0, 2)}
+                                     <div className={`w-6 h-6 rounded-lg ${project.manager?.avatarColor || 'bg-slate-400'} text-white flex items-center justify-center text-[10px] font-bold shadow-sm`}>
+                                         {project.manager?.name?.substring(0, 2) || '??'}
                                      </div>
-                                     <span className="font-medium text-slate-600">{project.manager.name}</span>
+                                     <span className="font-medium text-slate-600">{project.manager?.name || '未知'}</span>
                                  </div>
                              </td>
                              <td className="py-5 px-4 text-center">

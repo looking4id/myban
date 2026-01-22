@@ -1,8 +1,16 @@
 
 import React from 'react';
-import { Search, Plus, BookOpen, FolderTree, FileText, ChevronRight, Star, MoreHorizontal, Clock, Users } from './Icons';
+import { Search, Plus, BookOpen, FolderTree, FileText, ChevronRight, Star, MoreHorizontal, Clock } from './Icons';
+import { GlobalRightControls } from './layout/GlobalRightControls';
+import { User as UserType } from '../types';
 
-export const KnowledgeBase = () => {
+interface KnowledgeBaseProps {
+  user?: UserType | null;
+  onLogout?: () => void;
+  onGoHome?: () => void;
+}
+
+export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({ user, onLogout, onGoHome }) => {
   return (
     <div className="flex-1 flex flex-col bg-white overflow-hidden">
       <div className="h-16 border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
@@ -10,7 +18,7 @@ export const KnowledgeBase = () => {
           <BookOpen size={24} className="text-blue-600" />
           <h2 className="text-xl font-bold text-slate-800">知识库</h2>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-5">
           <div className="relative">
             <input type="text" placeholder="全局搜索文档..." className="pl-8 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500 w-64 bg-slate-50" />
             <Search size={16} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -18,6 +26,8 @@ export const KnowledgeBase = () => {
           <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-all shadow-sm">
             <Plus size={16} /> 新建文档
           </button>
+          <div className="w-px h-6 bg-slate-200 mx-1"></div>
+          <GlobalRightControls user={user} onLogout={onLogout} onGoHome={onGoHome} />
         </div>
       </div>
 

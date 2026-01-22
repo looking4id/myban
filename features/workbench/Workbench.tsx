@@ -22,11 +22,13 @@ interface WorkbenchProps {
   onGoHome?: () => void;
 }
 
-const WorkbenchHeader = ({ user, onAddClick, onRefresh, isRefreshing }: { user: string; onAddClick: () => void; onRefresh: () => void; isRefreshing: boolean }) => {
+const WorkbenchHeader = ({ user, onRefresh, isRefreshing }: { user: string; onRefresh: () => void; isRefreshing: boolean }) => {
   return (
     <div className="flex items-center justify-between mb-8 flex-shrink-0">
       <div className="flex flex-col gap-1">
-        <h2 className="text-2xl font-semibold text-slate-800 tracking-tight">下午好，{user} 👋</h2>
+        {/* 20px 标题 */}
+        <h2 className="text-xl font-bold text-slate-800 tracking-tight">下午好，{user} 👋</h2>
+        {/* 14px 正文 */}
         <p className="text-sm text-slate-500 font-medium">当前你有 <span className="text-blue-600 font-semibold">12</span> 个任务正在进行中，本周已交付 <span className="text-emerald-500 font-semibold">8</span> 个需求。</p>
       </div>
       <div className="flex items-center gap-3">
@@ -41,13 +43,6 @@ const WorkbenchHeader = ({ user, onAddClick, onRefresh, isRefreshing }: { user: 
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
             系统正常
         </div>
-        <button 
-            onClick={onAddClick}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded text-sm font-semibold hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all active:scale-95"
-        >
-            <Plus size={18} strokeWidth={2.5} />
-            <span>新建项目</span>
-        </button>
       </div>
     </div>
   );
@@ -64,10 +59,11 @@ const WidgetWrapper: React.FC<{
   return (
     <div className={`bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden flex flex-col hover:shadow-md transition-all duration-300 group/widget ${className}`}>
       <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white flex-shrink-0">
-        <div className="flex items-center gap-3 font-semibold text-slate-800 text-base">
+        {/* 小标题标准化 14px 加粗 */}
+        <div className="flex items-center gap-3 font-bold text-slate-800 text-sm">
           <span className="text-blue-600">{icon}</span>
           <span className="tracking-tight">{title}</span>
-          {count !== undefined && <span className="text-slate-500 font-medium text-xs ml-1 bg-slate-100 px-2 py-0.5 rounded-full">{count}</span>}
+          {count !== undefined && <span className="text-slate-500 font-bold text-xs ml-1 bg-slate-100 px-2 py-0.5 rounded-full">{count}</span>}
         </div>
         <div className="flex items-center gap-3">
            {headerAction}
@@ -81,7 +77,6 @@ const WidgetWrapper: React.FC<{
   );
 };
 
-// ... StatCard and QuickEntry components remain same ...
 const StatCard = ({ label, value, color, icon: Icon, trend, onClick }: any) => (
   <div 
     onClick={onClick}
@@ -95,7 +90,7 @@ const StatCard = ({ label, value, color, icon: Icon, trend, onClick }: any) => (
             <Icon size={20} />
         </div>
         {trend && (
-            <div className={`text-xs font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 ${trend > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}`}>
+            <div className={`text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${trend > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}`}>
                 {trend > 0 ? <TrendingUp size={12} /> : <TrendingUp size={12} className="rotate-180" />}
                 {Math.abs(trend)}%
             </div>
@@ -103,6 +98,7 @@ const StatCard = ({ label, value, color, icon: Icon, trend, onClick }: any) => (
     </div>
     <div className="relative z-10">
       <div className="text-3xl font-bold text-slate-800 leading-none mb-2 group-hover:text-blue-600 transition-colors">{value}</div>
+      {/* 14px 正文标签 */}
       <div className="text-sm font-medium text-slate-500">{label}</div>
     </div>
   </div>
@@ -113,7 +109,8 @@ const QuickEntry = ({ icon: Icon, label, color, onClick }: any) => (
         <div className={`w-14 h-14 rounded-2xl ${color} bg-opacity-10 flex items-center justify-center text-${color.split('-')[1]}-600 group-hover:scale-110 group-active:scale-95 transition-all shadow-sm border border-transparent`}>
             <Icon size={24} />
         </div>
-        <span className="text-xs font-medium text-slate-600 group-hover:text-blue-600 transition-colors">{label}</span>
+        {/* 辅助入口字号 12px */}
+        <span className="text-xs font-bold text-slate-600 group-hover:text-blue-600 transition-colors">{label}</span>
     </div>
 );
 
@@ -169,20 +166,19 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-[#f8fafc]">
-      <div className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0 z-10 shadow-sm">
-        <h1 className="text-lg font-bold text-slate-800">个人工作台</h1>
+      <div className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0 z-[50] shadow-sm">
+        {/* 标题标准化 20px */}
+        <h1 className="text-xl font-bold text-slate-800 tracking-tight">个人工作台</h1>
         <GlobalRightControls user={user} onLogout={onLogout} onGoHome={onGoHome} />
       </div>
 
       <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
         <WorkbenchHeader 
             user={user?.name || 'lo'} 
-            onAddClick={() => setIsCreateProjectModalOpen(true)} 
             onRefresh={() => fetchData(true)}
             isRefreshing={isRefreshing}
         />
         
-        {/* 顶部核心指标 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <StatCard label="待我处理" value={data.stats.todo} color="bg-gradient-to-br from-blue-500 to-indigo-600" icon={Layers} trend={12} onClick={() => handleStatClick('待我处理')} />
             <StatCard label="本周完成" value={data.stats.done} color="bg-gradient-to-br from-emerald-400 to-teal-600" icon={CheckCircle2} trend={5} onClick={() => handleStatClick('本周完成')} />
@@ -191,10 +187,7 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* 左侧宽栏：工作核心 */}
             <div className="lg:col-span-8 flex flex-col gap-8">
-                
-                {/* 我的项目列表 */}
                 <WidgetWrapper 
                     title="重点关注项目" 
                     icon={<Star size={18} />} 
@@ -208,7 +201,7 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
                         >
                         <Plus size={14} strokeWidth={3} className="group-hover/addbtn:scale-110" />
                         </button>
-                        <button className="text-xs font-semibold text-blue-600 hover:underline">查看全部项目</button>
+                        <button className="text-xs font-bold text-blue-600 hover:underline">查看全部项目</button>
                     </div>
                     }
                 >
@@ -226,8 +219,9 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
                                             <Code2 size={24} />
                                         </div>
                                         <div>
-                                            <span className="font-bold text-slate-800 text-base group-hover:text-blue-600 transition-colors block">{p.name}</span>
-                                            <span className="text-xs font-medium text-slate-400 mt-0.5 block">{p.code}</span>
+                                            {/* 项目标题 14px */}
+                                            <span className="font-bold text-slate-800 text-sm group-hover:text-blue-600 transition-colors block">{p.name}</span>
+                                            <span className="text-xs font-bold text-slate-400 mt-0.5 block">{p.code}</span>
                                         </div>
                                     </div>
                                     {p.isStar && <Star size={16} className="text-amber-400 fill-amber-400 group-hover:scale-125 transition-transform" />}
@@ -235,7 +229,7 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
                                 <div className="flex items-center justify-between mt-auto">
                                     <div className="flex items-center gap-2">
                                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                                        <span className="text-xs font-semibold text-slate-500">{p.statusLabel}</span>
+                                        <span className="text-xs font-bold text-slate-500">{p.statusLabel}</span>
                                     </div>
                                     <div className="flex -space-x-2">
                                         {[1,2,3].map(i => (
@@ -248,7 +242,6 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
                     </div>
                 </WidgetWrapper>
 
-                {/* 待办工作项 - 列表视图 */}
                 <WidgetWrapper 
                     title="待办事项列表" 
                     icon={<Target size={18} />} 
@@ -273,9 +266,9 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
                             <thead>
-                                <tr className="border-b border-slate-100 text-xs font-semibold text-slate-500">
+                                <tr className="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-widest">
                                     <th className="pb-4 px-2">事项详情</th>
-                                    <th className="pb-4 w-32">当前进度</th>
+                                    <th className="pb-4 w-32">进度</th>
                                     <th className="pb-4 w-28 text-center">状态</th>
                                     <th className="pb-4 w-32 text-right">截止日期</th>
                                 </tr>
@@ -291,8 +284,9 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
                                         <div className="flex items-center gap-3">
                                             <div className={`w-1 h-8 rounded-full ${task.statusColor}`}></div>
                                             <div className="flex flex-col gap-0.5">
-                                                <div className="text-sm text-slate-800 font-medium group-hover:text-blue-600 transition-colors line-clamp-1">{task.title}</div>
-                                                <div className="text-xs text-slate-400 font-mono tracking-tight">{task.displayId}</div>
+                                                {/* 列表文字标准化 14px */}
+                                                <div className="text-sm text-slate-800 font-bold group-hover:text-blue-600 transition-colors line-clamp-1">{task.title}</div>
+                                                <div className="text-xs text-slate-400 font-mono font-bold">{task.displayId}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -301,13 +295,13 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
                                             <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
                                                 <div className="h-full bg-blue-500 rounded-full transition-all duration-700" style={{ width: `${task.progress || 0}%` }}></div>
                                             </div>
-                                            <span className="text-xs font-medium text-slate-500">{task.progress || 0}%</span>
+                                            <span className="text-xs font-bold text-slate-500">{task.progress || 0}%</span>
                                         </div>
                                     </td>
                                     <td className="py-4 text-center">
                                         <StatusBadge status="进行中" className="scale-90" />
                                     </td>
-                                    <td className="py-4 text-xs font-mono font-medium text-slate-500 text-right">
+                                    <td className="py-4 text-xs font-mono font-bold text-slate-400 text-right">
                                         {task.dueDate}
                                     </td>
                                 </tr>
@@ -317,40 +311,14 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
                     </div>
                     <button 
                     onClick={() => onTaskSelect && onTaskSelect(filteredTasks[0])}
-                    className="w-full mt-4 py-2.5 bg-slate-50 hover:bg-slate-100 rounded text-xs font-semibold text-slate-500 transition-all border border-transparent hover:border-slate-200"
+                    className="w-full mt-4 py-2.5 bg-slate-50 hover:bg-slate-100 rounded text-xs font-bold text-slate-500 transition-all border border-transparent hover:border-slate-200"
                     >
                         查看全部工作项
                     </button>
                 </WidgetWrapper>
-
-                {/* 最近文档 / 知识库 */}
-                <WidgetWrapper title="最近访问文档" icon={<FileText size={18} />}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {[
-                            { title: 'V2.4 产品交付规范', time: '10分钟前', icon: FileText, color: 'text-blue-500' },
-                            { title: '后端 API 安全指南', time: '1小时前', icon: ShieldCheck, color: 'text-emerald-500' },
-                            { title: '前端重构技术路线', time: '3小时前', icon: Code2, color: 'text-purple-500' },
-                            { title: 'Sprint 回顾周报', time: '昨天', icon: BarChart2, color: 'text-amber-500' },
-                        ].map((doc, idx) => (
-                            <div key={idx} className="flex items-center gap-4 p-4 border border-slate-100 rounded-lg hover:border-blue-200 hover:bg-blue-50/10 transition-all cursor-pointer group">
-                                <div className={`p-2 rounded-lg bg-white shadow-sm border border-slate-50 group-hover:scale-110 transition-transform ${doc.color}`}>
-                                    <doc.icon size={18} />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="text-sm font-semibold text-slate-700 truncate group-hover:text-blue-600">{doc.title}</div>
-                                    <div className="text-xs text-slate-400 font-medium">查看于 {doc.time}</div>
-                                </div>
-                                <ChevronRight size={14} className="text-slate-300 opacity-0 group-hover:opacity-100 transition-all" />
-                            </div>
-                        ))}
-                    </div>
-                </WidgetWrapper>
             </div>
 
-            {/* 右侧窄栏：辅助信息与动态 */}
             <div className="lg:col-span-4 flex flex-col gap-8">
-                
-                {/* 快捷导航入口 */}
                 <WidgetWrapper title="快捷入口" icon={<Zap size={18} />}>
                     <div className="grid grid-cols-4 gap-y-6">
                         <QuickEntry icon={Plus} label="建需求" color="bg-blue-500" onClick={() => setIsCreateTaskModalOpen(true)} />
@@ -364,21 +332,20 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
                     </div>
                 </WidgetWrapper>
 
-                {/* 团队效能健康度 */}
                 <WidgetWrapper title="团队效能雷达" icon={<Activity size={18} />}>
                     <div className="flex flex-col items-center py-4">
                         <DonutChart percentage={92} color="#3b82f6" label="当前效能指数" />
                         <div className="mt-8 space-y-4 w-full px-2">
-                            <div className="flex justify-between items-center text-xs">
-                                <span className="text-slate-500 font-medium">需求按时交付率</span>
-                                <span className="text-emerald-500 font-bold">95.4%</span>
+                            <div className="flex justify-between items-center text-xs font-bold">
+                                <span className="text-slate-500 uppercase">需求按时交付率</span>
+                                <span className="text-emerald-500">95.4%</span>
                             </div>
                             <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
                                 <div className="h-full bg-emerald-500 transition-all duration-1000" style={{ width: '95%' }}></div>
                             </div>
-                            <div className="flex justify-between items-center text-xs">
-                                <span className="text-slate-500 font-medium">代码评审覆盖率</span>
-                                <span className="text-blue-500 font-bold">88.2%</span>
+                            <div className="flex justify-between items-center text-xs font-bold">
+                                <span className="text-slate-500 uppercase">代码评审覆盖率</span>
+                                <span className="text-blue-500">88.2%</span>
                             </div>
                             <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
                                 <div className="h-full bg-blue-500 transition-all duration-1000" style={{ width: '88%' }}></div>
@@ -392,17 +359,17 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
                     <div className="space-y-6">
                         {data.activities.map(act => (
                             <div 
-                            key={act.id} 
-                            className="flex gap-4 relative group cursor-pointer"
-                            onClick={() => onProjectSelect && onProjectSelect(data.projects[0])}
+                              key={act.id} 
+                              className="flex gap-4 relative group cursor-pointer"
+                              onClick={() => onProjectSelect && onProjectSelect(data.projects[0])}
                             >
                                 <div className="absolute left-[18px] top-10 bottom-[-24px] w-0.5 bg-slate-100 group-last:hidden"></div>
-                                <div className={`w-9 h-9 rounded-lg flex-shrink-0 ${act.user.avatarColor} text-white flex items-center justify-center text-sm font-bold shadow-md group-hover:scale-110 transition-transform z-10`}>
-                                    {act.user.name.slice(0, 1)}
+                                <div className={`w-9 h-9 rounded-lg flex-shrink-0 ${act.user?.avatarColor || 'bg-slate-400'} text-white flex items-center justify-center text-sm font-bold shadow-md group-hover:scale-110 transition-transform z-10`}>
+                                    {act.user?.name?.slice(0, 1) || '?'}
                                 </div>
                                 <div className="flex flex-col gap-1 pb-4">
                                     <div className="text-sm text-slate-600 leading-relaxed">
-                                        <span className="font-bold text-slate-800">{act.user.name}</span>
+                                        <span className="font-bold text-slate-800">{act.user?.name || '未知用户'}</span>
                                         <span className="mx-1 text-slate-400 font-medium">{act.action}</span>
                                         <span className="font-bold text-blue-600 hover:underline">{act.target}</span>
                                     </div>
@@ -411,62 +378,7 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
                             </div>
                         ))}
                     </div>
-                    <button className="w-full mt-4 py-2 text-xs font-semibold text-blue-600 hover:underline">查看全站动态日志</button>
-                </WidgetWrapper>
-
-                {/* 日历简版 */}
-                <WidgetWrapper title="工作日程" icon={<Calendar size={18} />}>
-                    <div className="flex flex-col gap-6">
-                        <div className="flex items-center justify-between px-1">
-                            <span className="text-sm font-bold text-slate-800 tracking-tight">2025年 8月</span>
-                            <div className="flex gap-2">
-                                <button className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-slate-800 transition-colors"><ChevronRight size={14} className="rotate-180" /></button>
-                                <button className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-slate-800 transition-colors"><ChevronRight size={14} /></button>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-7 text-center text-xs font-bold text-slate-300 mb-2">
-                            <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
-                        </div>
-                        <div className="grid grid-cols-7 text-center gap-y-4 text-xs font-semibold text-slate-600">
-                            <div className="text-slate-200">28</div><div className="text-slate-200">29</div><div className="text-slate-200">30</div>
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(d => (
-                                <div 
-                                key={d} 
-                                onClick={() => setSelectedCalendarDate(d)}
-                                className={`cursor-pointer transition-all w-7 h-7 mx-auto flex items-center justify-center rounded hover:bg-blue-50 hover:text-blue-600 ${selectedCalendarDate === d ? 'ring-2 ring-blue-100' : ''}`}
-                                >
-                                    {d}
-                                </div>
-                            ))}
-                            <div 
-                            onClick={() => setSelectedCalendarDate(15)}
-                            className={`bg-blue-600 text-white rounded w-7 h-7 mx-auto flex items-center justify-center shadow-lg shadow-blue-200 ring-2 ring-blue-50 ring-offset-1 cursor-pointer scale-110 z-10`}
-                            >
-                                15
-                            </div>
-                            {[16, 17, 18, 19, 20, 21, 22, 23, 24, 25].map(d => (
-                                <div 
-                                key={d} 
-                                onClick={() => setSelectedCalendarDate(d)}
-                                className={`cursor-pointer transition-all w-7 h-7 mx-auto flex items-center justify-center rounded hover:bg-blue-50 hover:text-blue-600 ${selectedCalendarDate === d ? 'ring-2 ring-blue-100' : ''}`}
-                                >
-                                    {d}
-                                </div>
-                            ))}
-                        </div>
-                        
-                        {/* 今日待办列表预览 */}
-                        <div className="mt-2 space-y-3 pt-4 border-t border-slate-50">
-                            <div className="flex items-center gap-3 px-3 py-2 bg-blue-50/50 rounded border border-blue-100 group cursor-pointer hover:bg-blue-100/50 transition-colors">
-                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
-                                <span className="text-xs font-semibold text-blue-700">14:00 - 项目周会汇报 (D{selectedCalendarDate})</span>
-                            </div>
-                            <div className="flex items-center gap-3 px-3 py-2 bg-slate-50/50 rounded border border-slate-100 group cursor-pointer hover:bg-slate-100 transition-colors">
-                                <div className="w-1.5 h-1.5 rounded-full bg-slate-400"></div>
-                                <span className="text-xs font-semibold text-slate-500">16:30 - Code Review (D{selectedCalendarDate})</span>
-                            </div>
-                        </div>
-                    </div>
+                    <button className="w-full mt-4 py-2 text-xs font-bold text-blue-600 hover:underline">查看全站动态日志</button>
                 </WidgetWrapper>
             </div>
         </div>
@@ -482,7 +394,6 @@ export const Workbench: React.FC<WorkbenchProps> = ({ onProjectSelect, onTaskSel
             <CreateTaskModal 
                 onClose={() => setIsCreateTaskModalOpen(false)}
                 onSubmit={(task) => {
-                    console.log("Created task:", task);
                     setIsCreateTaskModalOpen(false);
                     fetchData(true);
                 }}
