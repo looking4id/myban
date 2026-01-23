@@ -73,20 +73,31 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#f9fafb] text-slate-800 font-sans">
       <div className="bg-white rounded shadow-2xl shadow-slate-200/50 w-[960px] h-[580px] flex overflow-hidden">
-        <div className="w-[45%] relative bg-gradient-to-br from-blue-50 to-white p-10 flex flex-col overflow-hidden border-r border-slate-100">
-             <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-100/50 rounded-full blur-3xl"></div>
-             <div className="absolute top-40 -left-10 w-32 h-32 bg-indigo-100/30 rounded-full blur-2xl"></div>
+        <div className="w-[45%] relative bg-gradient-to-br from-slate-50 to-blue-50/30 p-10 flex flex-col overflow-hidden border-r border-slate-100">
+             {/* 背景装饰 - 柔和色调 */}
+             <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-100/40 rounded-full blur-[80px]"></div>
+             <div className="absolute top-40 -left-10 w-32 h-32 bg-indigo-100/30 rounded-full blur-[60px]"></div>
+             
              <div className="z-10 mt-4 relative">
                  <h1 className="text-4xl font-black text-blue-600 italic tracking-wider mb-2" style={{ fontFamily: '"Arial", sans-serif' }}>LUK</h1>
                  <h2 className="text-3xl font-bold text-slate-800 mb-3 tracking-tight">让协作更敏捷</h2>
-                 <p className="text-xs text-slate-500 tracking-[0.4em] uppercase font-medium">助力团队高效协作</p>
+                 <p className="text-xs text-slate-400 tracking-[0.4em] uppercase font-bold">助力团队高效协作</p>
              </div>
-             <div className="absolute top-1/4 left-0 right-0 bottom-0 flex items-end justify-center pointer-events-none">
-                 <div className="relative w-full h-full flex items-end justify-center">
+             
+             <div className="absolute inset-0 flex items-end justify-center pointer-events-none">
+                 <div className="relative w-full h-[75%] flex items-end justify-center overflow-hidden">
+                     {/* 
+                         使用研发协作主题图片 (Team working together) 
+                         使用 grayscale 和 opacity 处理以贴合整体淡雅色调，避免突兀
+                     */}
                      <img 
-                         src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                         alt="Collaboration 3D" 
-                         className="w-[110%] h-auto object-contain mb-8 drop-shadow-2xl mix-blend-multiply opacity-60 brightness-125 contrast-75 transform translate-y-6"
+                         src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop" 
+                         alt="R&D Collaboration" 
+                         className="w-full h-full object-cover object-center opacity-40 grayscale mix-blend-multiply transform hover:scale-105 transition-transform duration-[10s] ease-out"
+                         style={{ 
+                            maskImage: 'linear-gradient(to bottom, transparent 0%, black 40%)',
+                            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 40%)'
+                         }}
                      />
                  </div>
              </div>
