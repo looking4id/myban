@@ -5,13 +5,14 @@ import { TopHeader } from './components/layout/TopHeader';
 import { FilterBar } from './features/project/kanban/FilterBar';
 import { WorkItemsView } from './features/project/work-items/WorkItemsView';
 import { ProjectList } from './features/project/list/ProjectList';
-import { ProjectDetail } from './features/project/views/ProjectDetail';
+// Refactored Imports:
+import { ProjectDetail } from './features/project/view/ProjectDetail';
 import { Workbench } from './features/workbench/Workbench';
 import { Login } from './features/auth/Login';
-import { CodeManagement } from './components/CodeManagement';
-import { KnowledgeBase } from './components/KnowledgeBase';
-import { PerformanceMetrics } from './components/PerformanceMetrics';
-import { SystemSettings } from './components/SystemSettings';
+import { CodeManagement } from './features/code/CodeManagement';
+import { KnowledgeBase } from './features/knowledge/KnowledgeBase';
+import { PerformanceMetrics } from './features/metrics/PerformanceMetrics';
+import { SystemSettings } from './features/system-settings/SystemSettings';
 import { FilterState, ViewType, SavedView, TaskType, User, Project, Task } from './types/index';
 import { AppProvider } from './utils/AppContext';
 

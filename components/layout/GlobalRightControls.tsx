@@ -212,7 +212,7 @@ export const GlobalRightControls: React.FC<GlobalRightControlsProps> = ({
             >
                 <Bell size={20} />
                 {unreadCount > 0 && (
-                    <span className="absolute top-2 right-2 w-4 h-4 bg-rose-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm animate-in zoom-in duration-300">
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-rose-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm animate-in zoom-in duration-300">
                         {unreadCount}
                     </span>
                 )}
