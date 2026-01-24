@@ -68,9 +68,20 @@ export const OtherSettingsView: React.FC = () => {
   );
 };
 
+interface ModuleState {
+  id: number;
+  title: string;
+  enabled: boolean;
+  type?: string;
+  options?: string[];
+  selectedOption?: string;
+  desc?: string;
+  subText?: string;
+}
+
 /* --- Tab 1: 可启用的功能模块 --- */
 const EnabledModulesTab = ({ onSave }: { onSave: () => void }) => {
-  const [moduleStates, setModuleStates] = useState([
+  const [moduleStates, setModuleStates] = useState<ModuleState[]>([
     { id: 1, title: '启用工时花费', enabled: false },
     { 
       id: 2,

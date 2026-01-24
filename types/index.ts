@@ -22,6 +22,15 @@ export interface User {
   id: string;
   name: string;
   avatarColor: string;
+  role?: string;
+  dept?: string;
+  email?: string;
+  status?: string;
+  realName?: string;
+  gender?: string;
+  position?: string;
+  group?: string;
+  joinDate?: string;
 }
 
 export interface Project {
@@ -161,4 +170,24 @@ export interface DetailItem {
   status: string;
   owner: string;
   updatedAt: string;
+}
+
+// ------------------- Workflow Related Types -------------------
+
+export interface WorkflowState {
+  id: string;
+  name: string;
+  type: 'start' | 'progress' | 'end';
+  color: string;
+}
+
+export interface Workflow {
+  id: string;
+  name: string;
+  scope: string; // TaskType
+  description?: string;
+  states: WorkflowState[];
+  transitions: { fromId: string; toIds: string[] }[];
+  updatedAt: string;
+  author: string;
 }

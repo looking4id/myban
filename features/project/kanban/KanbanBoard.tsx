@@ -4,21 +4,65 @@ import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea
 import { MOCK_COLUMNS, MOCK_USERS, MOCK_PROJECTS } from '../../../utils/constants';
 import { KanbanCard } from './KanbanCard';
 import { 
-  Circle, MoreHorizontal, Plus, XCircle, ChevronDown, 
+  Circle, CheckCircle2, MoreHorizontal, Plus, XCircle, Clock, Trash2, 
+  ChevronDown, Paperclip, Download, UploadCloud, FileText, ChevronRight, 
+  LayoutList, FolderTree, PlayCircle, ShieldAlert, Zap, User, Target, Calendar,
   Maximize2, Bold, Italic, Underline, Link, Box, ListChecks, History, Share2, 
-  Ban, Trash2, Calendar, Target, Code2, List, LayoutList, Image as ImageIcon, 
-  Strikethrough, Quote, Minus, Smile, Paperclip, RefreshCw, Star, 
-  MessageSquare, User, CheckCircle2, ChevronRight, Edit3, Globe, Copy,
-  LayoutGrid, FileText, Bug, Layers, Smartphone, Download, Clock, GitPullRequest, FlaskConical,
-  CheckSquare, Search, BookOpen, Send, Sparkles, Keyboard, ThumbsUp, ThumbsDown,
-  GitBranch, Flag, AlertTriangle, ExternalLink, Paperclip as AttachmentIcon,
-  UploadCloud, Repeat, Settings, HelpCircle, Package, Filter, Unlink, Diamond, Eye, ArrowRight
+  Settings, Ban, Edit3, Search, Repeat, MessageSquare, Code2, List,
+  Filter, Minus, GitPullRequest, BookOpen, Sparkles, Star, RefreshCw, Copy,
+  ArrowRight, ExternalLink, ThumbsUp, ThumbsDown, Smile, Bug, CheckSquare,
+  Package, Unlink, Diamond
 } from '../../../components/common/Icons';
-import { Task, TaskType, Priority, Severity, Column, User as UserType, Attachment } from '../../../types';
+import { Task, TaskType, Priority, Severity, FilterState, ViewType, Column, User as UserType, Attachment } from '../../../types';
 import { StatusBadge, PriorityBadge } from '../../../components/common/ProjectShared';
 
-// ------------------- Create Task Modal -------------------
+// 还原原型图的高保真编辑器工具栏
+const EditorToolbar = () => (
+    <div className="flex items-center gap-4 py-2 border-b border-slate-100 bg-slate-50/50 px-4 flex-wrap">
+        <div className="flex items-center gap-1 pr-4 border-r border-slate-200">
+            <button type="button" className="p-1.5 hover:bg-white rounded text-slate-500 transition-colors"><History size={14}/></button>
+            <button type="button" className="p-1.5 hover:bg-white rounded text-slate-500 rotate-180 transition-colors"><History size={14}/></button>
+            <button type="button" className="p-1.5 hover:bg-white rounded text-slate-500 transition-colors"><Box size={14}/></button>
+            <button type="button" className="p-1.5 hover:bg-white rounded text-slate-500 transition-colors"><Target size={14}/></button>
+            <button type="button" className="flex items-center gap-1 px-2 py-1 text-[11px] font-bold text-slate-600 hover:bg-white rounded border border-transparent hover:border-slate-200 ml-2 transition-all">
+                <Plus size={12}/> 插入
+            </button>
+        </div>
+        <div className="flex items-center gap-3 pr-4 border-r border-slate-200">
+            <span className="text-[11px] font-bold text-slate-500 cursor-pointer hover:text-blue-600 flex items-center gap-1">正文 <ChevronDown size={10}/></span>
+            <span className="text-[11px] font-bold text-slate-500 cursor-pointer hover:text-blue-600 flex items-center gap-1">微软雅黑 <ChevronDown size={10}/></span>
+            <span className="text-[11px] font-bold text-slate-500 cursor-pointer hover:text-blue-600 flex items-center gap-1">14px <ChevronDown size={10}/></span>
+        </div>
+        <div className="flex items-center gap-1">
+            <button type="button" className="p-1.5 hover:bg-white rounded text-slate-500 transition-colors"><Bold size={14}/></button>
+            <button type="button" className="p-1.5 hover:bg-white rounded text-slate-500 transition-colors"><Italic size={14}/></button>
+            <button type="button" className="p-1.5 hover:bg-white rounded text-slate-500 transition-colors"><Underline size={14}/></button>
+            <button type="button" className="p-1.5 hover:bg-white rounded text-slate-500 transition-colors"><Ban size={14} className="rotate-45"/></button>
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+             <button type="button" className="p-1.5 hover:bg-white rounded text-slate-400 transition-colors"><Maximize2 size={14}/></button>
+        </div>
+    </div>
+);
 
+// 辅助属性字段组件 (还原图2右侧样式)
+const SidePropertyField = ({ label, required, children }: any) => (
+    <div className="space-y-1.5">
+        <label className="block text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">
+            {label} {required && <span className="text-red-500">*</span>}
+        </label>
+        {children}
+    </div>
+);
+
+const DetailField = ({ label, value }: { label: string, value: React.ReactNode }) => (
+    <div>
+        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{label}</div>
+        <div className="text-sm font-bold text-slate-800">{value}</div>
+    </div>
+);
+
+// 还原图1 & 图2：高保真新建工作项弹窗
 export const CreateTaskModal: React.FC<{
     onClose: () => void;
     onSubmit: (task: Task) => void;
@@ -26,128 +70,125 @@ export const CreateTaskModal: React.FC<{
     defaultProjectId?: string;
 }> = ({ onClose, onSubmit, defaultType, defaultProjectId }) => {
     const [title, setTitle] = useState('');
-    const [type, setType] = useState<TaskType>(defaultType || TaskType.Requirement);
+    const [type, setType] = useState<TaskType>(defaultType || TaskType.Task);
     const [priority, setPriority] = useState<Priority>(Priority.Normal);
+    const [severity, setSeverity] = useState<Severity>(Severity.Normal);
     const [assigneeId, setAssigneeId] = useState('u1');
-    const [projectId, setProjectId] = useState(defaultProjectId || 'p1');
-    const [version, setVersion] = useState('');
+    const [projectId, setProjectId] = useState(defaultProjectId || (MOCK_PROJECTS.length > 0 ? MOCK_PROJECTS[0].id : ''));
+
+    const isDefect = type === TaskType.Defect;
+    // Unified split layout for Requirement, Task, and Defect to match screenshot designs
+    const isSplitLayout = type === TaskType.Requirement || type === TaskType.Task || type === TaskType.Defect;
 
     return (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-6 font-sans">
-            <div className="bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-300 w-[900px] h-[80vh] border border-white/20">
-                {/* Header */}
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6 font-sans">
+            <div className={`bg-white rounded shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-300 border border-white/20 ${isSplitLayout ? 'w-[1000px] h-[600px] max-h-[85vh]' : 'w-[880px]'}`}>
+                {/* 头部导航 */}
                 <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white flex-shrink-0">
                     <h3 className="text-xl font-bold text-slate-800 tracking-tight">新建{type}</h3>
                     <div className="flex items-center gap-4">
-                        <button className="p-1 text-slate-300 hover:text-slate-600 transition-colors" onClick={onClose}><XCircle size={22} /></button>
+                        {!isSplitLayout && <button className="text-xs text-slate-400 font-bold hover:text-slate-600 flex items-center gap-1 transition-colors">更多 <ChevronDown size={12}/></button>}
+                        <button onClick={onClose} className="p-1 text-slate-300 hover:text-slate-600 transition-colors"><XCircle size={22} /></button>
                     </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-8 bg-white">
-                    <div className="space-y-6">
-                        {/* Title */}
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700">标题 <span className="text-red-500">*</span></label>
-                            <input 
-                                autoFocus
-                                className="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:border-blue-500 outline-none transition-all placeholder:text-slate-300" 
-                                placeholder="请填写" 
-                                value={title} 
-                                onChange={e => setTitle(e.target.value)} 
-                            />
-                        </div>
+                <div className="flex-1 overflow-hidden flex">
+                    {isSplitLayout ? (
+                        <div className="flex-1 flex p-8 gap-8 overflow-y-auto custom-scrollbar bg-white">
+                            {/* Left Column */}
+                            <div className="flex-1 space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-slate-700">标题 <span className="text-red-500">*</span></label>
+                                    <input 
+                                        className="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-blue-500 outline-none placeholder:text-slate-300 transition-all" 
+                                        placeholder="请填写" 
+                                        value={title} 
+                                        onChange={e => setTitle(e.target.value)} 
+                                    />
+                                </div>
 
-                        {/* Grid Fields */}
-                        <div className="grid grid-cols-2 gap-x-8 gap-y-6">
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700">负责人/协作者</label>
-                                <div className="relative">
-                                    <select className="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:border-blue-500 outline-none appearance-none bg-white text-slate-600" value={assigneeId} onChange={e => setAssigneeId(e.target.value)}>
-                                        <option value="" disabled>指派负责人/协作者</option>
-                                        {MOCK_USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
-                                    </select>
-                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700">类型 <span className="text-red-500">*</span></label>
-                                <div className="relative">
-                                    <select className="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:border-blue-500 outline-none appearance-none bg-white text-slate-600" value={type} onChange={e => setType(e.target.value as TaskType)}>
-                                        {Object.values(TaskType).map(t => <option key={t} value={t}>{t}</option>)}
-                                    </select>
-                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700">计划时间</label>
-                                <div className="flex items-center gap-2 border border-slate-200 rounded px-3 py-2">
-                                    <input type="date" className="flex-1 text-sm outline-none text-slate-600" />
-                                    <span className="text-slate-300">→</span>
-                                    <input type="date" className="flex-1 text-sm outline-none text-slate-600" />
-                                    <Calendar size={14} className="text-slate-400" />
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700">关联项目</label>
-                                <div className="relative">
-                                    <select className="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:border-blue-500 outline-none appearance-none bg-white text-slate-600" value={projectId} onChange={e => setProjectId(e.target.value)}>
-                                        {MOCK_PROJECTS.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-                                    </select>
-                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700">迭代</label>
-                                <div className="relative">
-                                    <select className="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:border-blue-500 outline-none appearance-none bg-white text-slate-600">
-                                        <option>选择迭代</option>
-                                    </select>
-                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700">版本</label>
-                                <div className="relative">
-                                    <select className="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:border-blue-500 outline-none appearance-none bg-white text-slate-600">
-                                        <option>选择版本</option>
-                                    </select>
-                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Description */}
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700">描述</label>
-                            <div className="border border-slate-200 rounded overflow-hidden flex flex-col min-h-[200px]">
-                                <div className="bg-slate-50 border-b border-slate-100 p-2 flex items-center gap-2">
-                                    <button className="p-1.5 hover:bg-white rounded text-slate-500"><span className="text-xs font-bold">正文</span></button>
-                                    <div className="w-px h-4 bg-slate-300 mx-1"></div>
-                                    <button className="p-1.5 hover:bg-white rounded text-slate-500"><Bold size={14}/></button>
-                                    <button className="p-1.5 hover:bg-white rounded text-slate-500"><Italic size={14}/></button>
-                                    <button className="p-1.5 hover:bg-white rounded text-slate-500"><Underline size={14}/></button>
-                                    <button className="p-1.5 hover:bg-white rounded text-slate-500"><Strikethrough size={14}/></button>
-                                    <div className="w-px h-4 bg-slate-300 mx-1"></div>
-                                    <button className="p-1.5 hover:bg-white rounded text-slate-500"><List size={14}/></button>
-                                    <button className="p-1.5 hover:bg-white rounded text-slate-500"><ListChecks size={14}/></button>
-                                    <div className="w-px h-4 bg-slate-300 mx-1"></div>
-                                    <button className="p-1.5 hover:bg-white rounded text-slate-500"><Link size={14}/></button>
-                                    <button className="p-1.5 hover:bg-white rounded text-slate-500"><ImageIcon size={14}/></button>
-                                    <div className="ml-auto">
-                                        <button className="p-1.5 hover:bg-white rounded text-slate-500"><Maximize2 size={14}/></button>
+                                <div className="grid grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-slate-700">负责人/协作者</label>
+                                        <div className="relative">
+                                            <select className="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-blue-500 outline-none appearance-none bg-white text-slate-600" value={assigneeId} onChange={e => setAssigneeId(e.target.value)}>
+                                                <option value="" disabled>指派负责人/协作者</option>
+                                                {MOCK_USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                                            </select>
+                                            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-slate-700">类型 <span className="text-red-500">*</span></label>
+                                        <div className="relative">
+                                            <select className="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:border-blue-500 outline-none appearance-none bg-white text-slate-600" value={type} onChange={e => setType(e.target.value as TaskType)}>
+                                                {Object.values(TaskType).map(t => <option key={t} value={t}>{t}</option>)}
+                                            </select>
+                                            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                        </div>
                                     </div>
                                 </div>
-                                <textarea className="flex-1 p-4 outline-none resize-none text-sm text-slate-700" placeholder="" />
+
+                                <div className="grid grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-slate-700">计划时间</label>
+                                        <div className="flex items-center gap-2 border border-slate-200 rounded px-3 py-2">
+                                            <input type="date" className="flex-1 text-sm outline-none text-slate-600" />
+                                            <span className="text-slate-300">→</span>
+                                            <input type="date" className="flex-1 text-sm outline-none text-slate-600" />
+                                            <Calendar size={14} className="text-slate-400" />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-slate-700">关联项目</label>
+                                        <div className="relative">
+                                            <select className="w-full border border-slate-200 rounded px-3 py-2 text-sm focus:border-blue-500 outline-none appearance-none bg-white text-slate-600" value={projectId} onChange={e => setProjectId(e.target.value)}>
+                                                {MOCK_PROJECTS.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                                            </select>
+                                            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2 flex-1 flex flex-col">
+                                    <label className="text-sm font-bold text-slate-700">描述</label>
+                                    <div className="border border-slate-300 rounded flex-1 flex flex-col min-h-[300px]">
+                                        {/* Editor Toolbar from screenshot */}
+                                        <div className="flex items-center gap-1 p-2 border-b border-slate-200 bg-white">
+                                            <button className="p-1.5 hover:bg-slate-100 rounded text-slate-700 text-xs font-medium flex items-center gap-1">正文 <ChevronDown size={10}/></button>
+                                            <div className="w-px h-4 bg-slate-300 mx-1"></div>
+                                            <button className="p-1.5 hover:bg-slate-100 rounded text-slate-700"><Bold size={16}/></button>
+                                            <button className="p-1.5 hover:bg-slate-100 rounded text-slate-700"><Italic size={16}/></button>
+                                            <button className="p-1.5 hover:bg-slate-100 rounded text-slate-700"><Underline size={16}/></button>
+                                            <button className="p-1.5 hover:bg-slate-100 rounded text-slate-700"><Code2 size={16}/></button>
+                                            <div className="w-px h-4 bg-slate-300 mx-1"></div>
+                                            <button className="p-1.5 hover:bg-slate-100 rounded text-slate-700"><List size={16}/></button>
+                                            <button className="p-1.5 hover:bg-slate-100 rounded text-slate-700"><ListChecks size={16}/></button>
+                                            <button className="p-1.5 hover:bg-slate-100 rounded text-slate-700"><Link size={16}/></button>
+                                            <button className="p-1.5 hover:bg-slate-100 rounded text-slate-700"><Box size={16}/></button>
+                                            <button className="p-1.5 hover:bg-slate-100 rounded text-slate-700"><LayoutList size={16}/></button>
+                                            <div className="ml-auto">
+                                                <button className="p-1.5 hover:bg-slate-100 rounded text-slate-700"><Maximize2 size={16}/></button>
+                                            </div>
+                                        </div>
+                                        <textarea className="flex-1 p-4 outline-none resize-none text-sm text-slate-700" placeholder="" />
+                                    </div>
+                                </div>
+
+                                {/* Attachments */}
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
+                                        附件 <Plus size={14} className="text-blue-600 cursor-pointer"/>
+                                    </label>
+                                </div>
                             </div>
                         </div>
-
-                        {/* Attachments */}
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
-                                附件 <Plus size={14} className="text-blue-600 cursor-pointer"/>
-                            </label>
+                    ) : (
+                        // Fallback layout (Not currently used for main types)
+                        <div className="flex-1 flex items-center justify-center text-slate-400">
+                            未知的任务类型布局
                         </div>
-                    </div>
+                    )}
                 </div>
 
                 <div className="px-8 py-5 border-t border-slate-100 bg-white flex items-center gap-3 flex-shrink-0 z-30">
@@ -177,7 +218,6 @@ export const CreateTaskModal: React.FC<{
 };
 
 // ------------------- Relate Test Case Modal -------------------
-
 const RelateTestCaseModal = ({ isOpen, onClose, onAdd }: { isOpen: boolean, onClose: () => void, onAdd: (selected: any[]) => void }) => {
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     
@@ -307,15 +347,6 @@ const RelateTestCaseModal = ({ isOpen, onClose, onAdd }: { isOpen: boolean, onCl
     );
 };
 
-// ------------------- Task Details Modal (Comprehensive Edit View) -------------------
-
-const DetailField = ({ label, value }: { label: string, value: React.ReactNode }) => (
-    <div className="flex items-start gap-8">
-        <span className="text-slate-500 font-bold text-sm w-24 flex-shrink-0">{label}</span>
-        <div className="text-sm text-slate-700 font-medium flex-1">{value}</div>
-    </div>
-);
-
 export const TaskDetailsModal: React.FC<{
   task: Task;
   onClose: () => void;
@@ -328,23 +359,19 @@ export const TaskDetailsModal: React.FC<{
   const [newSubTaskType, setNewSubTaskType] = useState<TaskType>(TaskType.Task);
   const [newSubTaskAssignee, setNewSubTaskAssignee] = useState(MOCK_USERS[0].id);
   
-  // New state for test case linking
   const [linkedTestCases, setLinkedTestCases] = useState<any[]>([]);
   const [isRelateModalOpen, setIsRelateModalOpen] = useState(false);
 
-  // New state for code review linking
   const [linkedCodeReviews, setLinkedCodeReviews] = useState([
       { id: '!1', title: '【示例数据】Pull Request 是实现代码质量左移，保障代码质量和规范的绝佳工具', repo: '北京华佑科技有限公司/示例仓库-测试仓库', status: '未测试', owner: 'lo', priority: 'P0', checkStatus: '已通过' }
   ]);
   const [isAddingCodeReview, setIsAddingCodeReview] = useState(false);
 
-  // New state for document linking
   const [linkedDocuments, setLinkedDocuments] = useState([
       { id: 'd1', title: '【示例数据】自助开票 PRD', type: 'Word', size: '2.4 MB', creator: 'looking4id', date: '2025-08-02' }
   ]);
   const [isAddingDocument, setIsAddingDocument] = useState(false);
 
-  // New state for work logs
   const [workLogs, setWorkLogs] = useState([
       { id: 'wl1', name: 'Mo Chun', avatarColor: 'bg-orange-500', date: '04-05', hours: 8, desc: '修复代码建议样式丢失' },
       { id: 'wl2', name: 'Dreampie', avatarColor: 'bg-green-500', date: '04-05', hours: 2, desc: '社区版 issue 创建的 URL 参数处理' },
@@ -352,20 +379,17 @@ export const TaskDetailsModal: React.FC<{
       { id: 'wl4', name: 'Tony', avatarColor: 'bg-blue-500', date: '04-05', hours: 4, desc: 'PR 评论报错 st.isSuccess 不存在' },
   ]);
 
-  // Mock Attachments
   const [attachments, setAttachments] = useState([
       { id: 'f1', name: 'chrome.exe.sig', size: '1.39 KB', time: '上传于 4 分钟前', uploader: 'looking4id', uploaderAvatar: 'bg-orange-500' },
       { id: 'f2', name: 'chrome.exe.sig', size: '1.39 KB', time: '上传于 4 分钟前', uploader: 'looking4id', uploaderAvatar: 'bg-orange-500' },
   ]);
 
-  // Mock Versions
   const [reqVersions, setReqVersions] = useState([
       { id: 'v1', version: 'V1.0', remark: '备注', status: '启用', editor: 'looking4id', date: '2026-01-22 23:11', avatar: 'bg-orange-500' }
   ]);
   
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
 
-  // Local state for sub-items
   const [subItems, setSubItems] = useState([
     { id: '#ICQMC8', title: '【示例需求】付款后支持自助申请开票', status: '意向', owner: MOCK_USERS[0], type: TaskType.Requirement },
     { id: '#ICQMC9', title: '【示例需求】订单页面支持查看开票进度', status: '意向', owner: MOCK_USERS[0], type: TaskType.Requirement },
@@ -374,7 +398,6 @@ export const TaskDetailsModal: React.FC<{
     { id: '#ICQMCC', title: '【示例需求】后台支持发票审查通过功能', status: '进行中', owner: MOCK_USERS[0], type: TaskType.Requirement },
   ]);
 
-  // Local state for related items
   const [relatedItems, setRelatedItems] = useState([
     { id: '#ICQMCD', title: '【示例缺陷】手动开票时小概率遇到发票金额错误', type: TaskType.Defect, status: '已确认', owner: 'looking4id', relation: '普通' },
     { id: '#ICQMC4', title: '【示例任务】后端任务：提交订单接口', type: TaskType.Task, status: '进行中', owner: 'looking4id', relation: '普通' },
@@ -385,14 +408,12 @@ export const TaskDetailsModal: React.FC<{
   ]);
   const [isAddingRelated, setIsAddingRelated] = useState(false);
 
-  // Comment & Logs State
   const [bottomTab, setBottomTab] = useState<'comments' | 'logs'>('comments');
   const [commentContent, setCommentContent] = useState('');
   const [comments, setComments] = useState([
     { id: 'c1', user: 'looking4id', content: '测试评论功能，请注意查收。', time: '10分钟前', avatar: 'bg-orange-500' }
   ]);
 
-  // History logs
   const historyLogs = [
       { user: 'looking4id', action: '关联了', target: '北京华佑科技有限公司/示例仓库-测试仓库 Pull Request !1', time: '4小时前', icon: GitPullRequest },
       { user: 'looking4id', action: '将 计划截止日期 从 2025-08-30 修改为', target: '2025-09-13', time: '11小时前', icon: Calendar },
@@ -419,7 +440,6 @@ export const TaskDetailsModal: React.FC<{
   };
 
   const handleAddTestCases = (selected: any[]) => {
-      // Avoid duplicates
       const newCases = selected.filter(s => !linkedTestCases.some(l => l.id === s.id));
       setLinkedTestCases([...linkedTestCases, ...newCases]);
       setIsRelateModalOpen(false);
@@ -434,7 +454,6 @@ export const TaskDetailsModal: React.FC<{
   };
 
   const handleAddCodeReview = () => {
-      // Mock adding a new PR
       const newPR = {
           id: `!${Date.now()}`,
           title: '【新增】支持多端同步的实时通信模块',
@@ -642,226 +661,236 @@ export const TaskDetailsModal: React.FC<{
                                </div>
                            </div>
                        )}
-
                        {activeTab === '子工作项' && (
-                           <div className="space-y-4">
-                               <div className="flex items-center justify-between mb-2">
-                                   <div className="flex items-center gap-4 text-sm text-slate-500">
-                                       <button className="flex items-center gap-1 hover:text-slate-800 font-bold text-slate-800">全部 <ChevronDown size={12}/></button>
-                                       <button className="flex items-center gap-1 hover:text-slate-800">负责人 <ChevronDown size={12}/></button>
-                                       <button className="flex items-center gap-1 hover:text-slate-800">状态 <ChevronDown size={12}/></button>
-                                   </div>
-                                   <button onClick={() => setIsAddingSubTask(!isAddingSubTask)} className="text-blue-600 hover:text-blue-700 text-sm flex items-center gap-1 font-medium">
-                                       <Plus size={16} /> 添加
-                                   </button>
+                           <div className="space-y-6 animate-in fade-in duration-300">
+                                <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 flex gap-3 items-end">
+                                    <div className="flex-1">
+                                        <label className="text-xs font-bold text-slate-500 mb-1 block">标题</label>
+                                        <input 
+                                            className="w-full text-sm p-2 border border-slate-200 rounded focus:border-blue-500 outline-none" 
+                                            placeholder="输入子工作项标题" 
+                                            value={newSubTaskTitle}
+                                            onChange={e => setNewSubTaskTitle(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="w-32">
+                                        <label className="text-xs font-bold text-slate-500 mb-1 block">类型</label>
+                                        <select 
+                                            className="w-full text-sm p-2 border border-slate-200 rounded outline-none"
+                                            value={newSubTaskType}
+                                            onChange={e => setNewSubTaskType(e.target.value as TaskType)}
+                                        >
+                                            <option value={TaskType.Task}>任务</option>
+                                            <option value={TaskType.Requirement}>需求</option>
+                                            <option value={TaskType.Defect}>缺陷</option>
+                                        </select>
+                                    </div>
+                                    <div className="w-32">
+                                        <label className="text-xs font-bold text-slate-500 mb-1 block">负责人</label>
+                                        <select 
+                                            className="w-full text-sm p-2 border border-slate-200 rounded outline-none"
+                                            value={newSubTaskAssignee}
+                                            onChange={e => setNewSubTaskAssignee(e.target.value)}
+                                        >
+                                            {MOCK_USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                                        </select>
+                                    </div>
+                                    <button 
+                                        onClick={handleAddSubTask}
+                                        className="bg-blue-600 text-white px-4 py-2 rounded text-sm font-bold hover:bg-blue-700 shadow-sm"
+                                    >
+                                        快速创建
+                                    </button>
+                                </div>
+                                
+                                <div className="space-y-2">
+                                    {subItems.map((item, index) => (
+                                        <div key={index} className="flex items-center justify-between p-3 border border-slate-100 rounded hover:border-blue-200 hover:bg-blue-50/30 transition-all group">
+                                            <div className="flex items-center gap-3">
+                                                <div className={`w-1.5 h-1.5 rounded-full ${item.type === TaskType.Requirement ? 'bg-blue-500' : item.type === TaskType.Defect ? 'bg-red-500' : 'bg-green-500'}`}></div>
+                                                <span className="text-xs font-mono text-slate-400 font-bold">{item.id}</span>
+                                                <span className="text-sm font-medium text-slate-700">{item.title}</span>
+                                            </div>
+                                            <div className="flex items-center gap-6">
+                                                <span className="text-xs px-2 py-0.5 bg-slate-100 text-slate-500 rounded">{item.status}</span>
+                                                <div className="flex items-center gap-2 w-24">
+                                                    <div className={`w-5 h-5 rounded-full ${item.owner.avatarColor} text-white flex items-center justify-center text-[10px]`}>{item.owner.name.charAt(0)}</div>
+                                                    <span className="text-xs text-slate-600">{item.owner.name}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                           </div>
+                       )}
+                       {activeTab === '关联工作项' && (
+                           <div className="space-y-6 animate-in fade-in duration-300">
+                               <div className="flex justify-between items-center">
+                                   <div className="text-sm text-slate-500">已关联 {relatedItems.length} 项</div>
+                                   <button className="text-blue-600 text-sm font-bold hover:underline flex items-center gap-1"><Plus size={14}/> 关联现有工作项</button>
                                </div>
-
-                               {isAddingSubTask && (
-                                   <div className="flex items-center gap-2 p-2 border border-blue-200 rounded bg-blue-50/10 animate-in fade-in slide-in-from-top-2 duration-200">
-                                       <div className="relative">
-                                           <select 
-                                               className="appearance-none bg-white border border-slate-200 rounded px-2 py-1.5 text-sm w-24 outline-none focus:border-blue-500 text-slate-600 pl-8"
-                                               value={newSubTaskType}
-                                               onChange={(e) => setNewSubTaskType(e.target.value as TaskType)}
-                                           >
-                                               <option value={TaskType.Requirement}>需求</option>
-                                               <option value={TaskType.Task}>任务</option>
-                                               <option value={TaskType.Defect}>缺陷</option>
-                                           </select>
-                                           <div className="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none">
-                                               {newSubTaskType === TaskType.Requirement ? <FileText size={14} className="text-purple-500"/> : newSubTaskType === TaskType.Defect ? <Bug size={14} className="text-red-500"/> : <CheckSquare size={14} className="text-blue-500"/>}
-                                           </div>
-                                       </div>
-                                       <input 
-                                           autoFocus
-                                           className="flex-1 border border-slate-200 rounded px-3 py-1.5 text-sm outline-none focus:border-blue-500"
-                                           placeholder="请输入子工作项标题"
-                                           value={newSubTaskTitle}
-                                           onChange={(e) => setNewSubTaskTitle(e.target.value)}
-                                           onKeyDown={(e) => e.key === 'Enter' && handleAddSubTask()}
-                                       />
-                                       <div className="relative">
-                                           <select 
-                                               className="appearance-none bg-white border border-slate-200 rounded px-2 py-1.5 text-sm w-32 outline-none focus:border-blue-500 text-slate-600 pl-8"
-                                               value={newSubTaskAssignee}
-                                               onChange={(e) => setNewSubTaskAssignee(e.target.value)}
-                                           >
-                                               {MOCK_USERS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
-                                           </select>
-                                           <User size={14} className="absolute left-2 top-1/2 -translate-y-1/2 text-orange-500 pointer-events-none" />
-                                       </div>
-                                       <button onClick={handleAddSubTask} className="px-3 py-1.5 bg-green-500 text-white rounded text-sm font-medium hover:bg-green-600">新建</button>
-                                       <button onClick={() => setIsAddingSubTask(false)} className="px-3 py-1.5 text-slate-500 hover:text-slate-700 text-sm">取消</button>
-                                   </div>
-                               )}
-
-                               <div className="space-y-1">
-                                   {subItems.map((item) => (
-                                       <div key={item.id} className="flex items-center justify-between py-3 px-2 hover:bg-slate-50 rounded group border-b border-slate-50">
-                                           <div className="flex items-center gap-3 flex-1 min-w-0">
-                                               {item.type === TaskType.Requirement ? <FileText size={16} className="text-purple-500 flex-shrink-0" /> : <CheckSquare size={16} className="text-blue-500 flex-shrink-0" />}
-                                               <span className="text-xs text-slate-400 font-mono flex-shrink-0">{item.id}</span>
-                                               <span className="text-sm text-slate-700 font-medium truncate">{item.title}</span>
-                                           </div>
-                                           <div className="flex items-center gap-6 flex-shrink-0">
-                                               <span className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded border border-slate-200">{item.status}</span>
-                                               <div className="flex items-center gap-2 w-24">
-                                                   <div className={`w-5 h-5 rounded-full ${item.owner.avatarColor} text-white flex items-center justify-center text-[10px]`}>{item.owner.name.charAt(0)}</div>
-                                                   <span className="text-sm text-slate-600">{item.owner.name}</span>
+                               <div className="space-y-2">
+                                    {relatedItems.map((item, index) => (
+                                        <div key={index} className="flex items-center justify-between p-3 border border-slate-100 rounded hover:border-blue-200 hover:bg-blue-50/30 transition-all">
+                                            <div className="flex items-center gap-3">
+                                                <span className={`text-[10px] px-1.5 py-0.5 rounded text-white font-bold ${item.type === TaskType.Requirement ? 'bg-blue-400' : item.type === TaskType.Defect ? 'bg-red-400' : 'bg-green-400'}`}>{item.type}</span>
+                                                <span className="text-xs font-mono text-slate-400 font-bold">{item.id}</span>
+                                                <span className="text-sm font-medium text-slate-700">{item.title}</span>
+                                            </div>
+                                            <div className="flex items-center gap-6">
+                                                <span className="text-xs text-slate-400">关系: {item.relation}</span>
+                                                <span className="text-xs px-2 py-0.5 bg-slate-100 text-slate-500 rounded">{item.status}</span>
+                                                <span className="text-xs text-slate-600 w-20 text-right">{item.owner}</span>
+                                                <button className="text-slate-300 hover:text-red-500"><Unlink size={14}/></button>
+                                            </div>
+                                        </div>
+                                    ))}
+                               </div>
+                           </div>
+                       )}
+                       {activeTab === '关联测试用例' && (
+                           <div className="space-y-6 animate-in fade-in duration-300">
+                                <div className="flex justify-between items-center">
+                                   <div className="text-sm text-slate-500">共 {linkedTestCases.length} 个用例</div>
+                                   <button onClick={() => setIsRelateModalOpen(true)} className="text-blue-600 text-sm font-bold hover:underline flex items-center gap-1"><Plus size={14}/> 关联用例</button>
+                               </div>
+                               {linkedTestCases.length > 0 ? (
+                                   <div className="space-y-2">
+                                       {linkedTestCases.map(tc => (
+                                           <div key={tc.id} className="flex items-center justify-between p-3 border border-slate-100 rounded hover:border-blue-200 transition-all group">
+                                               <div className="flex items-center gap-3">
+                                                   <span className="text-xs font-mono text-slate-400 font-bold">{tc.id}</span>
+                                                   <span className="text-sm font-medium text-slate-700">{tc.title}</span>
                                                </div>
-                                               <button className="text-slate-400 hover:text-slate-600 p-1 rounded hover:bg-slate-200 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                   <MoreHorizontal size={16} />
-                                               </button>
+                                               <div className="flex items-center gap-6">
+                                                   <span className="text-xs text-slate-500">{tc.version}</span>
+                                                   <span className={`text-xs font-bold ${tc.result === '已通过' ? 'text-green-600' : 'text-slate-400'}`}>{tc.result}</span>
+                                                   <span className="text-xs text-slate-600 w-20 text-right">{tc.maintainer}</span>
+                                                   <button onClick={() => handleRemoveTestCase(tc.id)} className="text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Unlink size={14}/></button>
+                                               </div>
+                                           </div>
+                                       ))}
+                                   </div>
+                               ) : (
+                                   <div className="text-center py-12 text-slate-400 text-sm">暂无关联的测试用例</div>
+                               )}
+                           </div>
+                       )}
+                       {activeTab === '关联代码评审' && (
+                           <div className="space-y-6 animate-in fade-in duration-300">
+                               <div className="flex justify-between items-center">
+                                   <div className="text-sm text-slate-500">共 {linkedCodeReviews.length} 个评审</div>
+                                   <button onClick={handleAddCodeReview} className="text-blue-600 text-sm font-bold hover:underline flex items-center gap-1"><Plus size={14}/> 创建评审</button>
+                               </div>
+                               <div className="space-y-3">
+                                   {linkedCodeReviews.map(pr => (
+                                       <div key={pr.id} className="border border-slate-200 rounded p-4 hover:shadow-sm transition-all">
+                                           <div className="flex items-start justify-between mb-2">
+                                               <div className="flex items-center gap-2">
+                                                   <GitPullRequest size={16} className="text-purple-500" />
+                                                   <span className="text-sm font-bold text-slate-700">{pr.title}</span>
+                                                   <span className="text-xs font-mono text-slate-400">{pr.id}</span>
+                                               </div>
+                                               <span className="text-xs font-bold bg-green-50 text-green-600 px-2 py-0.5 rounded border border-green-100">{pr.checkStatus}</span>
+                                           </div>
+                                           <div className="text-xs text-slate-500 mb-3">{pr.repo}</div>
+                                           <div className="flex items-center justify-between text-xs text-slate-400">
+                                               <div className="flex gap-4">
+                                                   <span>负责人: {pr.owner}</span>
+                                                   <span>优先级: {pr.priority}</span>
+                                                   <span>状态: {pr.status}</span>
+                                               </div>
+                                               <button onClick={() => handleRemoveCodeReview(pr.id)} className="text-red-400 hover:underline">解除关联</button>
                                            </div>
                                        </div>
                                    ))}
                                </div>
                            </div>
                        )}
-
-                       {activeTab === '关联工作项' && (
-                           <div className="space-y-4">
-                               <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-4 text-sm text-slate-500">
-                                        <button className="flex items-center gap-1 hover:text-slate-800 font-bold text-slate-800">全部 <ChevronDown size={12}/></button>
-                                        <button className="flex items-center gap-1 hover:text-slate-800">负责人 <ChevronDown size={12}/></button>
-                                        <button className="flex items-center gap-1 hover:text-slate-800">状态 <ChevronDown size={12}/></button>
-                                    </div>
-                                    <button onClick={() => setIsAddingRelated(!isAddingRelated)} className="text-blue-600 hover:text-blue-700 text-sm flex items-center gap-1 font-medium">
-                                        <Plus size={16} /> 添加
-                                    </button>
-                                </div>
-                                <div className="space-y-1">
-                                    {relatedItems.map((item) => (
-                                        <div key={item.id} className="flex items-center justify-between py-3 px-2 hover:bg-slate-50 rounded group border-b border-slate-50">
-                                            <div className="flex items-center gap-3 flex-1 min-w-0">
-                                                {item.type === TaskType.Defect ? (
-                                                    <div className="p-1 bg-red-500 rounded text-white shadow-sm shadow-red-100 flex-shrink-0"><Bug size={12} strokeWidth={3} /></div>
-                                                ) : item.type === TaskType.Requirement ? (
-                                                    <div className="p-1 bg-purple-500 rounded text-white shadow-sm shadow-purple-100 flex-shrink-0"><FileText size={12} strokeWidth={3} /></div>
-                                                ) : (
-                                                    <div className="p-1 bg-blue-500 rounded text-white shadow-sm shadow-blue-100 flex-shrink-0"><CheckSquare size={12} strokeWidth={3} /></div>
-                                                )}
-                                                <span className="text-xs text-slate-400 font-mono flex-shrink-0">{item.id}</span>
-                                                <span className="text-sm text-slate-700 font-medium truncate">{item.title}</span>
-                                            </div>
-                                            <div className="flex items-center gap-6 flex-shrink-0">
-                                                <span className={`px-2 py-0.5 text-xs rounded border flex items-center gap-1.5 bg-slate-100 text-slate-500 border-slate-200`}>
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-slate-400"></div>{item.status}
-                                                </span>
-                                                <div className="flex items-center gap-2 w-24 justify-end">
-                                                    <div className="w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center text-[10px] font-bold shadow-sm">Lo</div>
-                                                    <span className="text-sm text-slate-600 truncate">{item.owner}</span>
-                                                </div>
-                                                <button className="text-slate-400 hover:text-slate-600 p-1 rounded hover:bg-slate-200 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <MoreHorizontal size={16} />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                       {activeTab === '关联文档' && (
+                           <div className="space-y-6 animate-in fade-in duration-300">
+                               <div className="flex justify-between items-center">
+                                   <div className="text-sm text-slate-500">共 {linkedDocuments.length} 个文档</div>
+                                   <button onClick={handleAddDocument} className="text-blue-600 text-sm font-bold hover:underline flex items-center gap-1"><Plus size={14}/> 关联文档</button>
+                               </div>
+                               <div className="grid grid-cols-2 gap-4">
+                                   {linkedDocuments.map(doc => (
+                                       <div key={doc.id} className="flex items-start gap-3 p-3 border border-slate-200 rounded hover:border-blue-300 hover:bg-blue-50/10 transition-all group">
+                                           <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded flex items-center justify-center flex-shrink-0">
+                                               <FileText size={20} />
+                                           </div>
+                                           <div className="flex-1 min-w-0">
+                                               <div className="text-sm font-bold text-slate-700 truncate mb-1">{doc.title}</div>
+                                               <div className="flex justify-between text-xs text-slate-400">
+                                                   <span>{doc.size} • {doc.type}</span>
+                                                   <span>{doc.date}</span>
+                                               </div>
+                                           </div>
+                                           <button onClick={() => handleRemoveDocument(doc.id)} className="text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Unlink size={14}/></button>
+                                       </div>
+                                   ))}
+                               </div>
                            </div>
                        )}
-                       {activeTab === '关联测试用例' && (
-                           <div className="h-full flex flex-col">
-                               <div className="flex justify-end mb-4">
-                                   <button onClick={() => setIsRelateModalOpen(true)} className="flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-bold border border-transparent hover:bg-blue-50 px-3 py-1.5 rounded transition-all">
-                                       <Plus size={16} /> 添加
-                                   </button>
-                               </div>
-                               {linkedTestCases.length === 0 ? (
-                                   <div className="flex-1 flex flex-col items-center justify-center text-slate-300 gap-4">
-                                       <Package size={64} className="opacity-20 text-slate-400" strokeWidth={1} />
-                                       <span className="text-sm font-medium text-slate-400">暂无关联测试用例</span>
+                       {activeTab === '工时' && (
+                           <div className="space-y-6 animate-in fade-in duration-300">
+                               <div className="bg-slate-50 p-4 rounded border border-slate-200 flex justify-between items-center">
+                                   <div className="flex gap-8">
+                                       <div>
+                                           <div className="text-xs text-slate-400 mb-1">预估工时</div>
+                                           <div className="text-xl font-black text-slate-700">20.0 <span className="text-xs font-normal">h</span></div>
+                                       </div>
+                                       <div>
+                                           <div className="text-xs text-slate-400 mb-1">已登记</div>
+                                           <div className="text-xl font-black text-blue-600">15.0 <span className="text-xs font-normal">h</span></div>
+                                       </div>
+                                       <div>
+                                           <div className="text-xs text-slate-400 mb-1">剩余工时</div>
+                                           <div className="text-xl font-black text-green-600">5.0 <span className="text-xs font-normal">h</span></div>
+                                       </div>
                                    </div>
-                               ) : (
-                                   <div className="space-y-1">
-                                       {linkedTestCases.map(tc => (
-                                           <div key={tc.id} className="flex items-center justify-between py-3 px-2 hover:bg-slate-50 rounded group border-b border-slate-50 transition-colors">
-                                               <div className="flex items-center gap-3 flex-1 min-w-0">
-                                                   <CheckCircle2 size={16} className="text-green-500 flex-shrink-0" />
-                                                   <span className="text-sm text-slate-700 font-bold truncate">{tc.title}</span>
-                                               </div>
-                                               <div className="flex items-center gap-6 flex-shrink-0">
-                                                   <span className="text-red-500 border border-red-200 bg-red-50 px-1 py-0.5 rounded text-[10px] font-black">{tc.priority}</span>
-                                                   <div className="flex items-center gap-2 w-24">
-                                                       <div className="w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center text-[10px] font-bold shadow-sm">L</div>
-                                                       <span className="text-xs text-slate-600 font-bold">{tc.maintainer}</span>
+                                   <button className="bg-blue-600 text-white px-4 py-2 rounded text-sm font-bold hover:bg-blue-700 shadow-sm">登记工时</button>
+                               </div>
+                               <div>
+                                   <h4 className="text-sm font-bold text-slate-700 mb-4">工时日志</h4>
+                                   <div className="space-y-4">
+                                       {workLogs.map(log => (
+                                           <div key={log.id} className="flex items-start gap-4 pb-4 border-b border-slate-50 last:border-0">
+                                               <div className={`w-8 h-8 rounded-full ${log.avatarColor} text-white flex items-center justify-center text-xs font-bold mt-1`}>{log.name.charAt(0)}</div>
+                                               <div className="flex-1">
+                                                   <div className="flex justify-between mb-1">
+                                                       <span className="text-sm font-bold text-slate-700">{log.name}</span>
+                                                       <span className="text-xs text-slate-400">{log.date}</span>
                                                    </div>
-                                                   <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                                                        {tc.result === '已通过' ? <CheckCircle2 size={12} className="text-green-500"/> : <Circle size={12} />}
-                                                        <span>{tc.result || '未测试'}</span>
-                                                   </div>
-                                                   <button onClick={() => handleRemoveTestCase(tc.id)} className="text-slate-400 hover:text-red-500 flex items-center gap-1 text-xs font-medium hover:bg-red-50 px-2 py-1 rounded transition-colors"><Unlink size={14} /> 取消关联</button>
+                                                   <p className="text-sm text-slate-600 mb-1">{log.desc}</p>
+                                                   <div className="text-xs font-bold text-blue-600">耗时: {log.hours}h</div>
                                                </div>
                                            </div>
                                        ))}
                                    </div>
-                               )}
-                           </div>
-                       )}
-                       {activeTab === '关联代码评审' && (
-                            <div className="space-y-4">
-                                <div className="flex items-center justify-end gap-4 mb-2">
-                                     <button className="text-slate-500 hover:text-slate-700 text-sm flex items-center gap-1"><Unlink size={14} /> 批量取消关联</button>
-                                     <button onClick={() => setIsAddingCodeReview(!isAddingCodeReview)} className="text-blue-600 hover:text-blue-700 text-sm flex items-center gap-1 font-medium"><Plus size={16} /> 添加</button>
-                                </div>
-                                <div className="space-y-1">
-                                    {linkedCodeReviews.map(pr => (
-                                        <div key={pr.id} className="flex items-center justify-between py-3 px-2 hover:bg-slate-50 rounded group border-b border-slate-50">
-                                            <div className="flex items-center gap-3 flex-1 min-w-0">
-                                                 <div className="w-5 h-5 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-500">!1</div>
-                                                 <span className="text-sm text-slate-700 font-medium truncate">{pr.title}</span>
-                                                 <span className="text-red-500 border border-red-200 bg-red-50 px-1 py-0.5 rounded text-[10px] font-bold">{pr.priority}</span>
-                                            </div>
-                                            <div className="flex items-center gap-6 flex-shrink-0">
-                                                <div className="flex items-center gap-1.5 text-xs text-slate-400"><Circle size={12} /><span>{pr.status}</span></div>
-                                                <button onClick={() => handleRemoveCodeReview(pr.id)} className="text-slate-400 hover:text-red-500 flex items-center gap-1 text-xs font-medium hover:bg-red-50 px-2 py-1 rounded transition-colors opacity-0 group-hover:opacity-100"><Unlink size={14} /> 取消关联</button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                       )}
-                       {activeTab === '关联文档' && (
-                           <div className="space-y-4">
-                                <div className="flex items-center justify-end gap-4 mb-2">
-                                        <button className="text-slate-500 hover:text-slate-700 text-sm flex items-center gap-1"><Unlink size={14} /> 批量取消关联</button>
-                                        <button onClick={() => setIsAddingDocument(!isAddingDocument)} className="text-blue-600 hover:text-blue-700 text-sm flex items-center gap-1 font-medium"><Plus size={16} /> 添加</button>
-                                </div>
-                                <div className="space-y-1">
-                                    {linkedDocuments.map(doc => (
-                                        <div key={doc.id} className="flex items-center justify-between py-3 px-2 hover:bg-slate-50 rounded group border-b border-slate-50">
-                                            <div className="flex items-center gap-3 flex-1 min-w-0">
-                                                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0"><FileText size={16} /></div>
-                                                    <div className="flex flex-col gap-0.5 min-w-0"><span className="text-sm text-slate-700 font-medium truncate">{doc.title}</span><span className="text-xs text-slate-400">{doc.size} • {doc.date}</span></div>
-                                            </div>
-                                            <div className="flex items-center gap-6 flex-shrink-0">
-                                                <button onClick={() => handleRemoveDocument(doc.id)} className="text-slate-400 hover:text-red-500 flex items-center gap-1 text-xs font-medium hover:bg-red-50 px-2 py-1 rounded transition-colors opacity-0 group-hover:opacity-100"><Unlink size={14} /> 取消关联</button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                               </div>
                            </div>
                        )}
                        {activeTab === '附件' && (
-                            <div className="space-y-4 animate-in fade-in duration-300">
-                               <div className="flex items-center justify-between mb-2">
-                                   <span className="text-sm font-bold text-slate-500">共 {attachments.length} 项</span>
-                                   <button className="text-blue-600 hover:text-blue-700 text-sm flex items-center gap-1 font-medium"><Plus size={16} /> 添加</button>
+                           <div className="space-y-6 animate-in fade-in duration-300">
+                               <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:bg-slate-50 transition-colors cursor-pointer">
+                                   <UploadCloud size={32} className="mx-auto text-slate-400 mb-2" />
+                                   <p className="text-sm text-slate-600 font-medium">点击或拖拽文件到此处上传</p>
+                                   <p className="text-xs text-slate-400 mt-1">支持各种常见格式，单个文件最大 50MB</p>
                                </div>
-                               <div className="space-y-1">
+                               <div className="space-y-3">
                                    {attachments.map(file => (
-                                       <div key={file.id} className="flex items-center justify-between py-3 px-2 hover:bg-slate-50 rounded group border-b border-slate-50">
-                                           <div className="flex items-center gap-3 flex-1 min-w-0">
-                                               <div className="text-slate-400"><Paperclip size={16} /></div>
-                                               <span className="text-sm text-slate-700 font-medium truncate">{file.name}</span>
-                                               <span className="text-xs text-slate-400 font-mono">({file.size})</span>
-                                               <span className="text-xs text-slate-400">{file.time}</span>
+                                       <div key={file.id} className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded hover:shadow-sm transition-all group">
+                                           <div className="flex items-center gap-3">
+                                               <div className="p-2 bg-slate-100 rounded text-slate-500"><FileText size={20} /></div>
+                                               <div>
+                                                   <div className="text-sm font-bold text-slate-700">{file.name}</div>
+                                                   <div className="text-xs text-slate-400">{file.size} • {file.time}</div>
+                                               </div>
                                            </div>
-                                           <div className="flex items-center gap-4 flex-shrink-0">
-                                               <div className="flex items-center gap-2"><span className="text-sm text-slate-600">{file.uploader}</span><div className={`w-6 h-6 rounded-full ${file.uploaderAvatar} text-white flex items-center justify-center text-[10px] font-bold shadow-sm`}>Lo</div></div>
-                                               <button className="text-slate-400 hover:text-slate-600 p-1 rounded hover:bg-slate-200 opacity-0 group-hover:opacity-100 transition-opacity"><MoreHorizontal size={16} /></button>
+                                           <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                               <button className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded"><Download size={16} /></button>
+                                               <button className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded"><Trash2 size={16} /></button>
                                            </div>
                                        </div>
                                    ))}
@@ -869,50 +898,33 @@ export const TaskDetailsModal: React.FC<{
                            </div>
                        )}
                        {activeTab === '需求版本' && (
-                            <div className="space-y-4 animate-in fade-in duration-300">
-                               <div className="flex items-center justify-between mb-2">
-                                   <span className="text-sm font-bold text-slate-500">共 {reqVersions.length} 项</span>
-                                   <button className="text-blue-600 hover:text-blue-700 text-sm flex items-center gap-1 font-medium"><Plus size={16} /> 创建需求版本</button>
-                               </div>
-                               <div className="space-y-1">
-                                   {reqVersions.map(ver => (
-                                       <div key={ver.id} className="flex items-center justify-between py-3 px-2 hover:bg-slate-50 rounded group border-b border-slate-50">
-                                           <div className="flex items-center gap-8 flex-1 min-w-0">
-                                               <span className="text-sm text-slate-700 font-medium w-16">{ver.version}</span>
-                                               <span className="text-sm text-slate-400 w-32">{ver.remark}</span>
-                                               <span className="px-2 py-0.5 bg-green-50 text-green-600 border border-green-200 text-xs rounded">{ver.status}</span>
-                                               <div className="flex items-center gap-2"><div className={`w-6 h-6 rounded-full ${ver.avatar} text-white flex items-center justify-center text-[10px] font-bold shadow-sm`}>Lo</div><span className="text-sm text-slate-600">{ver.editor}</span></div>
-                                               <span className="text-sm text-slate-500 font-mono">{ver.date}</span>
-                                           </div>
-                                           <div className="flex items-center gap-4 flex-shrink-0"><button className="text-blue-600 hover:text-blue-700 text-sm font-medium">查看</button></div>
-                                       </div>
-                                   ))}
-                               </div>
-                           </div>
-                       )}
-                       {activeTab === '工时' && (
-                             <div className="space-y-8 animate-in fade-in duration-300">
-                               <div className="flex items-start justify-between px-2">
-                                   <div className="space-y-2"><div className="text-xs font-bold text-slate-500">预估工时</div><div className="flex items-end gap-2 group cursor-pointer"><span className="text-3xl font-black text-slate-800 leading-none">0</span><span className="text-xs font-bold text-slate-400 mb-1">小时</span><Edit3 size={14} className="text-slate-300 group-hover:text-blue-500 mb-1 transition-colors" /></div></div>
-                                   <div className="w-px h-10 bg-slate-100 mx-4"></div>
-                                   <div className="space-y-2"><div className="text-xs font-bold text-slate-500 flex items-center gap-1">已登记 <Diamond size={12} className="text-amber-400 fill-amber-400" /></div><div className="flex items-end gap-2"><span className="text-3xl font-black text-slate-800 leading-none">15</span><span className="text-xs font-bold text-slate-400 mb-1">小时</span></div></div>
-                                   <div className="w-px h-10 bg-slate-100 mx-4"></div>
-                                   <div className="space-y-2"><div className="text-xs font-bold text-slate-500 flex items-center gap-1">剩余 <Diamond size={12} className="text-amber-400 fill-amber-400" /></div><div className="flex items-end gap-2"><span className="text-3xl font-black text-slate-800 leading-none">0</span><span className="text-xs font-bold text-slate-400 mb-1">小时</span></div></div>
-                                   <div className="w-px h-10 bg-slate-100 mx-4"></div>
-                                   <div className="flex-1 space-y-2 max-w-xs"><div className="text-xs font-bold text-slate-500 flex items-center gap-1">工作项进度 <Diamond size={12} className="text-amber-400 fill-amber-400" /></div><div className="flex items-center gap-3"><div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-slate-300" style={{ width: '0%' }}></div></div><span className="text-sm font-bold text-slate-400">0%</span></div></div>
-                               </div>
-                               <div className="border border-slate-200 rounded-lg overflow-hidden">
-                                   <div className="bg-slate-50 px-6 py-3 border-b border-slate-200 flex items-center justify-between"><span className="text-xs font-bold text-slate-500">共登记 {workLogs.length} 次</span><button className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-4 py-1.5 rounded shadow-sm shadow-emerald-100 transition-all active:scale-95">登记工时</button></div>
-                                   <div className="divide-y divide-slate-100 bg-white">
-                                       {workLogs.map(log => (
-                                           <div key={log.id} className="p-4 flex items-start gap-4 group hover:bg-slate-50/50 transition-colors">
-                                               <div className={`w-10 h-10 rounded-full ${log.avatarColor} text-white flex items-center justify-center text-sm font-bold shadow-sm flex-shrink-0`}>{log.name.substring(0, 2)}</div>
-                                               <div className="flex-1 min-w-0 pt-0.5"><div className="flex items-center gap-2 mb-1"><span className="text-sm font-bold text-slate-700">{log.name}</span><span className="text-xs font-mono text-slate-400">{log.date}</span><span className="text-xs text-slate-500">登记了 <span className="font-bold text-slate-900">{log.hours} 小时</span></span></div><div className="text-sm text-slate-600 truncate">{log.desc}</div></div>
-                                               <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity self-center"><button className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-blue-600 transition-colors"><Edit3 size={14} /> 编辑</button><button className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-red-500 transition-colors"><Trash2 size={14} /> 删除</button></div>
-                                           </div>
+                           <div className="space-y-6 animate-in fade-in duration-300">
+                               <table className="w-full text-left text-sm">
+                                   <thead className="bg-slate-50 text-slate-500 font-bold border-b border-slate-200">
+                                       <tr>
+                                           <th className="py-2 px-4">版本号</th>
+                                           <th className="py-2 px-4">备注</th>
+                                           <th className="py-2 px-4">状态</th>
+                                           <th className="py-2 px-4">修改人</th>
+                                           <th className="py-2 px-4">修改时间</th>
+                                           <th className="py-2 px-4 text-right">操作</th>
+                                       </tr>
+                                   </thead>
+                                   <tbody className="divide-y divide-slate-50">
+                                       {reqVersions.map(v => (
+                                           <tr key={v.id} className="hover:bg-slate-50 transition-colors">
+                                               <td className="py-3 px-4 font-mono font-bold text-blue-600">{v.version}</td>
+                                               <td className="py-3 px-4 text-slate-600">{v.remark}</td>
+                                               <td className="py-3 px-4"><span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-bold">{v.status}</span></td>
+                                               <td className="py-3 px-4 text-slate-600">{v.editor}</td>
+                                               <td className="py-3 px-4 text-slate-400 text-xs">{v.date}</td>
+                                               <td className="py-3 px-4 text-right">
+                                                   <button className="text-blue-600 hover:underline text-xs font-bold">对比</button>
+                                               </td>
+                                           </tr>
                                        ))}
-                                   </div>
-                               </div>
+                                   </tbody>
+                               </table>
                            </div>
                        )}
                    </div>
@@ -1063,7 +1075,7 @@ export const TaskDetailsModal: React.FC<{
 };
 
 // ------------------- Kanban Board Core -------------------
-/* (Keep existing KanbanBoard component unchanged) */
+
 interface KanbanBoardProps {
     columns: Column[];
     setColumns: React.Dispatch<React.SetStateAction<Column[]>>;
@@ -1112,13 +1124,31 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
         <DragDropContext onDragEnd={onDragEnd}>
             <div className="flex h-full p-6 gap-6 min-w-max">
                 {columns.map(col => (
-                    <div key={col.id} className="w-80 flex flex-col h-full bg-slate-100/50 rounded-xl border border-slate-200/60 backdrop-blur-sm">
+                    <div key={col.id} className="w-80 flex flex-col h-full bg-slate-100/50 rounded-xl border border-slate-200/60">
                         <div className="p-4 flex items-center justify-between flex-shrink-0"><div className="flex items-center gap-2"><Circle size={10} className={col.iconColor} fill="currentColor" /><span className="font-bold text-slate-700 text-sm">{col.title}</span><span className="bg-slate-200 text-slate-600 text-[10px] px-2 py-0.5 rounded-full font-bold">{col.tasks.length}</span></div><div className="flex gap-1"><button onClick={() => onAddClick(TaskType.Task)} className="p-1 text-slate-400 hover:text-slate-600 rounded hover:bg-slate-200 transition-colors"><Plus size={14}/></button><button className="p-1 text-slate-400 hover:text-slate-600 rounded hover:bg-slate-200 transition-colors"><MoreHorizontal size={14}/></button></div></div>
                         <Droppable droppableId={col.id}>{(provided, snapshot) => (
                                 <div {...provided.droppableProps} ref={provided.innerRef} className={`flex-1 overflow-y-auto px-3 pb-3 custom-scrollbar transition-colors ${snapshot.isDraggingOver ? 'bg-blue-50/30' : ''}`}>
                                     {col.tasks.map((task, index) => (
                                         <Draggable key={task.id} draggableId={task.id} index={index}>{(provided, snapshot) => (
-                                                <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={{ ...provided.draggableProps.style }} className={`${snapshot.isDragging ? 'rotate-2 scale-105 z-50' : ''}`}><KanbanCard task={task} onClick={(t) => onTaskClick(t)} onUpdate={() => {}} /></div>
+                                                <div 
+                                                    ref={provided.innerRef} 
+                                                    {...provided.draggableProps} 
+                                                    {...provided.dragHandleProps} 
+                                                    style={{
+                                                        ...provided.draggableProps.style,
+                                                        zIndex: snapshot.isDragging ? 9999 : 'auto',
+                                                        cursor: snapshot.isDragging ? 'grabbing' : 'grab'
+                                                    }} 
+                                                    className="mb-3"
+                                                >
+                                                    <div className={`transform transition-all ${snapshot.isDragging ? 'rotate-2 scale-105 shadow-2xl ring-1 ring-blue-400/50 rounded-lg' : ''}`}>
+                                                        <KanbanCard 
+                                                            task={task} 
+                                                            onClick={(t) => onTaskClick(t)} 
+                                                            onUpdate={() => {}}
+                                                        />
+                                                    </div>
+                                                </div>
                                             )}</Draggable>
                                     ))}
                                     {provided.placeholder}
