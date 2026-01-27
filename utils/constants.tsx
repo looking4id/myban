@@ -24,26 +24,31 @@ export const MOCK_PROJECTS: Project[] = [
 
 export const MOCK_COLUMNS: Column[] = [
   {
-    id: 'todo', title: '待办的', count: 5, iconColor: 'text-gray-400',
+    id: 'todo', title: '待办的', count: 7, iconColor: 'text-gray-400',
     tasks: [
       { id: 't1', displayId: '#RQ-101', title: '【需求】支持移动端扫码支付功能', type: TaskType.Requirement, priority: Priority.High, tags: ['支付模块', '核心'], dueDate: '2025-08-20', assignee: user1, statusColor: 'bg-gray-400', description: '在结算页面增加聚合支付入口，支持微信与支付宝扫码。', progress: 0, projectId: 'p1', creatorId: 'u3' },
       { id: 't2', displayId: '#DF-201', title: '【缺陷】结算页面在iOS 15系统下样式错乱', type: TaskType.Defect, priority: Priority.High, severity: Severity.Critical, environment: '测试环境', reproductionRate: '必然重现', tags: ['兼容性'], dueDate: '2025-08-16', assignee: user2, statusColor: 'bg-red-500', description: '结算按钮在低版本系统下高度塌陷。', progress: 0, projectId: 'p1', creatorId: 'u4' },
-      { id: 't101', displayId: '#RQ-105', title: '【需求】增加多语言支持 (中/英)', type: TaskType.Requirement, priority: Priority.Normal, tags: ['国际化'], dueDate: '2025-09-01', assignee: user3, statusColor: 'bg-gray-400', projectId: 'p1', creatorId: 'u3' }
+      { id: 't101', displayId: '#RQ-105', title: '【需求】增加多语言支持 (中/英)', type: TaskType.Requirement, priority: Priority.Normal, tags: ['国际化'], dueDate: '2025-09-01', assignee: user3, statusColor: 'bg-gray-400', projectId: 'p1', creatorId: 'u3' },
+      { id: 't102', displayId: '#TS-102', title: '【任务】API接口性能压测', type: TaskType.Task, priority: Priority.High, tags: ['性能', '后端'], dueDate: '2025-08-25', assignee: user2, statusColor: 'bg-gray-400', progress: 0, projectId: 'p1', creatorId: 'u1' },
+      { id: 't103', displayId: '#TS-103', title: '【任务】编写自动化部署文档', type: TaskType.Task, priority: Priority.Normal, tags: ['文档', '运维'], dueDate: '2025-08-28', assignee: user1, statusColor: 'bg-gray-400', progress: 10, projectId: 'p1', creatorId: 'u3' }
     ]
   },
   {
-    id: 'inprogress', title: '进行中', count: 4, iconColor: 'text-blue-500',
+    id: 'inprogress', title: '进行中', count: 5, iconColor: 'text-blue-500',
     tasks: [
       { id: 't3', displayId: '#RQ-102', title: '【需求】个人中心增加余额提取功能', type: TaskType.Requirement, priority: Priority.High, tags: ['钱包'], dueDate: '2025-08-30', assignee: user1, statusColor: 'bg-blue-600', description: '支持用户将余额提取至绑定的银行卡。', progress: 45, projectId: 'p1', creatorId: 'u3' },
       { id: 't4', displayId: '#DF-202', title: '【缺陷】图片上传超过5MB时无错误提示', type: TaskType.Defect, priority: Priority.Normal, severity: Severity.Major, environment: '开发环境', reproductionRate: '必然重现', tags: ['UI反馈'], dueDate: '2025-08-18', assignee: user2, statusColor: 'bg-blue-600', description: '直接卡死或转圈，需要明确告知用户。', progress: 60, projectId: 'p1', creatorId: 'u1' },
-      { id: 't5', displayId: '#TS-301', title: '【任务】后端API接口文档维护', type: TaskType.Task, priority: Priority.Normal, tags: ['文档'], dueDate: '2025-08-22', assignee: user1, statusColor: 'bg-blue-600', progress: 80, projectId: 'p1', creatorId: 'u1' }
+      { id: 't5', displayId: '#TS-301', title: '【任务】后端API接口文档维护', type: TaskType.Task, priority: Priority.Normal, tags: ['文档'], dueDate: '2025-08-22', assignee: user1, statusColor: 'bg-blue-600', progress: 80, projectId: 'p1', creatorId: 'u1' },
+      { id: 't104', displayId: '#TS-104', title: '【任务】前端组件库升级 v2.0', type: TaskType.Task, priority: Priority.High, tags: ['前端', '架构'], dueDate: '2025-09-05', assignee: user5, statusColor: 'bg-blue-600', progress: 65, projectId: 'p1', creatorId: 'u1' }
     ]
   },
   {
-    id: 'done', title: '已完成', count: 3, iconColor: 'text-green-500',
+    id: 'done', title: '已完成', count: 5, iconColor: 'text-green-500',
     tasks: [
       { id: 't8', displayId: '#RQ-100', title: '【需求】基础登录注册流程开发', type: TaskType.Requirement, priority: Priority.High, tags: ['账号系统'], dueDate: '2025-08-10', assignee: user1, statusColor: 'bg-green-500', progress: 100, projectId: 'p1', creatorId: 'u3' },
-      { id: 't9', displayId: '#DF-200', title: '【缺陷】首页Banner在某些分辨率下显示模糊', type: TaskType.Defect, priority: Priority.Normal, severity: Severity.Normal, environment: '线上环境', reproductionRate: '间歇重现', tags: ['视觉体验'], dueDate: '2025-08-12', assignee: user5, statusColor: 'bg-green-500', progress: 100, projectId: 'p1', creatorId: 'u4' }
+      { id: 't9', displayId: '#DF-200', title: '【缺陷】首页Banner在某些分辨率下显示模糊', type: TaskType.Defect, priority: Priority.Normal, severity: Severity.Normal, environment: '线上环境', reproductionRate: '间歇重现', tags: ['视觉体验'], dueDate: '2025-08-12', assignee: user5, statusColor: 'bg-green-500', progress: 100, projectId: 'p1', creatorId: 'u4' },
+      { id: 't100', displayId: '#TS-100', title: '【任务】数据库每日自动备份策略配置', type: TaskType.Task, priority: Priority.High, tags: ['DB', '运维'], dueDate: '2025-08-01', assignee: user2, statusColor: 'bg-green-500', progress: 100, projectId: 'p1', creatorId: 'u2' },
+      { id: 't105', displayId: '#TS-101', title: '【任务】配置 CI/CD 自动化流水线', type: TaskType.Task, priority: Priority.Normal, tags: ['DevOps'], dueDate: '2025-08-05', assignee: user1, statusColor: 'bg-green-500', progress: 100, projectId: 'p1', creatorId: 'u1' }
     ]
   },
   {
